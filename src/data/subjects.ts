@@ -14,7 +14,7 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     iconName: 'Atom',
     unitCount: 6,
     chapterCount: 22,
-    simulationCount: 18,
+    simulationCount: 100,
   },
   {
     id: 'chemistry',
@@ -29,7 +29,7 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     iconName: 'FlaskConical',
     unitCount: 12,
     chapterCount: 30,
-    simulationCount: 16,
+    simulationCount: 100,
   },
   {
     id: 'biology',
@@ -44,7 +44,7 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     iconName: 'Dna',
     unitCount: 21,
     chapterCount: 42,
-    simulationCount: 20,
+    simulationCount: 100,
   },
   {
     id: 'environmental',
@@ -59,7 +59,7 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     iconName: 'Globe',
     unitCount: 9,
     chapterCount: 25,
-    simulationCount: 14,
+    simulationCount: 100,
   },
   {
     id: 'mathematics',
@@ -74,7 +74,7 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     iconName: 'Sigma',
     unitCount: 9,
     chapterCount: 28,
-    simulationCount: 16,
+    simulationCount: 100,
   },
   {
     id: 'computerscience',
@@ -89,7 +89,7 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     iconName: 'Cpu',
     unitCount: 10,
     chapterCount: 26,
-    simulationCount: 15,
+    simulationCount: 100,
   },
 ];
 

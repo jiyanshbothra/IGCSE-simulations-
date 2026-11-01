@@ -246,6 +246,19 @@ export const SubjectDashboard: React.FC<SubjectDashboardProps> = ({
                             </div>
                           ))}
                         </div>
+                        {subjectSimulations
+                          .filter((sim) => sim.chapterId === chapter.id && !chapter.concepts.some((concept) => concept.simulationId === sim.id))
+                          .map((sim) => (
+                            <div key={sim.id} className="rounded-xl border border-cyan-900/60 bg-cyan-950/10 p-3.5 flex items-center justify-between gap-4">
+                              <div className="min-w-0">
+                                <p className="text-xs font-semibold text-slate-200">{sim.title}</p>
+                                <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">{sim.subtitle}</p>
+                              </div>
+                              <button onClick={() => onSelectSimulation(sim.id)} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600 text-cyan-300 hover:text-white border border-cyan-500/30 text-xs font-semibold">
+                                <Play className="w-3.5 h-3.5 fill-current" /> Open lab
+                              </button>
+                            </div>
+                          ))}
                       </div>
                     ))}
                   </div>

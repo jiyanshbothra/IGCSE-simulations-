@@ -17,33 +17,37 @@ const SUBJECT_COLORS: Record<string, { primary: string; accent: string; bg: stri
 };
 
 // Physics formulas for computing measurements
-function computePhysics(simId: string, params: Record<string, number>): Record<string, number | string> {
-  const m: Record<string, number | string> = {};
-  // Default: use parameter values as measurements
-  Object.entries(params).forEach(([k, v]) => { m[k] = v; });
-  return m;
-}
-
-// Particle system for visual rendering
-interface Particle {
-  x: number; y: number; vx: number; vy: number; r: number; color: string;
-}
-
-function createParticles(count: number, w: number, h: number, speed: number, colors: string[]): Particle[] {
-  const particles: Particle[] = [];
-  for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const spd = speed * (0.5 + Math.random());
-    particles.push({
-      x: 20 + Math.random() * (w - 40),
-      y: 20 + Math.random() * (h - 40),
-      vx: Math.cos(angle) * spd,
-      vy: Math.sin(angle) * spd,
-      r: 3 + Math.random() * 3,
-      color: colors[Math.floor(Math.random() * colors.length)]
-    });
+function computePhysics(model: string, params: Record<string, number>): Record<string, number | string> {
+  const values = Object.values(params);
+  const [a = 0, b = 0, c = 0] = values;
+  const aliases: Record<string, string> = {
+    optics: 'waves', electromagnetism: 'circuits', radioactivity: 'nuclear', space: 'energy',
+    particles: 'thermal', practical: 'mathematics', atoms: 'binary', stoichiometry: 'energy',
+    electrochemistry: 'circuits', energetics: 'thermal', kinetics: 'thermal', acidbase: 'thermal',
+    periodic: 'forces', organic: 'energy', cells: 'mathematics', transport: 'thermal', enzymes: 'thermal',
+    photosynthesis: 'energy', humanbiology: 'population', respiration: 'energy', coordination: 'kinematics',
+    genetics: 'binary', ecology: 'population', biotechnology: 'population', resources: 'energy', land: 'forces',
+    water: 'thermal', atmosphere: 'thermal', ecosystems: 'population', hazards: 'forces', number: 'mathematics',
+    algebra: 'mathematics', coordinate: 'mathematics', geometry: 'mathematics', mensuration: 'mathematics',
+    trigonometry: 'mathematics', statistics: 'mathematics', probability: 'mathematics', programming: 'binary',
+    database: 'mathematics', logic: 'binary', algorithms: 'mathematics', data: 'binary', hardware: 'binary',
+    networks: 'binary', security: 'binary', systems: 'binary',
+  };
+  switch (aliases[model] ?? model) {
+    case 'kinematics': return { finalSpeed: a + b * c, distance: a * c + 0.5 * b * c * c };
+    case 'forces': return { acceleration: b / (a || 1), weight: a * 9.81 };
+    case 'energy': return { potentialEnergy: a * 9.81 * b, kineticEnergy: 0.5 * a * c * c };
+    case 'waves': return { waveSpeed: a * b, period: 1 / (a || 1) };
+    case 'circuits': return { current: a / (b || 1), power: a * (a / (b || 1)) };
+    case 'thermal': return { temperatureChange: a / ((b || 1) * (c || 1)), energyPerMass: a / (b || 1) };
+    case 'nuclear': {
+      const remaining = a * Math.pow(0.5, c / (b || 1));
+      return { remainingNuclei: remaining, decayedFraction: 100 * (1 - remaining / (a || 1)) };
+    }
+    case 'population': return { naturalIncrease: a - b, populationNextYear: c * (1 + (a - b) / 1000) };
+    case 'binary': return { binaryValue: Math.floor(a).toString(2).padStart(Math.floor(b), '0'), hexValue: Math.floor(a).toString(16).toUpperCase() };
+    default: return { outputValue: a * b + c, gradient: a };
   }
-  return particles;
 }
 
 export const GenericSimulation: React.FC<GenericSimulationProps> = ({ metadata, onBack }) => {
@@ -60,7 +64,6 @@ export const GenericSimulation: React.FC<GenericSimulationProps> = ({ metadata, 
   const [predictionSubmitted, setPredictionSubmitted] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
-  const particlesRef = useRef<Particle[]>([]);
   const [graphData, setGraphData] = useState<Array<{ x: number; y: number }>>([]);
 
   // Initialize parameter values
@@ -72,21 +75,7 @@ export const GenericSimulation: React.FC<GenericSimulationProps> = ({ metadata, 
 
   // Update measurements when params change
   useEffect(() => {
-    const m = computePhysics(metadata.id, paramValues);
-    // Generate pseudo-measurements from parameters and metadata
-    metadata.measurements.forEach(mDef => {
-      if (!(mDef.id in m)) {
-        // Generate a computed value based on parameter relationships
-        const paramKeys = Object.keys(paramValues);
-        if (paramKeys.length >= 2) {
-          const v1 = paramValues[paramKeys[0]] || 1;
-          const v2 = paramValues[paramKeys[1]] || 1;
-          m[mDef.id] = Math.round((v1 * v2 / 10) * Math.pow(10, mDef.precision)) / Math.pow(10, mDef.precision);
-        } else {
-          m[mDef.id] = 0;
-        }
-      }
-    });
+    const m = computePhysics(metadata.visualType ?? '', paramValues);
     setMeasurements(m);
   }, [paramValues, metadata.id]);
 
@@ -98,29 +87,6 @@ export const GenericSimulation: React.FC<GenericSimulationProps> = ({ metadata, 
     if (!ctx) return;
     const W = canvas.width;
     const H = canvas.height;
-
-    // Get speed factor from first parameter
-    const paramKeys = Object.keys(paramValues);
-    const speedFactor = paramKeys.length > 0 
-      ? (paramValues[paramKeys[0]] - (metadata.parameters[0]?.min || 0)) / 
-        ((metadata.parameters[0]?.max || 100) - (metadata.parameters[0]?.min || 0) + 0.01) 
-      : 0.5;
-
-    // Get count factor from second parameter
-    const countFactor = paramKeys.length > 1
-      ? (paramValues[paramKeys[1]] - (metadata.parameters[1]?.min || 0)) /
-        ((metadata.parameters[1]?.max || 100) - (metadata.parameters[1]?.min || 0) + 0.01)
-      : 0.5;
-
-    // Initialize particles if needed
-    const targetCount = Math.max(10, Math.floor(20 + countFactor * 80));
-    if (particlesRef.current.length === 0 || Math.abs(particlesRef.current.length - targetCount) > 10) {
-      particlesRef.current = createParticles(
-        targetCount, W, H, 
-        1 + speedFactor * 4,
-        [colors.primary, colors.accent, '#ffffff80']
-      );
-    }
 
     // Clear
     ctx.fillStyle = '#0a0e17';
@@ -137,28 +103,27 @@ export const GenericSimulation: React.FC<GenericSimulationProps> = ({ metadata, 
     ctx.lineWidth = 2;
     ctx.strokeRect(1, 1, W - 2, H - 2);
 
-    // Update and draw particles
-    const speed = 0.5 + speedFactor * 4;
-    particlesRef.current.forEach(p => {
-      p.x += p.vx * speed;
-      p.y += p.vy * speed;
-      if (p.x < p.r || p.x > W - p.r) { p.vx *= -1; p.x = Math.max(p.r, Math.min(W - p.r, p.x)); }
-      if (p.y < p.r || p.y > H - p.r) { p.vy *= -1; p.y = Math.max(p.r, Math.min(H - p.r, p.y)); }
-
-      // Glow
-      const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-      gradient.addColorStop(0, p.color);
-      gradient.addColorStop(1, 'transparent');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Core
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
+    // Deterministic topic visual: plots the actual calculated readings rather
+    // than showing the same decorative random particle animation for every lab.
+    const entries = Object.entries(measurements).filter((entry): entry is [string, number] => typeof entry[1] === 'number');
+    const plotX = 250, plotY = 72, plotW = Math.max(180, W - 285), plotH = Math.max(150, H - 115);
+    ctx.strokeStyle = 'rgba(148,163,184,.35)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(plotX, plotY); ctx.lineTo(plotX, plotY + plotH); ctx.lineTo(plotX + plotW, plotY + plotH); ctx.stroke();
+    ctx.font = '12px Inter, sans-serif';
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText(`${metadata.title} · calculated result profile`, plotX, 54);
+    const maxValue = Math.max(1, ...entries.map(([, value]) => Math.abs(value)));
+    const barW = Math.min(74, (plotW - 24) / Math.max(entries.length, 1) - 10);
+    entries.forEach(([key, value], i) => {
+      const x = plotX + 14 + i * (barW + 12);
+      const barH = Math.max(3, Math.abs(value) / maxValue * (plotH - 38));
+      ctx.fillStyle = i % 2 ? colors.accent : colors.primary;
+      ctx.fillRect(x, plotY + plotH - barH, barW, barH);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText(key.slice(0, 12), x, plotY + plotH + 15);
+      ctx.fillText(String(Number(value.toPrecision(4))), x, plotY + plotH - barH - 6);
     });
 
     // Draw measurement overlay

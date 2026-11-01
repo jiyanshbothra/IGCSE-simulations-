@@ -1,6 +1,7 @@
 import { SimulationMetadata } from '../types/simulation';
+import { buildSimulationCatalog } from './simulationCatalog';
 
-export const SIMULATIONS_REGISTRY: Record<string, SimulationMetadata> = {
+const EXISTING_SIMULATIONS: Record<string, SimulationMetadata> = {
   'phys-vernier-caliper': {
     id: 'phys-vernier-caliper',
     subjectId: 'physics',
@@ -783,5 +784,12 @@ export const SIMULATIONS_REGISTRY: Record<string, SimulationMetadata> = {
     formulae: ['Q = A \\cdot B', 'Q = A + B', 'Q = \\overline{A}', 'Q = \\overline{A \\cdot B}', 'Q = A \\oplus B'],
     tags: ['Boolean Logic', 'Logic Gates', 'Truth Tables', 'Digital Electronics', 'Computer Architecture']
   }
+};
+
+// Each catalog entry has its own syllabus topic, metadata and route. The seven
+// hand-built labs below take precedence where a richer dedicated component exists.
+export const SIMULATIONS_REGISTRY: Record<string, SimulationMetadata> = {
+  ...buildSimulationCatalog(),
+  ...EXISTING_SIMULATIONS,
 };
 

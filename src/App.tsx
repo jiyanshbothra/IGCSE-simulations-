@@ -172,12 +172,10 @@ export const App: React.FC = () => {
                 const el = document.getElementById('subjects-section');
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
-              onOpenFeaturedSim={() => navigateToSimulation('phys-gas-laws')}
               onOpenCoverageMatrix={() => setIsMatrixOpen(true)}
             />
             <SubjectCardsGrid
               onSelectSubject={navigateToSubject}
-              onSelectSimulation={navigateToSimulation}
             />
           </>
         )}
