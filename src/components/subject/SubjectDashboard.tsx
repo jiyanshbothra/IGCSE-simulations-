@@ -218,10 +218,20 @@ export const SubjectDashboard: React.FC<SubjectDashboardProps> = ({
                                 {concept.simulationId ? (
                                   <button
                                     onClick={() => onSelectSimulation(concept.simulationId!)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600 text-cyan-300 hover:text-white text-xs font-semibold transition-all border border-cyan-500/30"
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
+                                      SIMULATIONS_REGISTRY[concept.simulationId]
+                                        ? 'bg-cyan-600/20 hover:bg-cyan-600 text-cyan-300 hover:text-white border-cyan-500/30'
+                                        : 'bg-amber-950/30 hover:bg-amber-900/50 text-amber-300 hover:text-amber-200 border-amber-500/30'
+                                    }`}
                                   >
-                                    <Play className="w-3.5 h-3.5 fill-current" />
-                                    <span>Launch Simulation Lab</span>
+                                    {SIMULATIONS_REGISTRY[concept.simulationId] ? (
+                                      <>
+                                        <Play className="w-3.5 h-3.5 fill-current" />
+                                        <span>Launch Simulation Lab</span>
+                                      </>
+                                    ) : (
+                                      <span>Lab in development</span>
+                                    )}
                                   </button>
                                 ) : (
                                   <span className="text-[10px] font-mono text-slate-500 px-2 py-1 rounded bg-slate-950 border border-slate-800">

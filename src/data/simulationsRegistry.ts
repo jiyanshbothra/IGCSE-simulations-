@@ -1,6 +1,81 @@
 import { SimulationMetadata } from '../types/simulation';
 
 export const SIMULATIONS_REGISTRY: Record<string, SimulationMetadata> = {
+  'phys-vernier-caliper': {
+    id: 'phys-vernier-caliper',
+    subjectId: 'physics',
+    unitId: 'phys-u1',
+    chapterId: 'phys-c1-1',
+    title: 'Vernier Caliper & Micrometer Gauging',
+    subtitle: 'Read main and vernier scales, compare instrument resolution, and correct for zero error',
+    syllabusCode: '0625.1.1.1',
+    difficulty: 'Both',
+    learningObjectives: [
+      'Measure length using appropriate instruments and record a reading to a precision justified by the instrument.',
+      'Read a vernier caliper and micrometer screw gauge using the main scale and aligned subdivision.',
+      'Identify zero error and apply a correction to an observed measurement.'
+    ],
+    scientificPrinciples: [
+      'Vernier reading = main scale reading + (aligned vernier division × least count).',
+      'Micrometer reading = sleeve scale reading + (thimble division × least count).',
+      'Corrected reading = observed reading − zero error.',
+      'A smaller least count gives finer resolution, but does not remove all measurement uncertainty.'
+    ],
+    assumptions: [
+      'The instrument scale is ideal and its stated least count is exact.',
+      'The object is held squarely between the measuring faces.',
+      'Random reading uncertainty is not modelled; this lab isolates scale resolution and zero error.'
+    ],
+    parameters: [
+      {
+        id: 'objectLength', name: 'Object length', symbol: 'L', unit: 'mm', min: 1, max: 19.99, step: 0.01,
+        defaultValue: 12.36, description: 'Length of the object being measured.', category: 'primary'
+      },
+      {
+        id: 'instrument', name: 'Instrument', symbol: 'I', unit: '', min: 0, max: 1, step: 1,
+        defaultValue: 0, description: 'Choose a vernier caliper (0) or micrometer (1).', category: 'primary'
+      },
+      {
+        id: 'zeroError', name: 'Zero error', symbol: 'e_0', unit: 'mm', min: -0.2, max: 0.2, step: 0.01,
+        defaultValue: 0, description: 'Systematic offset applied to the instrument reading.', category: 'secondary'
+      }
+    ],
+    measurements: [
+      { id: 'observedReading', label: 'Observed reading', symbol: 'R_o', unit: 'mm', precision: 2 },
+      { id: 'correctedReading', label: 'Corrected reading', symbol: 'R_c', unit: 'mm', precision: 2, formula: 'R_c = R_o - e_0' },
+      { id: 'mainScaleReading', label: 'Main scale reading', symbol: 'MSR', unit: 'mm', precision: 2 },
+      { id: 'subdivisionIndex', label: 'Aligned subdivision', symbol: 'n', unit: 'divisions', precision: 0 }
+    ],
+    challenges: [],
+    guidedSteps: [
+      {
+        stepNumber: 1,
+        instruction: 'Set the instrument to a vernier caliper and inspect the main scale.',
+        actionRequired: 'Move the object length slider and identify the last whole millimetre before the vernier zero.',
+        scientificInsight: 'The main scale gives the whole millimetre part of a vernier caliper reading.'
+      },
+      {
+        stepNumber: 2,
+        instruction: 'Find the vernier division that aligns with a main scale mark.',
+        actionRequired: 'Read the aligned division and multiply its number by the 0.1 mm least count.',
+        scientificInsight: 'The vernier scale resolves the fraction of a millimetre between main scale marks.'
+      },
+      {
+        stepNumber: 3,
+        instruction: 'Switch to the micrometer and compare the least count.',
+        actionRequired: 'Observe how the finer thimble scale changes the recorded precision.',
+        scientificInsight: 'A micrometer screw gauge commonly resolves 0.01 mm, finer than a 0.1 mm vernier caliper.'
+      }
+    ],
+    defaultMode: 'explore',
+    formulae: [
+      'R = MSR + n × LC',
+      'R_c = R_o - e_0',
+      'LC_{vernier} = 0.1 mm',
+      'LC_{micrometer} = 0.01 mm'
+    ],
+    tags: ['Measurement', 'Vernier Caliper', 'Micrometer', 'Resolution', 'Zero Error']
+  },
   'phys-gas-laws': {
     id: 'phys-gas-laws',
     subjectId: 'physics',

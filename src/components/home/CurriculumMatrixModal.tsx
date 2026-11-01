@@ -174,9 +174,13 @@ export const CurriculumMatrixModal: React.FC<CurriculumMatrixModalProps> = ({
                                     onSelectSimulation(concept.simulationId!);
                                     onClose();
                                   }}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 text-xs font-semibold border border-cyan-500/30 whitespace-nowrap transition-all group shrink-0"
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all group shrink-0 border ${
+                                    SIMULATIONS_REGISTRY[concept.simulationId]
+                                      ? 'bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border-cyan-500/30'
+                                      : 'bg-amber-950/30 hover:bg-amber-900/50 text-amber-300 border-amber-500/30'
+                                  }`}
                                 >
-                                  <span>Launch Lab</span>
+                                  <span>{SIMULATIONS_REGISTRY[concept.simulationId] ? 'Launch Lab' : 'Lab in development'}</span>
                                   <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
                               ) : (

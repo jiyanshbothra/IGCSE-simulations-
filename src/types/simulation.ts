@@ -63,6 +63,7 @@ export interface SimulationMetadata {
   subtitle: string;
   syllabusCode: string; // e.g. "0625.2.1"
   difficulty: 'Core' | 'Extended' | 'Both';
+  visualType?: string;
   learningObjectives: string[];
   scientificPrinciples: string[];
   assumptions: string[];
@@ -74,4 +75,3 @@ export interface SimulationMetadata {
   formulae: string[];
   tags: string[];
 }
-
