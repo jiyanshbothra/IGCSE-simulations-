@@ -613,3 +613,4 @@ export const LogicGatesSimulation: React.FC<LogicGatesSimulationProps> = ({ onBa
     </div>
   );
 };
+

@@ -92,3 +92,4 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     simulationCount: 15,
   },
 ];
+

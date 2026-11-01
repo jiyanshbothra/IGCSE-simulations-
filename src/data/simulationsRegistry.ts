@@ -709,3 +709,4 @@ export const SIMULATIONS_REGISTRY: Record<string, SimulationMetadata> = {
     tags: ['Boolean Logic', 'Logic Gates', 'Truth Tables', 'Digital Electronics', 'Computer Architecture']
   }
 };
+

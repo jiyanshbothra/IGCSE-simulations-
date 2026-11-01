@@ -581,3 +581,4 @@ export const CURRICULUM_DATA: Record<string, SubjectCurriculum> = {
     ]
   }
 };
+

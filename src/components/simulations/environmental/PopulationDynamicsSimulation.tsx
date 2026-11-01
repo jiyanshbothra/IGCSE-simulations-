@@ -613,3 +613,4 @@ export const PopulationDynamicsSimulation: React.FC<PopulationDynamicsProps> = (
     </div>
   );
 };
+

@@ -853,3 +853,4 @@ export const GasLawsSimulation: React.FC<GasLawsSimulationProps> = ({ onBack }) 
     </div>
   );
 };
+

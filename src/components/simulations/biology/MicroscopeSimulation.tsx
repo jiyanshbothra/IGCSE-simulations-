@@ -627,3 +627,4 @@ export const MicroscopeSimulation: React.FC<MicroscopeSimulationProps> = ({ onBa
     </div>
   );
 };
+

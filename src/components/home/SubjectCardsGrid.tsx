@@ -222,3 +222,4 @@ export const SubjectCardsGrid: React.FC<SubjectCardsGridProps> = ({
     </section>
   );
 };
+

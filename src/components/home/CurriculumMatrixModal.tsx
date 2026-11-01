@@ -214,3 +214,4 @@ export const CurriculumMatrixModal: React.FC<CurriculumMatrixModalProps> = ({
     </div>
   );
 };
+

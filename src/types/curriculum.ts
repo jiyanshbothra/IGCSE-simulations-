@@ -64,3 +64,4 @@ export interface SubjectCurriculum {
   syllabusPeriod: string;
   units: Unit[];
 }
+

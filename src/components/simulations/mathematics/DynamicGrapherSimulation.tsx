@@ -766,3 +766,4 @@ export const DynamicGrapherSimulation: React.FC<DynamicGrapherProps> = ({ onBack
     </div>
   );
 };
+
