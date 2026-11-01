@@ -5,7 +5,7 @@ export const CURRICULUM_DATA: Record<string, SubjectCurriculum> = {
     subjectId: 'physics',
     subjectName: 'Cambridge IGCSE Physics Pure',
     syllabusCode: '0625',
-    syllabusPeriod: '2023–2026',
+    syllabusPeriod: '2026–2028',
     units: [
       {
         id: 'phys-u1',
@@ -539,7 +539,7 @@ export const CURRICULUM_DATA: Record<string, SubjectCurriculum> = {
     subjectId: 'chemistry',
     subjectName: 'Cambridge IGCSE Chemistry Pure',
     syllabusCode: '0620',
-    syllabusPeriod: '2023–2026',
+    syllabusPeriod: '2026–2028',
     units: [
       {
         id: 'chem-u1',
@@ -854,7 +854,7 @@ export const CURRICULUM_DATA: Record<string, SubjectCurriculum> = {
     subjectId: 'biology',
     subjectName: 'Cambridge IGCSE Biology Pure',
     syllabusCode: '0610',
-    syllabusPeriod: '2023–2026',
+    syllabusPeriod: '2026–2028',
     units: [
       {
         id: 'bio-u2',
@@ -1038,7 +1038,7 @@ export const CURRICULUM_DATA: Record<string, SubjectCurriculum> = {
     subjectId: 'environmental',
     subjectName: 'Cambridge IGCSE Environmental Management',
     syllabusCode: '0680',
-    syllabusPeriod: '2024–2026',
+    syllabusPeriod: '2027–2029',
     units: [
       {
         id: 'env-u2',
@@ -1233,7 +1233,7 @@ export const CURRICULUM_DATA: Record<string, SubjectCurriculum> = {
     subjectId: 'computerscience',
     subjectName: 'Cambridge IGCSE Computer Science',
     syllabusCode: '0478',
-    syllabusPeriod: '2023–2026',
+    syllabusPeriod: '2026–2028',
     units: [
       {
         id: 'cs-u1',

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { SimulationMetadata, SimulationParameter, LearningMode } from '../../types/simulation';
+import { drawTopicDiagram } from './TopicDiagram';
 
 interface GenericSimulationProps {
   metadata: SimulationMetadata;
@@ -16,7 +17,7 @@ const SUBJECT_COLORS: Record<string, { primary: string; accent: string; bg: stri
   computerscience: { primary: '#f43f5e', accent: '#fb7185', bg: 'rgba(244,63,94,0.08)', border: 'rgba(244,63,94,0.3)' },
 };
 
-// Physics formulas for computing measurements
+// Subject-specific deterministic output models
 function computePhysics(model: string, params: Record<string, number>): Record<string, number | string> {
   const values = Object.values(params);
   const [a = 0, b = 0, c = 0] = values;
@@ -31,7 +32,8 @@ function computePhysics(model: string, params: Record<string, number>): Record<s
     algebra: 'mathematics', coordinate: 'mathematics', geometry: 'mathematics', mensuration: 'mathematics',
     trigonometry: 'mathematics', statistics: 'mathematics', probability: 'mathematics', programming: 'binary',
     database: 'mathematics', logic: 'binary', algorithms: 'mathematics', data: 'binary', hardware: 'binary',
-    networks: 'binary', security: 'binary', systems: 'binary',
+    networks: 'binary', network: 'binary', transmission: 'binary', software: 'mathematics', automation: 'mathematics',
+    vectors: 'mathematics', security: 'binary', systems: 'binary',
   };
   switch (aliases[model] ?? model) {
     case 'kinematics': return { finalSpeed: a + b * c, distance: a * c + 0.5 * b * c * c };
@@ -103,28 +105,9 @@ export const GenericSimulation: React.FC<GenericSimulationProps> = ({ metadata, 
     ctx.lineWidth = 2;
     ctx.strokeRect(1, 1, W - 2, H - 2);
 
-    // Deterministic topic visual: plots the actual calculated readings rather
-    // than showing the same decorative random particle animation for every lab.
-    const entries = Object.entries(measurements).filter((entry): entry is [string, number] => typeof entry[1] === 'number');
+    // Each syllabus model has its own apparatus, graph, or data representation.
     const plotX = 250, plotY = 72, plotW = Math.max(180, W - 285), plotH = Math.max(150, H - 115);
-    ctx.strokeStyle = 'rgba(148,163,184,.35)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(plotX, plotY); ctx.lineTo(plotX, plotY + plotH); ctx.lineTo(plotX + plotW, plotY + plotH); ctx.stroke();
-    ctx.font = '12px Inter, sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText(`${metadata.title} · calculated result profile`, plotX, 54);
-    const maxValue = Math.max(1, ...entries.map(([, value]) => Math.abs(value)));
-    const barW = Math.min(74, (plotW - 24) / Math.max(entries.length, 1) - 10);
-    entries.forEach(([key, value], i) => {
-      const x = plotX + 14 + i * (barW + 12);
-      const barH = Math.max(3, Math.abs(value) / maxValue * (plotH - 38));
-      ctx.fillStyle = i % 2 ? colors.accent : colors.primary;
-      ctx.fillRect(x, plotY + plotH - barH, barW, barH);
-      ctx.fillStyle = '#cbd5e1';
-      ctx.font = '10px Inter, sans-serif';
-      ctx.fillText(key.slice(0, 12), x, plotY + plotH + 15);
-      ctx.fillText(String(Number(value.toPrecision(4))), x, plotY + plotH - barH - 6);
-    });
+    drawTopicDiagram(ctx, metadata.subjectId, metadata.visualType ?? '', paramValues, plotX, plotY, plotW, plotH);
 
     // Draw measurement overlay
     ctx.fillStyle = 'rgba(0,0,0,0.6)';

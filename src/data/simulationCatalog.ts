@@ -85,8 +85,13 @@ const parameter = (id: string, name: string, symbol: string, unit: string, min: 
 const measure = (id: string, label: string, unit: string, precision: number, formula: string): MeasurementDefinition => ({ id, label, unit, precision, formula });
 
 function modelDetails(model: string, variant: number) {
-  const shift = (variant - 1) % 10;
-  const p = (id: string, name: string, unit: string, min: number, max: number, step: number, base: number, desc: string) => parameter(id, name, id, unit, min, max, step, Math.min(max, Math.max(min, base + shift * step)), desc);
+  const p = (id: string, name: string, unit: string, min: number, max: number, step: number, base: number, desc: string) => {
+    const steps = Math.max(1, Math.floor((max - min) / step) + 1);
+    const baseStep = Math.round((Math.min(max, Math.max(min, base)) - min) / step);
+    const scenarioStep = Math.max(0, variant - 1) * 7;
+    const variedValue = min + ((baseStep + scenarioStep) % steps) * step;
+    return parameter(id, name, id, unit, min, max, step, variedValue, desc);
+  };
   const common = {
     kinematics: { parameters: [p('initialSpeed','Initial speed','m/s',0,30,1,4,'Starting speed of the object.'),p('acceleration','Acceleration','m/s²',-5,5,.5,1,'Constant acceleration.'),p('time','Time','s',1,10,1,3,'Elapsed time.')], measurements: [measure('finalSpeed','Final speed','m/s',2,'v = u + at'),measure('distance','Displacement','m',2,'s = ut + ½at²')], formulae: ['v = u + at','s = ut + ½at²'] },
     forces: { parameters: [p('mass','Mass','kg',.1,20,.1,2,'Mass of the object.'),p('force','Resultant force','N',0,100,1,10,'Net force acting on the object.')], measurements: [measure('acceleration','Acceleration','m/s²',2,'a = F/m'),measure('weight','Weight','N',2,'W = mg')], formulae: ['F = ma','W = mg'] },
@@ -110,7 +115,8 @@ function modelDetails(model: string, variant: number) {
     algebra: 'mathematics', coordinate: 'mathematics', geometry: 'mathematics', mensuration: 'mathematics',
     trigonometry: 'mathematics', statistics: 'mathematics', probability: 'mathematics', programming: 'binary',
     database: 'mathematics', logic: 'binary', algorithms: 'mathematics', data: 'binary', hardware: 'binary',
-    networks: 'binary', security: 'binary', systems: 'binary',
+    networks: 'binary', network: 'binary', transmission: 'binary', software: 'mathematics', automation: 'mathematics',
+    vectors: 'mathematics', security: 'binary', systems: 'binary',
   };
   const resolved = aliases[model] ?? model;
   return { ...common, [model]: common[resolved as keyof typeof common] ?? common.mathematics };
@@ -118,12 +124,12 @@ function modelDetails(model: string, variant: number) {
 
 function classify(subject: SubjectId, title: string): string {
   const t = title.toLowerCase();
-  if (subject === 'physics') return /wave|sound|ripple/.test(t) ? 'waves' : /circuit|ohm|voltage|current/.test(t) ? 'circuits' : /thermal|heat|gas|brownian|latent/.test(t) ? 'thermal' : /radioactive|nuclear|rutherford|nuclide/.test(t) ? 'nuclear' : /orbit|space|star|redshift/.test(t) ? 'energy' : /energy|momentum|pressure/.test(t) ? 'energy' : /motion|ticker|pendulum|terminal/.test(t) ? 'kinematics' : 'forces';
-  if (subject === 'chemistry') return /rate|equilibrium/.test(t) ? 'thermal' : /mole|equation|stoichi/.test(t) ? 'energy' : /electrolys|fuel cell/.test(t) ? 'circuits' : /state|diffusion|gas/.test(t) ? 'thermal' : /organic|bromine|chromatography|flame/.test(t) ? 'waves' : 'forces';
-  if (subject === 'biology') return /population|heart|vessel/.test(t) ? 'population' : /photosynthesis|enzyme|osmosis|transport/.test(t) ? 'thermal' : /genetic|punnett/.test(t) ? 'binary' : 'energy';
-  if (subject === 'environmental') return /population|demographic/.test(t) ? 'population' : /water|aquifer/.test(t) ? 'thermal' : 'energy';
-  if (subject === 'mathematics') return /circle|unit circle|trig/.test(t) ? 'waves' : /graph|simultaneous/.test(t) ? 'mathematics' : 'energy';
-  return /binary|complement/.test(t) ? 'binary' : /logic/.test(t) ? 'circuits' : /algorithm|cpu/.test(t) ? 'mathematics' : 'binary';
+  if (subject === 'physics') return /refraction|lens|light|optics/.test(t) ? 'optics' : /electromagnet|induction|motor effect/.test(t) ? 'electromagnetism' : /radioactive|nuclear|rutherford|nuclide|half-life/.test(t) ? 'radioactivity' : /orbit|space|star|redshift|universe/.test(t) ? 'space' : /wave|sound|ripple/.test(t) ? 'waves' : /circuit|ohm|voltage|current|resistance/.test(t) ? 'circuits' : /thermal|heat|gas|brownian|latent|temperature/.test(t) ? 'thermal' : /energy|momentum|work|power/.test(t) ? 'energy' : /motion|ticker|pendulum|terminal|speed|acceleration/.test(t) ? 'kinematics' : 'forces';
+  if (subject === 'chemistry') return /chromatograph|separat|filtrat|distill|crystall/.test(t) ? 'practical' : /atom|electron|proton|isotope|ion/.test(t) ? 'atoms' : /mole|equation|stoichi|formula|reacting mass/.test(t) ? 'stoichiometry' : /electrolys|fuel cell|electrode/.test(t) ? 'electrochemistry' : /energetic|enthalpy|exothermic|endothermic/.test(t) ? 'energetics' : /rate|collision|catalyst|equilibrium/.test(t) ? 'kinetics' : /acid|alkali|neutralis|titration|salt/.test(t) ? 'acidbase' : /periodic|group|metal|displacement|reactivity/.test(t) ? 'periodic' : /organic|alkane|alkene|polymer|ethanol|carboxylic/.test(t) ? 'organic' : /state|diffusion|gas|particle|melting|boiling/.test(t) ? 'particles' : 'practical';
+  if (subject === 'biology') return /microscop|cell|organelle|magnification/.test(t) ? 'cells' : /osmosis|diffusion|membrane|transport/.test(t) ? 'transport' : /enzyme/.test(t) ? 'enzymes' : /photosynthesis|plant nutrition|stomata/.test(t) ? 'photosynthesis' : /heart|blood|digestion|disease|nutrition/.test(t) ? 'humanbiology' : /respiration|gas exchange|excretion/.test(t) ? 'respiration' : /nervous|hormone|response|reproduction|coordination/.test(t) ? 'coordination' : /genetic|inherit|variation|punnett|chromosome/.test(t) ? 'genetics' : /ecosystem|ecology|food web|population|biodiversity/.test(t) ? 'ecology' : /biotechnology|fermentation|genetic modification/.test(t) ? 'biotechnology' : 'cells';
+  if (subject === 'environmental') return /land|soil|crop|erosion|agriculture/.test(t) ? 'land' : /water|aquifer|river|ocean|pollution/.test(t) ? 'water' : /atmosphere|climate|greenhouse|ozone|air/.test(t) ? 'atmosphere' : /ecosystem|biodiversity|fieldwork|sampling/.test(t) ? 'ecosystems' : /hazard|earthquake|volcano|flood|storm/.test(t) ? 'hazards' : /population|demographic|migration/.test(t) ? 'population' : 'resources';
+  if (subject === 'mathematics') return /coordinate|gradient|midpoint|straight line/.test(t) ? 'coordinate' : /geometry|angle|circle theorem|polygon/.test(t) ? 'geometry' : /mensuration|area|volume|surface/.test(t) ? 'mensuration' : /trig|bearing|sine|cosine/.test(t) ? 'trigonometry' : /vector|transform/.test(t) ? 'vectors' : /probab/.test(t) ? 'probability' : /statistic|data|mean|median/.test(t) ? 'statistics' : /algebra|graph|equation|function|sequence/.test(t) ? 'algebra' : 'number';
+  return /transmission|packet|error check|checksum/.test(t) ? 'transmission' : /hardware|processor|cpu|memory|storage/.test(t) ? 'hardware' : /software|operating system/.test(t) ? 'software' : /network|internet|router|ip address/.test(t) ? 'network' : /sensor|automated|control system|emerging technolog/.test(t) ? 'automation' : /algorithm|search|sort/.test(t) ? 'algorithms' : /program|iteration|loop|python/.test(t) ? 'programming' : /database|query|record|field/.test(t) ? 'database' : /logic|boolean|gate|truth table/.test(t) ? 'logic' : 'binary';
 }
 
 const subjectPrefix: Record<SubjectId, string> = { physics: 'phys', chemistry: 'chem', biology: 'bio', environmental: 'env', mathematics: 'math', computerscience: 'cs' };
@@ -134,16 +140,22 @@ export function buildSimulationCatalog(): Record<string, SimulationMetadata> {
   for (const [subjectKey, curriculum] of Object.entries(CURRICULUM_DATA) as [SubjectId, typeof CURRICULUM_DATA[SubjectId]][]) {
     const legacy = curriculum.units.flatMap(unit => unit.chapters.flatMap(chapter => chapter.concepts.filter(concept => concept.simulationId).map(concept => ({ unit, chapter, concept }))));
     const syllabusChapters = curriculum.units.flatMap(unit => unit.chapters.map(chapter => ({ unit, chapter })));
+    const chapterCoverage = new Map<string, number>();
+    legacy.forEach(({ chapter }) => chapterCoverage.set(chapter.id, (chapterCoverage.get(chapter.id) ?? 0) + 1));
+    const chaptersNeedingLabs = syllabusChapters.filter(({ chapter }) => (chapterCoverage.get(chapter.id) ?? 0) < 2);
     const topicList = topics[subjectKey];
     const scenarioCount = 100;
     for (let index = 0; index < scenarioCount; index++) {
       const scenario = index + 1;
       const legacyEntry = legacy[index];
-      const assignedChapter = legacyEntry ?? syllabusChapters[index % syllabusChapters.length];
-      const topic = topicList[Math.floor(index * topicList.length / scenarioCount)];
-      const title = legacyEntry?.concept.title ?? `${topic.title} — Investigation ${String(scenario).padStart(2, '0')}`;
+      const supplementIndex = index - legacy.length;
+      const assignedChapter = legacyEntry ?? chaptersNeedingLabs[supplementIndex] ?? syllabusChapters[Math.max(0, supplementIndex) % syllabusChapters.length];
+      // Cycle through the official syllabus areas so supplementary entries cover
+      // the full topic list even when a subject already has legacy concept IDs.
+      const topic = topicList[index % topicList.length];
+      const title = legacyEntry?.concept.title ?? `${topic.title} — ${assignedChapter?.chapter.title ?? 'Syllabus investigation'} (${String(supplementIndex + 1).padStart(2, '0')})`;
       const model = legacyEntry ? classify(subjectKey, title) : topic.model;
-      const details = modelDetails(model, Math.ceil(scenario / topicList.length)) as unknown as Record<string, { parameters: SimulationParameter[]; measurements: MeasurementDefinition[]; formulae: string[] }>;
+      const details = modelDetails(model, scenario) as unknown as Record<string, { parameters: SimulationParameter[]; measurements: MeasurementDefinition[]; formulae: string[] }>;
       const modelData = details[model] ?? details.mathematics ?? details.forces;
       const id = legacyEntry?.concept.simulationId ?? `${subjectPrefix[subjectKey]}-syllabus-${String(scenario).padStart(3, '0')}`;
       const objective = legacyEntry?.concept.learningObjectives[0];
@@ -153,7 +165,7 @@ export function buildSimulationCatalog(): Record<string, SimulationMetadata> {
         unitId: assignedChapter?.unit.id ?? `${subjectPrefix[subjectKey]}-unit-${topic.code}`,
         chapterId: assignedChapter?.chapter.id ?? `${subjectPrefix[subjectKey]}-topic-${topic.code}`,
         title,
-        subtitle: legacyEntry?.concept.description ?? `${topic.title}: scenario ${scenario}. ${topic.objective}`,
+        subtitle: legacyEntry?.concept.description ?? `${topic.objective} Investigation ${supplementIndex + 1} of 100.`,
         syllabusCode: objective?.code ?? `${IGCSE_SUBJECTS_CODE[subjectKey]}.${topic.code}`,
         difficulty: 'Both',
         visualType: model,
@@ -172,6 +184,10 @@ export function buildSimulationCatalog(): Record<string, SimulationMetadata> {
         tags: [topic.title, `Scenario ${scenario}`, `Syllabus ${topic.code}`],
       };
     }
+  }
+  for (const subjectId of Object.keys(TOPICS) as SubjectId[]) {
+    const count = Object.values(catalog).filter((simulation) => simulation.subjectId === subjectId).length;
+    if (count !== 100) throw new Error(`Expected 100 syllabus simulations for ${subjectId}, found ${count}.`);
   }
   return catalog;
 }
