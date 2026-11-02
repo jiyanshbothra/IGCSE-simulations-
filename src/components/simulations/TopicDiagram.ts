@@ -101,6 +101,28 @@ export function drawTopicDiagram(ctx: CanvasRenderingContext2D, subject: Subject
     if (model === 'geometry' || model === 'trigonometry' || model === 'mensuration') { line(ctx,cx-85,cy+55,cx+85,cy+55,'#818cf8',3);line(ctx,cx-85,cy+55,cx,cy-75,'#818cf8',3);line(ctx,cx,cy-75,cx+85,cy+55,'#818cf8',3);circle(ctx,cx,cy+55,4,'#fbbf24');text(ctx,model==='trigonometry'?'SOH · CAH · TOA':model==='mensuration'?'πr²h':'angle relationships',x+22,y+25,'#c7d2fe',14); }
     else if(model==='statistics'||model==='probability'){axes(ctx,x+45,y+45,width-80,height-95,model==='statistics'?'Frequency distribution':'Probability model');for(let i=0;i<8;i++){const h=30+Math.abs(Math.sin(i*1.3))*height*.55;ctx.fillStyle='#818cf8';ctx.fillRect(x+65+i*42,y+height-50-h,32,h);}text(ctx,model==='probability'?'event outcomes':'data values',x+20,y+height-16,'#c7d2fe',12);}
     else { axes(ctx,x+45,y+45,width-80,height-95,'Coordinate plane');ctx.beginPath();ctx.strokeStyle='#a5b4fc';ctx.lineWidth=3;for(let i=0;i<=100;i++){const xx=-5+i/10;const yy=model==='algebra'?a*xx+b:model==='vectors'?xx*.6+Math.sin(xx):Math.sin(xx);const px=cx+xx*width/14,py=cy-yy*height/12;i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.stroke();text(ctx,model==='vectors'?'vector components':'y = mx + c',x+20,y+25,'#c7d2fe',14);}
+  } else if (subject === 'geography') {
+    const titles: Record<string, string> = {
+      'geo-rivers': 'River long profile and discharge', 'geo-coasts': 'Wave approach and sediment transfer',
+      'geo-ecosystems': 'Ecosystem stores and flows', 'geo-hazards': 'Hazard exposure and vulnerability',
+      'geo-climate': 'Climate evidence and anomaly', 'geo-population': 'Population structure',
+      'geo-urban': 'Urban land use and access', 'geo-development': 'Development indicators',
+      'geo-economies': 'Employment by economic sector', 'geo-resources': 'Resource supply and demand',
+    };
+    axes(ctx, x + 45, y + 45, width - 80, height - 95, titles[model] ?? 'Geographical data investigation');
+    const values = [a, b, Math.max(1, a * 0.7), Math.max(1, b * 0.55)];
+    values.forEach((v, i) => { const bh = Math.min(height - 115, Math.abs(v) / Math.max(...values, 1) * (height - 115)); ctx.fillStyle = ['#22c55e', '#38bdf8', '#f59e0b', '#a3e635'][i]; ctx.fillRect(x + 70 + i * 75, y + height - 50 - bh, 42, bh); });
+    text(ctx, 'Change controls to compare evidence and impacts', x + 20, y + height - 16, '#86efac', 12);
+  } else if (subject === 'business') {
+    const titles: Record<string, string> = {
+      'bus-enterprise': 'Stakeholder value and enterprise', 'bus-people': 'Workforce productivity',
+      'bus-marketing': 'Marketing mix and market share', 'bus-operations': 'Production output and efficiency',
+      'bus-finance': 'Costs, revenue and break-even', 'bus-external': 'External change and business response',
+    };
+    axes(ctx, x + 45, y + 45, width - 80, height - 95, titles[model] ?? 'Business decision model');
+    const values = [a, b, Math.max(1, a * 0.6), Math.max(1, b * 0.75)];
+    values.forEach((v, i) => { const bh = Math.min(height - 115, Math.abs(v) / Math.max(...values, 1) * (height - 115)); ctx.fillStyle = ['#f59e0b', '#38bdf8', '#34d399', '#fb7185'][i]; ctx.fillRect(x + 70 + i * 75, y + height - 50 - bh, 42, bh); });
+    text(ctx, 'Change assumptions to compare business outcomes', x + 20, y + height - 16, '#fcd34d', 12);
   } else {
     if(model==='logic'){const gates=['AND','OR','NOT','XOR'];line(ctx,x+25,cy-35,cx-40,cy-35,'#fb7185',2);line(ctx,x+25,cy+35,cx-40,cy+35,'#fb7185',2);ctx.fillStyle='#1e293b';ctx.fillRect(cx-40,cy-55,100,110);ctx.strokeStyle='#fb7185';ctx.strokeRect(cx-40,cy-55,100,110);text(ctx,gates[Math.round(a)%4],cx-22,cy+5,'#fda4af',18);line(ctx,cx+60,cy,cx+width/2,cy,'#fda4af',3);text(ctx,'Q',cx+width/2+8,cy+5,'#fda4af',15);text(ctx,'logic gate circuit',x+20,y+25,'#fda4af',14);}
     else if(model==='binary'){const bits=Math.floor(a).toString(2).padStart(8,'0');text(ctx,'DENARY → BINARY → HEX',x+25,y+35,'#fda4af',14);bits.split('').forEach((bit,i)=>{ctx.fillStyle=bit==='1'?'#be123c':'#1e293b';ctx.fillRect(x+30+i*48,cy-24,38,48);text(ctx,bit,x+44+i*48,cy+7,'#fff',18);});text(ctx,`hex: ${Math.floor(a).toString(16).toUpperCase()}`,x+30,cy+70,'#fda4af',15);}

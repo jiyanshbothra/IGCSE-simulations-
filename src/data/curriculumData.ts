@@ -1338,3 +1338,17 @@ export const CURRICULUM_DATA: Record<string, SubjectCurriculum> = {
     ]
   }
 };
+
+// Geography and Business follow the Cambridge 2027–2029 syllabus content areas.
+for (const [subjectId, subjectName, syllabusCode, topics] of [
+  ['geography', 'Cambridge IGCSE Geography', '0460', ['Changing river environments', 'Changing coastal environments', 'Changing ecosystems', 'Tectonic hazards', 'Climate change', 'Changing populations', 'Changing towns and cities', 'Development', 'Changing economies', 'Resource provision']],
+  ['business', 'Cambridge IGCSE Business', '0264', ['Understanding business activity', 'People in business', 'Marketing', 'Operations management', 'Financial information and decisions', 'External influences on business activity']],
+] as const) {
+  CURRICULUM_DATA[subjectId] = {
+    subjectId, subjectName, syllabusCode, syllabusPeriod: '2027–2029',
+    units: [{ id: `${subjectId}-unit-1`, number: 1, title: 'Syllabus topics', description: 'Cambridge syllabus content areas', chapters: topics.map((title, i) => ({
+      id: `${subjectId}-chapter-${i + 1}`, number: String(i + 1), title,
+      description: `Interactive syllabus investigations: ${title}.`, concepts: [],
+    })) }],
+  };
+}

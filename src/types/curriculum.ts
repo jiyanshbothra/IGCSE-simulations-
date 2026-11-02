@@ -4,7 +4,9 @@ export type SubjectId =
   | 'biology' 
   | 'environmental' 
   | 'mathematics' 
-  | 'computerscience';
+  | 'computerscience'
+  | 'geography'
+  | 'business';
 
 export interface SubjectMetadata {
   id: SubjectId;

@@ -12,6 +12,8 @@ import {
   Globe,
   Sigma,
   Cpu,
+  Map,
+  BriefcaseBusiness,
   X
 } from 'lucide-react';
 import { SubjectId } from '../../types/curriculum';
@@ -57,6 +59,8 @@ export const Header: React.FC<HeaderProps> = ({
       case 'environmental': return <Globe className="w-4 h-4 text-teal-400" />;
       case 'mathematics': return <Sigma className="w-4 h-4 text-indigo-400" />;
       case 'computerscience': return <Cpu className="w-4 h-4 text-rose-400" />;
+      case 'geography': return <Map className="w-4 h-4 text-green-400" />;
+      case 'business': return <BriefcaseBusiness className="w-4 h-4 text-amber-400" />;
     }
   };
 

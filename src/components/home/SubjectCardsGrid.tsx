@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Atom, Cpu, Dna, FlaskConical, Globe, Sigma } from 'lucide-react';
+import { ArrowRight, Atom, Cpu, Dna, FlaskConical, Globe, Sigma, Map, BriefcaseBusiness } from 'lucide-react';
 import { SubjectId } from '../../types/curriculum';
 import { IGCSE_SUBJECTS } from '../../data/subjects';
 import { CURRICULUM_DATA } from '../../data/curriculumData';
@@ -18,6 +18,8 @@ export const SubjectCardsGrid: React.FC<SubjectCardsGridProps> = ({ onSelectSubj
       case 'environmental': return <Globe className="h-8 w-8 text-teal-400" />;
       case 'mathematics': return <Sigma className="h-8 w-8 text-indigo-400" />;
       case 'computerscience': return <Cpu className="h-8 w-8 text-rose-400" />;
+      case 'geography': return <Map className="h-8 w-8 text-green-400" />;
+      case 'business': return <BriefcaseBusiness className="h-8 w-8 text-amber-400" />;
     }
   };
 
@@ -29,6 +31,8 @@ export const SubjectCardsGrid: React.FC<SubjectCardsGridProps> = ({ onSelectSubj
       case 'environmental': return { border: 'border-teal-500/30 hover:border-teal-400/80', glow: 'group-hover:shadow-[0_0_30px_rgba(20,184,166,0.2)]', badge: 'bg-teal-500/10 text-teal-300 border-teal-500/30', button: 'bg-teal-600/20 hover:bg-teal-600 text-teal-300 hover:text-white border-teal-500/30' };
       case 'mathematics': return { border: 'border-indigo-500/30 hover:border-indigo-400/80', glow: 'group-hover:shadow-[0_0_30px_rgba(99,102,241,0.2)]', badge: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30', button: 'bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border-indigo-500/30' };
       case 'computerscience': return { border: 'border-rose-500/30 hover:border-rose-400/80', glow: 'group-hover:shadow-[0_0_30px_rgba(244,63,94,0.2)]', badge: 'bg-rose-500/10 text-rose-300 border-rose-500/30', button: 'bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border-rose-500/30' };
+      case 'geography': return { border: 'border-green-500/30 hover:border-green-400/80', glow: 'group-hover:shadow-[0_0_30px_rgba(34,197,94,0.2)]', badge: 'bg-green-500/10 text-green-300 border-green-500/30', button: 'bg-green-600/20 hover:bg-green-600 text-green-300 hover:text-white border-green-500/30' };
+      case 'business': return { border: 'border-amber-500/30 hover:border-amber-400/80', glow: 'group-hover:shadow-[0_0_30px_rgba(245,158,11,0.2)]', badge: 'bg-amber-500/10 text-amber-300 border-amber-500/30', button: 'bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white border-amber-500/30' };
     }
   };
 

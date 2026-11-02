@@ -91,5 +91,17 @@ export const IGCSE_SUBJECTS: SubjectMetadata[] = [
     chapterCount: 26,
     simulationCount: 100,
   },
+  {
+    id: 'geography', name: 'Geography', code: '0460', syllabusYear: '2027–2029',
+    tagline: 'Physical systems, people, places and geographical skills',
+    description: 'Investigate rivers, coasts, ecosystems, hazards, climate, populations, cities, development, economies and resources with interactive data models.',
+    themeColor: '#16a34a', accentColor: '#4ade80', gradient: 'from-green-500/20 via-emerald-500/10 to-transparent', iconName: 'Map', unitCount: 2, chapterCount: 10, simulationCount: 100,
+  },
+  {
+    id: 'business', name: 'Business', code: '0264', syllabusYear: '2027–2029',
+    tagline: 'Enterprise, people, marketing, operations and finance',
+    description: 'Explore business choices using interactive models for enterprise, people, marketing, operations, finance and external influences.',
+    themeColor: '#d97706', accentColor: '#fbbf24', gradient: 'from-amber-500/20 via-orange-500/10 to-transparent', iconName: 'BriefcaseBusiness', unitCount: 1, chapterCount: 6, simulationCount: 100,
+  },
 ];
 

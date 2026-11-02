@@ -15,6 +15,8 @@ const SUBJECT_COLORS: Record<string, { primary: string; accent: string; bg: stri
   environmental: { primary: '#14b8a6', accent: '#2dd4bf', bg: 'rgba(20,184,166,0.08)', border: 'rgba(20,184,166,0.3)' },
   mathematics: { primary: '#6366f1', accent: '#818cf8', bg: 'rgba(99,102,241,0.08)', border: 'rgba(99,102,241,0.3)' },
   computerscience: { primary: '#f43f5e', accent: '#fb7185', bg: 'rgba(244,63,94,0.08)', border: 'rgba(244,63,94,0.3)' },
+  geography: { primary: '#16a34a', accent: '#4ade80', bg: 'rgba(22,163,74,0.08)', border: 'rgba(22,163,74,0.3)' },
+  business: { primary: '#d97706', accent: '#fbbf24', bg: 'rgba(217,119,6,0.08)', border: 'rgba(217,119,6,0.3)' },
 };
 
 // Subject-specific deterministic output models

@@ -79,6 +79,26 @@ const TOPICS: Record<SubjectId, SimulationTopic[]> = {
     { code: '9', title: 'Databases', model: 'database', objective: 'Explore records, fields, keys, queries and validation.', equations: ['query result = rows satisfying selection conditions'] },
     { code: '10', title: 'Boolean logic', model: 'logic', objective: 'Construct logic circuits and verify truth tables.', equations: ['Q = A ∧ B', 'Q = A ⊕ B'] },
   ],
+  geography: [
+    { code: '1', title: 'Changing river environments', model: 'geo-rivers', objective: 'Relate discharge, velocity and river landforms.', equations: ['discharge = area × velocity'] },
+    { code: '2', title: 'Changing coastal environments', model: 'geo-coasts', objective: 'Investigate waves, sediment movement and coastal management.', equations: ['longshore drift transfers sediment alongshore'] },
+    { code: '3', title: 'Changing ecosystems', model: 'geo-ecosystems', objective: 'Compare ecosystem structure, nutrient cycles and human impacts.', equations: ['NPP = photosynthesis − respiration'] },
+    { code: '4', title: 'Tectonic hazards', model: 'geo-hazards', objective: 'Compare hazard risk, exposure, vulnerability and preparedness.', equations: ['risk = probability × impact'] },
+    { code: '5', title: 'Climate change', model: 'geo-climate', objective: 'Interpret climate evidence and mitigation and adaptation choices.', equations: ['anomaly = observed − baseline'] },
+    { code: '6', title: 'Changing populations', model: 'geo-population', objective: 'Interpret population structure, migration and demographic change.', equations: ['change = births − deaths + net migration'] },
+    { code: '7', title: 'Changing towns and cities', model: 'geo-urban', objective: 'Investigate urban land use, growth and service access.', equations: ['density = population / area'] },
+    { code: '8', title: 'Development', model: 'geo-development', objective: 'Compare development indicators and strategies.', equations: ['HDI combines health, education and income'] },
+    { code: '9', title: 'Changing economies', model: 'geo-economies', objective: 'Explore employment structure and economic change.', equations: ['sector share = sector employment / total employment'] },
+    { code: '10', title: 'Resource provision', model: 'geo-resources', objective: 'Assess resource demand, access and sustainable provision.', equations: ['deficit = demand − sustainable supply'] },
+  ],
+  business: [
+    { code: '1', title: 'Understanding business activity', model: 'bus-enterprise', objective: 'Evaluate enterprise, ownership, objectives and stakeholders.', equations: ['added value = selling price − bought-in costs'] },
+    { code: '2', title: 'People in business', model: 'bus-people', objective: 'Explore recruitment, training, motivation and productivity.', equations: ['productivity = output / employees'] },
+    { code: '3', title: 'Marketing', model: 'bus-marketing', objective: 'Use market research and the marketing mix in decisions.', equations: ['market share = sales / total market × 100'] },
+    { code: '4', title: 'Operations management', model: 'bus-operations', objective: 'Compare production methods, quality and productivity.', equations: ['productivity = output / input'] },
+    { code: '5', title: 'Financial information and decisions', model: 'bus-finance', objective: 'Interpret costs, revenue, profit, cash flow and break-even.', equations: ['break-even = fixed costs / contribution per unit'] },
+    { code: '6', title: 'External influences on business activity', model: 'bus-external', objective: 'Assess economic, legal, environmental and global influences.', equations: ['real value = nominal value / price index × 100'] },
+  ],
 };
 
 const parameter = (id: string, name: string, symbol: string, unit: string, min: number, max: number, step: number, value: number, description: string): SimulationParameter => ({ id, name, symbol, unit, min, max, step, defaultValue: value, description, category: 'primary' });
@@ -132,7 +152,7 @@ function classify(subject: SubjectId, title: string): string {
   return /transmission|packet|error check|checksum/.test(t) ? 'transmission' : /hardware|processor|cpu|memory|storage/.test(t) ? 'hardware' : /software|operating system/.test(t) ? 'software' : /network|internet|router|ip address/.test(t) ? 'network' : /sensor|automated|control system|emerging technolog/.test(t) ? 'automation' : /algorithm|search|sort/.test(t) ? 'algorithms' : /program|iteration|loop|python/.test(t) ? 'programming' : /database|query|record|field/.test(t) ? 'database' : /logic|boolean|gate|truth table/.test(t) ? 'logic' : 'binary';
 }
 
-const subjectPrefix: Record<SubjectId, string> = { physics: 'phys', chemistry: 'chem', biology: 'bio', environmental: 'env', mathematics: 'math', computerscience: 'cs' };
+const subjectPrefix: Record<SubjectId, string> = { physics: 'phys', chemistry: 'chem', biology: 'bio', environmental: 'env', mathematics: 'math', computerscience: 'cs', geography: 'geo', business: 'bus' };
 
 export function buildSimulationCatalog(): Record<string, SimulationMetadata> {
   const catalog: Record<string, SimulationMetadata> = {};
@@ -192,4 +212,4 @@ export function buildSimulationCatalog(): Record<string, SimulationMetadata> {
   return catalog;
 }
 
-const IGCSE_SUBJECTS_CODE: Record<SubjectId, string> = { physics: '0625', chemistry: '0620', biology: '0610', environmental: '0680', mathematics: '0580', computerscience: '0478' };
+const IGCSE_SUBJECTS_CODE: Record<SubjectId, string> = { physics: '0625', chemistry: '0620', biology: '0610', environmental: '0680', mathematics: '0580', computerscience: '0478', geography: '0460', business: '0264' };
