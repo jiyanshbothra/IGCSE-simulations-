@@ -1,4 +1,5 @@
 import React from 'react';
+import { AdditionalMathStage } from './AdditionalMathStage';
 import './visual-stage.css';
 import './visual-stage-details.css';
 
@@ -21,6 +22,7 @@ export function VisualStage({ operation, family, values, results, accent, title 
 
 function scene(operation, family, values, results) {
   const common = { viewBox: '0 0 760 340', role: 'img', 'aria-label': `${operation} model diagram` };
+  if (family === 'advancedMath') return <AdditionalMathStage operation={operation} values={values} results={results} />;
   if (operation === 'wave' || operation === 'sound' || operation === 'spectrum') return <WaveScene {...common} operation={operation} values={values} results={results} />;
   if (family === 'particles') return <ParticleScene {...common} operation={operation} values={values} results={results} />;
   if (family === 'motion') return <MotionScene {...common} operation={operation} values={values} results={results} />;

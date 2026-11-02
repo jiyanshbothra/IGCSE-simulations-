@@ -112,6 +112,128 @@
         ["9", "Databases", "Explore records, fields, keys, validation, and query results.", "databases", "database", "query output contains records satisfying all criteria"],
         ["10", "Boolean logic", "Construct logic circuits and verify truth tables.", "logic", "logic", "Boolean output follows the selected gate truth function"]
       ]
+    },
+    {
+      "id": "additionalmaths",
+      "name": "Additional Mathematics",
+      "code": "0606",
+      "period": "2028-2030",
+      "color": "#b69cff",
+      "icon": "A+",
+      "topics": [
+        [
+          "1",
+          "Functions",
+          "Explore function notation, domain and range, composite functions, and inverse functions.",
+          "amFunctions",
+          "amFunctions",
+          "Function outputs follow the defined mapping and its domain."
+        ],
+        [
+          "2",
+          "Quadratic functions",
+          "Investigate roots, discriminant, turning point, and transformations of quadratic graphs.",
+          "amQuadratics",
+          "amQuadratics",
+          "For y = ax^2 + bx + c, the discriminant b^2 - 4ac determines the roots."
+        ],
+        [
+          "3",
+          "Factors of polynomials",
+          "Connect polynomial roots, linear factors, expansion, and the remainder theorem.",
+          "amPolynomialFactors",
+          "amPolynomialFactors",
+          "A root r gives a factor (x - r)."
+        ],
+        [
+          "4",
+          "Equations, inequalities and graphs",
+          "Compare algebraic roots with graph intersections and solution intervals.",
+          "amEquationsInequalities",
+          "amEquationsInequalities",
+          "Inequality solutions follow the sign of the expression between its roots."
+        ],
+        [
+          "5",
+          "Simultaneous equations",
+          "Find and interpret intersections of a straight line and a quadratic curve.",
+          "amSimultaneous",
+          "amSimultaneous",
+          "Simultaneous solutions are coordinates where both equations are satisfied."
+        ],
+        [
+          "6",
+          "Logarithmic and exponential functions",
+          "Compare exponential growth with logarithmic inverses and solve related equations.",
+          "amLogExponential",
+          "amLogExponential",
+          "Log base b of x is the inverse operation to b raised to a power."
+        ],
+        [
+          "7",
+          "Straight-line graphs",
+          "Relate gradient and intercept to parallel, perpendicular, and transformed lines.",
+          "amStraightLine",
+          "amStraightLine",
+          "Parallel lines share a gradient; perpendicular gradients multiply to -1."
+        ],
+        [
+          "8",
+          "Coordinate geometry of the circle",
+          "Explore circle equations, radius, centre, and tangent geometry.",
+          "amCircle",
+          "amCircle",
+          "A circle with centre (h, k) and radius r satisfies (x-h)^2 + (y-k)^2 = r^2."
+        ],
+        [
+          "9",
+          "Circular measure",
+          "Connect radians to arc length, sector area, and chord length.",
+          "amCircularMeasure",
+          "amCircularMeasure",
+          "Arc length = radius * angle in radians."
+        ],
+        [
+          "10",
+          "Trigonometry",
+          "Explore radian graphs, identities, and the effect of transformations on trigonometric functions.",
+          "amTrigonometry",
+          "amTrigonometry",
+          "sin^2 x + cos^2 x = 1 for every angle x."
+        ],
+        [
+          "11",
+          "Permutations and combinations",
+          "Compare ordered arrangements with selections where order does not matter.",
+          "amPermutationsCombinations",
+          "amPermutationsCombinations",
+          "nPr = n!/(n-r)! and nCr = n!/[r!(n-r)!]."
+        ],
+        [
+          "12",
+          "Series",
+          "Investigate arithmetic and geometric sequences, nth terms, and finite sums.",
+          "amSeries",
+          "amSeries",
+          "Arithmetic and geometric terms follow distinct recurrence rules."
+        ],
+        [
+          "13",
+          "Vectors in two dimensions",
+          "Resolve and combine vectors and relate components to magnitude and direction.",
+          "amVectors2D",
+          "amVectors2D",
+          "Vector addition combines corresponding components."
+        ],
+        [
+          "14",
+          "Calculus",
+          "Explore derivatives as gradients and integrals as signed area under a curve.",
+          "amCalculus",
+          "amCalculus",
+          "For a quadratic, differentiation gives tangent gradient and integration gives signed area."
+        ]
+      ]
     }
   ]
 }
