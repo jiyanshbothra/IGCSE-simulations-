@@ -1,0 +1,15 @@
+.lesson-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0;padding:0}
+.lesson-steps span{display:flex;align-items:center;gap:8px;border:1px solid #27364b;border-radius:9px;background:#0b1220;padding:9px 10px;color:#aab8cb;font-size:11px}
+.lesson-steps b{display:grid;place-items:center;width:21px;height:21px;border-radius:50%;background:#083344;color:#67e8f9;font:11px 'DM Mono',monospace}
+.investigation-question{border-left:2px solid #22d3ee;background:#0b1724;padding:11px 13px;color:#dbeafe!important;font-weight:600}
+.trial-graph{margin:16px 0 20px;border:1px solid #1b2b40;border-radius:11px;background:linear-gradient(135deg,#0b1420,#09111c);padding:12px 14px}
+.trial-graph-heading{display:flex;justify-content:space-between;gap:10px;color:#cbd5e1;font-size:11px;font-weight:700}
+.trial-graph-heading small{color:#8494aa;font-size:10px;font-weight:400}
+.graph-controls{display:flex;align-items:center;gap:9px;margin-top:14px;color:#94a3b8;font-size:10px}
+.graph-controls select{max-width:100%;border:1px solid #2a3a4f;border-radius:7px;background:#080e17;padding:6px 9px;color:#dbe6f4;font-size:10px}
+.trial-graph svg{width:100%;height:auto;max-height:230px;margin-top:7px;overflow:visible}
+.trial-graph .graph-grid{fill:none;stroke:#263449;stroke-width:1}
+.trial-graph .trial-line{fill:none;stroke:#22d3ee;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.trial-graph circle{fill:#67e8f9;stroke:#083344;stroke-width:2}
+.trial-graph text{fill:#94a3b8;font-size:10px;font-family:'DM Mono',monospace}
+@media(max-width:600px){.lesson-steps{grid-template-columns:1fr}.trial-graph-heading{flex-direction:column;gap:4px}}
