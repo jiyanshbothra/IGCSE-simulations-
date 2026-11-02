@@ -1,0 +1,117 @@
+{
+  "subjects": [
+    {
+      "id": "physics", "name": "Physics Pure", "code": "0625", "period": "2026-2028", "color": "#38bdf8", "icon": "⚛",
+      "topics": [
+        ["1.1", "Physical quantities and measurement", "Measure length, time, and volume; evaluate resolution, precision, and uncertainty.", "measurement", "measurement", "resolution and uncertainty"],
+        ["1.2", "Motion", "Investigate distance, displacement, speed, velocity, acceleration, and motion graphs.", "motion", "kinematics", "v = u + at; s = ut + 1/2 at^2"],
+        ["1.3", "Mass, weight and density", "Distinguish mass from weight and determine density from mass and volume.", "density", "density", "density = mass / volume"],
+        ["1.4", "Forces", "Explore resultant forces, Newton's laws, friction, drag, and terminal velocity.", "forces", "force", "F = ma"],
+        ["1.5", "Momentum", "Relate momentum, force, and change in momentum during interactions.", "momentum", "momentum", "p = mv; F = change in p / change in t"],
+        ["1.6", "Energy stores and transfers", "Track energy transfers and conservation in mechanical systems.", "energy", "energy", "GPE = mgh; KE = 1/2 mv^2"],
+        ["1.7", "Work and power", "Measure work done and compare power for different transfers.", "workPower", "workPower", "W = Fd; P = W / t"],
+        ["1.8", "Pressure", "Relate pressure to force and area and model pressure in liquids.", "pressure", "pressure", "p = F / A; p = rho g h"],
+        ["2.1", "The kinetic particle model", "Explain changes of state, gas pressure, and temperature using particle motion.", "particles", "particleEnergy", "mean kinetic energy is proportional to absolute temperature"],
+        ["2.2", "Thermal properties and temperature", "Investigate specific heat capacity, latent heat, and thermal expansion.", "thermal", "specificHeat", "E = mc DeltaT"],
+        ["2.3", "Thermal energy transfers", "Compare conduction, convection, and radiation under controlled conditions.", "heatTransfer", "heatTransfer", "energy transfer rate depends on material and temperature difference"],
+        ["3.1", "General properties of waves", "Relate wave speed, frequency, wavelength, amplitude, and period.", "waves", "wave", "v = f lambda"],
+        ["3.2", "Light", "Trace reflection and refraction and investigate lenses and image formation.", "optics", "refraction", "n = sin(i) / sin(r)"],
+        ["3.3", "Electromagnetic spectrum", "Compare electromagnetic waves, their properties, uses, and risks.", "spectrum", "spectrum", "all electromagnetic waves travel at c in a vacuum"],
+        ["3.4", "Sound", "Investigate sound transmission, frequency, amplitude, and echoes.", "sound", "sound", "v = f lambda"],
+        ["4.1", "Magnetism", "Map magnetic fields and compare permanent magnets and electromagnets.", "magnetism", "magneticField", "field direction is the direction of force on a north pole"],
+        ["4.2", "Electrical quantities", "Relate charge, current, potential difference, and resistance.", "electricalQuantities", "charge", "Q = It; V = E / Q"],
+        ["4.3", "Electric circuits", "Compare current and potential difference in series and parallel circuits.", "circuits", "circuit", "V = IR"],
+        ["4.4", "Electrical safety", "Relate power, current, fuses, and safe electrical appliance operation.", "safety", "electricalPower", "P = IV"],
+        ["4.5", "Electromagnetic effects", "Investigate motor effect, electromagnetic induction, and transformers.", "induction", "induction", "induced e.m.f. increases with rate of flux change"],
+        ["5.1", "The nuclear atom", "Model atomic structure, isotopes, and changes in nuclear notation.", "atomic", "isotope", "nucleon number = proton number + neutron number"],
+        ["5.2", "Radioactivity", "Model random decay, half-life, background radiation, and shielding.", "radioactivity", "decay", "N = N0 (1/2)^(t / half-life)"],
+        ["6.1", "The Earth and the Solar System", "Compare planetary orbits, satellites, and gravitational motion.", "orbits", "orbit", "orbital speed = 2 pi r / period"],
+        ["6.2", "Stars and the Universe", "Interpret stellar life cycles, redshift, and evidence for an expanding universe.", "stars", "redshift", "redshift = change in wavelength / original wavelength"]
+      ]
+    },
+    {
+      "id": "chemistry", "name": "Chemistry Pure", "code": "0620", "period": "2026-2028", "color": "#34d399", "icon": "⚗",
+      "topics": [
+        ["1", "States of matter", "Use particle theory to interpret solids, liquids, gases, diffusion, and changes of state.", "states", "particleState", "mean kinetic energy changes with temperature"],
+        ["2", "Atoms, elements and compounds", "Model atomic structure, isotopes, ions, bonding, and formulae.", "atomicStructure", "atomicStructure", "relative atomic mass is the abundance-weighted mean"],
+        ["3", "Stoichiometry", "Use balanced equations, formulae, moles, reacting masses, and concentration.", "stoichiometry", "moles", "n = m / Mr; c = n / V"],
+        ["4", "Electrochemistry", "Trace ions during electrolysis and predict products at each electrode.", "electrolysis", "electrolysis", "charge = current x time"],
+        ["5", "Chemical energetics", "Compare exothermic and endothermic reactions and energy profiles.", "energetics", "enthalpy", "bond energy change = bonds broken - bonds formed"],
+        ["6", "Chemical reactions", "Investigate rates, collision theory, catalysts, and reversible reactions.", "reactionRate", "reactionRate", "rate = change in quantity / time"],
+        ["7", "Acids, bases and salts", "Model neutralisation, pH, salt preparation, and titration.", "acidBase", "neutralisation", "acid + base -> salt + water"],
+        ["8", "The Periodic Table", "Compare groups, periods, electron arrangements, and periodic trends.", "periodicTable", "periodicity", "properties repeat with outer electron configuration"],
+        ["9", "Metals", "Compare reactivity, displacement, extraction, alloys, and corrosion.", "metals", "reactivity", "a more reactive metal displaces a less reactive metal"],
+        ["10", "Chemistry of the environment", "Model air and water composition, pollutants, and treatment choices.", "environmentChem", "pollution", "concentration = amount / volume"],
+        ["11", "Organic chemistry", "Explore hydrocarbons, functional groups, reactions, and polymers.", "organic", "organic", "alkane formula CnH2n+2"],
+        ["12", "Experimental techniques and chemical analysis", "Practise separation, chromatography, and qualitative ion and gas tests.", "analysis", "chromatography", "Rf = distance moved by spot / distance moved by solvent"]
+      ]
+    },
+    {
+      "id": "biology", "name": "Biology Pure", "code": "0610", "period": "2026-2028", "color": "#a3e635", "icon": "🧬",
+      "topics": [
+        ["1", "Characteristics and classification of living organisms", "Classify organisms using shared features and observable characteristics.", "classification", "classification", "classification uses observable diagnostic characteristics"],
+        ["2", "Organisation of the organism", "Explore cell structures, tissues, organs, microscopy, and magnification.", "cells", "magnification", "magnification = image size / actual size"],
+        ["3", "Movement into and out of cells", "Compare diffusion, osmosis, and active transport across membranes.", "membranes", "osmosis", "net movement depends on concentration or water potential gradient"],
+        ["4", "Biological molecules", "Model carbohydrates, proteins, lipids, DNA, and food tests.", "molecules", "biomolecule", "large biological molecules are assembled from smaller units"],
+        ["5", "Enzymes", "Investigate effects of temperature, pH, and substrate concentration on enzyme activity.", "enzymes", "enzyme", "rate depends on enzyme-substrate collision and active-site shape"],
+        ["6", "Plant nutrition", "Explore photosynthesis, limiting factors, and leaf adaptations.", "photosynthesis", "photosynthesis", "carbon dioxide + water -> glucose + oxygen"],
+        ["7", "Human nutrition", "Model digestion, absorption, and nutrient balance.", "digestion", "digestion", "food molecules are hydrolysed into absorbable products"],
+        ["8", "Transport in plants", "Investigate xylem, phloem, transpiration, and translocation.", "plantTransport", "transpiration", "transpiration rate responds to environmental conditions"],
+        ["9", "Transport in animals", "Trace blood through the heart and compare circulation and blood components.", "circulation", "cardiacOutput", "cardiac output = heart rate x stroke volume"],
+        ["10", "Diseases and immunity", "Model pathogen transmission, immune response, and vaccination.", "immunity", "bioTransmission", "new infections depend on contacts and transmission probability"],
+        ["11", "Gas exchange in humans", "Compare ventilation, lung volume, and gas exchange surfaces.", "gasExchange", "ventilation", "minute ventilation = tidal volume x breathing rate"],
+        ["12", "Respiration", "Compare aerobic and anaerobic respiration and energy release.", "respiration", "respiration", "glucose + oxygen -> carbon dioxide + water"],
+        ["13", "Excretion in humans", "Model kidney filtration, reabsorption, and water balance.", "excretion", "kidney", "urine concentration responds to water balance"],
+        ["14", "Coordination and response", "Trace nervous pathways, reflex arcs, hormones, and homeostasis.", "coordination", "reflex", "response time = stimulus-to-response interval"],
+        ["15", "Drugs", "Investigate drug dose, effect, dependence, and risks using evidence.", "drugs", "doseResponse", "response depends on dose and biological sensitivity"],
+        ["16", "Reproduction", "Compare reproductive processes, cycles, and inheritance pathways.", "reproduction", "reproduction", "offspring inherit genetic material from parents"],
+        ["17", "Inheritance", "Predict monohybrid crosses, genotype ratios, and phenotype probabilities.", "inheritance", "inheritance", "probability follows allele segregation"],
+        ["18", "Variation and selection", "Model variation and how selection changes population traits.", "selection", "selection", "trait frequency changes with differential reproductive success"],
+        ["19", "Organisms and their environment", "Investigate food webs, population sampling, and ecosystem interactions.", "ecosystems", "foodWeb", "energy transfer between trophic levels is inefficient"],
+        ["20", "Human influences on ecosystems", "Compare human impacts, conservation strategies, and biodiversity change.", "humanImpact", "biodiversity", "species richness counts species; evenness compares abundance"],
+        ["21", "Biotechnology and genetic modification", "Model fermentation, genetic modification, and biotechnology yields.", "biotechnology", "fermentation", "yield = useful product / starting substrate"]
+      ]
+    },
+    {
+      "id": "environmental", "name": "Environmental Management", "code": "0680", "period": "2027-2029", "color": "#2dd4bf", "icon": "🌍",
+      "topics": [
+        ["1", "Natural resources", "Compare renewable and non-renewable resources, demand, supply, and management.", "resources", "resourceBalance", "resource balance = sustainable supply - demand"],
+        ["2", "Land", "Investigate soil, agriculture, land use, degradation, and management.", "land", "erosion", "soil loss responds to slope, cover, and runoff"],
+        ["3", "Water", "Model water cycle stores, availability, pollution, and sustainable supply.", "water", "waterBalance", "change in storage = inputs - outputs"],
+        ["4", "The atmosphere and human activities", "Analyse climate, air pollution, greenhouse gases, and mitigation.", "atmosphere", "climateBalance", "net radiative balance = incoming - outgoing energy"],
+        ["5", "Ecosystems, biodiversity and fieldwork", "Plan sampling and interpret biodiversity and ecosystem evidence.", "fieldwork", "biodiversity", "Simpson diversity responds to richness and evenness"],
+        ["6", "Natural hazards", "Assess hazard risk using probability, exposure, vulnerability, and preparedness.", "hazards", "hazardRisk", "risk = probability x exposure x vulnerability"],
+        ["7", "Human population", "Interpret population structures, growth, migration, and demographic change.", "population", "populationGrowth", "population change = births - deaths + net migration"]
+      ]
+    },
+    {
+      "id": "mathematics", "name": "Mathematics", "code": "0580", "period": "2025-2027", "color": "#818cf8", "icon": "∑",
+      "topics": [
+        ["1", "Number", "Explore number operations, fractions, percentages, bounds, and standard form.", "number", "number", "percentage change = (new - original) / original x 100"],
+        ["2", "Algebra and graphs", "Manipulate expressions, solve equations, and investigate functions and sequences.", "algebra", "algebra", "substitute x into the defined expression to obtain y"],
+        ["3", "Coordinate geometry", "Investigate gradient, distance, midpoint, and line equations.", "coordinate", "coordinate", "gradient = change in y / change in x"],
+        ["4", "Geometry", "Explore angle relationships, polygons, circle theorems, and constructions.", "geometry", "geometry", "angles in a triangle sum to 180 degrees"],
+        ["5", "Mensuration", "Calculate perimeter, area, surface area, and volume.", "mensuration", "mensuration", "area and volume follow shape-specific formulae"],
+        ["6", "Trigonometry", "Use trigonometric ratios, sine and cosine rules, and bearings.", "trigonometry", "trigonometry", "sin^2(theta) + cos^2(theta) = 1"],
+        ["7", "Transformations and vectors", "Apply transformations and combine vector translations.", "vectors", "vector", "vector addition adds corresponding components"],
+        ["8", "Probability", "Model single and combined events and compare expected frequency.", "probability", "probability", "expected frequency = probability x number of trials"],
+        ["9", "Statistics", "Compare data displays, averages, spread, cumulative frequency, and correlation.", "statistics", "statistics", "mean = sum of data / number of data values"]
+      ]
+    },
+    {
+      "id": "computerscience", "name": "Computer Science", "code": "0478", "period": "2026-2028", "color": "#fb7185", "icon": "⌘",
+      "topics": [
+        ["1", "Data representation", "Convert binary, denary, and hexadecimal and represent images, sound, and text.", "dataRepresentation", "binary", "denary = sum(bit x 2^position)"],
+        ["2", "Data transmission", "Model packets, error detection, transmission methods, and data rates.", "transmission", "transmission", "throughput = data size / time"],
+        ["3", "Hardware", "Trace processor, memory, storage, and input/output system behaviour.", "hardware", "cpu", "CPU time depends on instructions, cycles, and clock rate"],
+        ["4", "Software", "Compare operating system functions, utilities, and translators.", "software", "software", "translation maps source instructions to executable representation"],
+        ["5", "The internet and its uses", "Explore addressing, protocols, routing, web services, and security risks.", "networks", "network", "packet delivery depends on route and transmission conditions"],
+        ["6", "Automated and emerging technologies", "Model sensors, controllers, actuators, robotics, and emerging technologies.", "automation", "controlSystem", "controller output is determined by sensor input and control rule"],
+        ["7", "Algorithm design and problem-solving", "Trace algorithms, searches, sorts, validation, and efficiency.", "algorithms", "algorithm", "comparison count depends on algorithm and input order"],
+        ["8", "Programming", "Trace variables, selection, iteration, procedures, and test data.", "programming", "programTrace", "state changes follow each executed statement"],
+        ["9", "Databases", "Explore records, fields, keys, validation, and query results.", "databases", "database", "query output contains records satisfying all criteria"],
+        ["10", "Boolean logic", "Construct logic circuits and verify truth tables.", "logic", "logic", "Boolean output follows the selected gate truth function"]
+      ]
+    }
+  ]
+}
