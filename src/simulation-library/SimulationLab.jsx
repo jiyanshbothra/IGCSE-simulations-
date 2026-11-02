@@ -5,6 +5,7 @@ import { VisualStage } from './VisualStage';
 import './lab-quality.css';
 import './lab-controls.css';
 import './lab-premium.css';
+import './lab-visibility.css';
 
 export function SimulationLab({ simulationId }) {
   const spec = LAB_BY_ID[simulationId];
