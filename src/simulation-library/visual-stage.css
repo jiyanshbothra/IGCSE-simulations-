@@ -13,3 +13,5 @@
 @keyframes packet-travel{from{transform:translateX(-10px);opacity:.55}to{transform:translateX(14px);opacity:1}}
 @media(prefers-reduced-motion:reduce){.simulation-stage *{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 @media(max-width:700px){.stage-toolbar,.stage-caption{padding:0 9px;font-size:8px}.stage-viewport{min-height:210px;padding:5px 3px 0}.scene-svg{max-height:270px}.stage-chapter{display:none}.stage-caption-result{font-size:8px}.simulation-stage{margin:12px 0 16px}}
+.triangle-invalid{fill:#5b252b66;stroke:#e88989;stroke-width:2;stroke-dasharray:7 5}.heating-curve{fill:none;stroke:#84d5df;stroke-width:2.5;stroke-linejoin:round}.heating-curve-marker{fill:#f3bd70;stroke:#fff2d9;stroke-width:2}
+.catalyst-particle{fill:#e4bd66;stroke:#fff1c6;stroke-width:1}
