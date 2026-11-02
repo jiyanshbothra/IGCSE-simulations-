@@ -23,6 +23,26 @@ const SUBJECT_COLORS: Record<string, { primary: string; accent: string; bg: stri
 function computePhysics(model: string, params: Record<string, number>): Record<string, number | string> {
   const values = Object.values(params);
   const [a = 0, b = 0, c = 0] = values;
+  const [geoOrBusinessOutput, ...rest] = [
+    ['geo-rivers', a * b], ['geo-coasts', a * b / 100], ['geo-ecosystems', a - b],
+    ['geo-hazards', a * b * (c || 1) / 10000], ['geo-climate', a - b],
+    ['geo-population', a - b + c], ['geo-urban', a / (b || 1)],
+    ['geo-development', (a + b + c) / 3], ['geo-economies', a / (b || 1) * 100],
+    ['geo-resources', a - b], ['bus-enterprise', a - b], ['bus-people', a / (b || 1)],
+    ['bus-marketing', a / (b || 1) * 100], ['bus-operations', a / (b || 1)],
+    ['bus-finance', a / ((b - c) || 1)], ['bus-external', a / (b || 1) * 100],
+  ].find(([key]) => key === model) ?? [];
+  if (typeof geoOrBusinessOutput === 'string') {
+    const outputIds: Record<string, string> = {
+      'geo-rivers': 'discharge', 'geo-coasts': 'transportedSediment', 'geo-ecosystems': 'netProduction',
+      'geo-hazards': 'riskIndex', 'geo-climate': 'temperatureAnomaly', 'geo-population': 'populationChange',
+      'geo-urban': 'populationDensity', 'geo-development': 'developmentIndex', 'geo-economies': 'sectorShare',
+      'geo-resources': 'resourceBalance', 'bus-enterprise': 'addedValue', 'bus-people': 'labourProductivity',
+      'bus-marketing': 'marketShare', 'bus-operations': 'productivity', 'bus-finance': 'breakEvenOutput',
+      'bus-external': 'realValue',
+    };
+    return { [outputIds[geoOrBusinessOutput]]: rest[0] as number };
+  }
   const aliases: Record<string, string> = {
     optics: 'waves', electromagnetism: 'circuits', radioactivity: 'nuclear', space: 'energy',
     particles: 'thermal', practical: 'mathematics', atoms: 'binary', stoichiometry: 'energy',
