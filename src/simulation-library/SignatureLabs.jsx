@@ -178,14 +178,17 @@ export function InheritanceWorkbenchLab({ spec }) {
   const maternal = mother.split('');
   const paternal = father.split('');
   const offspring = paternal.flatMap((p, row) => maternal.map((m, col) => ({ row, col, genotype: [m, p].sort().join(''), phenotype: m === 'A' || p === 'A' ? 'Dominant phenotype' : 'Recessive phenotype' })));
-  const count = samples.reduce((acc, value) => { acc[value] = (acc[value] || 0) + 1; return acc; }, {});
   const reset = () => setSamples([]);
+  const simulateFour = () => {
+    const batch = Array.from({ length: 4 }, () => offspring[Math.floor(Math.random() * offspring.length)].genotype);
+    setSamples((previous) => [...previous, ...batch]);
+  };
   return <LabShell spec={spec} title="Inheritance: cross the alleles" badge={String(samples.length)} objective="Choose a genotype for each parent, then tap Punnett-square offspring to sample outcomes and compare the observed ratio with the prediction.">
     <div className="signature-grid inheritance-layout">
       <section className="panel inheritance-panel"><div className="panel-head lab-section-head"><div><span className="section-index">ALLELE CROSS · TAP AN OFFSPRING CELL</span><h2>Build the Punnett square</h2><p>Each square is one equally likely allele combination.</p></div><button className="text-button" onClick={reset}>Clear sample</button></div>
         <div className="parent-selectors"><GenotypePicker label="Parent 1" value={mother} onChange={setMother}/><span className="cross-symbol">×</span><GenotypePicker label="Parent 2" value={father} onChange={setFather}/></div>
         <div className="punnett-board"><div className="punnett-corner">Gametes</div>{maternal.map((allele, i) => <div key={`mh${i}`} className="gamete-heading allele-a">{allele}</div>)}{paternal.map((p, row) => <React.Fragment key={`row${row}`}><div className="gamete-heading allele-a">{p}</div>{maternal.map((m, col) => { const result = offspring[row * 2 + col]; return <button key={`${row}-${col}`} className={`punnett-outcome ${result.genotype.includes('A') ? 'dominant-outcome' : 'recessive-outcome'}`} onClick={() => setSamples((previous) => [...previous, result.genotype])} aria-label={`Sample offspring genotype ${result.genotype}, ${result.phenotype}`}><b>{result.genotype}</b><small>{result.phenotype === 'Dominant phenotype' ? 'dominant' : 'recessive'}</small></button>; })}</React.Fragment>)}</div>
-        <div className="sig-actions"><button className="button primary" onClick={() => setSamples((previous) => [...previous, ...Array.from({ length: 4 }, () => offspring[Math.floor(Math.random() * offspring.length)].genotype)])}>Generate 4 random offspring</button><button className="button secondary" onClick={reset}>Start a new sample</button></div>
+        <div className="sig-actions"><button className="button primary" onClick={simulateFour}>Generate 4 random offspring</button><button className="button secondary" onClick={reset}>Start a new sample</button></div>
         <p className="touch-instruction">Tap a square to add one offspring to the sample. Parent genotype choices rebuild the square instantly.</p>
       </section>
       <aside className="sig-side-stack"><section className="panel sig-instrument"><span className="section-index">EXPECTED PROBABILITY</span>{offspring.map((item, i) => <div className="sig-reading" key={i}><span>Cell {i + 1} · {item.genotype}</span><b>25%</b></div>)}<div className="formula-card">Each cell has probability 1/4.</div></section><section className="panel sig-instrument"><span className="section-index">OBSERVED SAMPLE · {samples.length}</span><Metric label="Dominant phenotype" value={`${samples.filter((g) => g.includes('A')).length} / ${samples.length || '—'}`}/><Metric label="Recessive phenotype" value={`${samples.filter((g) => g === 'aa').length} / ${samples.length || '—'}`}/><div className="sample-genotypes">{samples.slice(-20).map((g, i) => <span key={`${i}-${g}`} className={g === 'aa' ? 'recessive-outcome' : 'dominant-outcome'}>{g}</span>)}</div></section></aside>
@@ -249,14 +252,15 @@ export function CalculusWorkbenchLab({ spec }) {
   const yLimit = Math.max(4, Math.ceil(peak / 4) * 4);
   const sy = (y) => 192 - y * (140 / yLimit);
   const path = useMemo(() => Array.from({ length: 121 }, (_, i) => { const x = -5 + i / 12; return `${i ? 'L' : 'M'}${sx(x).toFixed(1)} ${sy(f(x)).toFixed(1)}`; }).join(' '), [a, b, c]);
-  const tangentPath = `M${sx(-5)} ${sy(slope * -5 + intercept)}L${sx(5)} ${sy(slope * 5 + intercept)}`;
+  const tangentStart = Math.max(-5, x0 - 1.5);
+  const tangentEnd = Math.min(5, x0 + 1.5);
+  const tangentPath = `M${sx(tangentStart)} ${sy(slope * tangentStart + intercept)}L${sx(tangentEnd)} ${sy(slope * tangentEnd + intercept)}`;
   const setPointFromEvent = (event) => {
     const matrix = plotRef.current?.getScreenCTM(); if (!matrix) return;
     const point = plotRef.current.createSVGPoint(); point.x = event.clientX; point.y = event.clientY;
     const p = point.matrixTransform(matrix.inverse());
     setCoefficients((value) => ({ ...value, x: clamp(Number(((p.x - 80) / 48 - 5).toFixed(2)), -5, 5) }));
   };
-  const changeCoefficient = (key, amount) => setCoefficients((previous) => ({ ...previous, [key]: Number(clamp(previous[key] + amount, key === 'a' ? -3 : -8, key === 'a' ? 3 : 8).toFixed(2)) }));
   const reset = () => setCoefficients({ a: variant % 2 ? 1 : -0.5, b: variant % 3 ? -2 : 1, c: variant % 2 ? 1 : -1, x: 1.5 });
   return <LabShell spec={spec} title="Calculus: move the tangent point" badge={fmt(slope, 2)} objective="Drag the point along the quadratic. The tangent line follows it, while the gradient and signed area are recalculated from the function.">
     <div className="signature-grid calculus-layout"><section className="panel calculus-panel"><div className="panel-head lab-section-head"><div><span className="section-index">DYNAMIC GRAPH · DRAG THE POINT</span><h2>f(x) = {fmt(a, 1)}x² + ({fmt(b, 1)})x + ({fmt(c, 1)})</h2><p>Blue curve is the function; gold line is the tangent at the movable point.</p></div><button className="text-button" onClick={reset}>Reset model</button></div>
