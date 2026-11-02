@@ -1,0 +1,174 @@
+.signature-page { max-width: 1480px; }
+.signature-page .lab-hero { border-color: color-mix(in srgb,var(--lab-accent) 34%,#27394a); }
+.signature-grid { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(310px,.75fr); align-items: start; gap: 16px; }
+.sig-play-panel,.sig-instrument,.inheritance-panel,.water-panel,.calculus-panel,.binary-register-panel { padding: 22px; }
+.sig-play-panel .lab-section-head p,.inheritance-panel .lab-section-head p,.water-panel .lab-section-head p,.calculus-panel .lab-section-head p,.binary-register-panel .lab-section-head p { color: #b6c5d2; font-size: 11px; line-height: 1.6; }
+.sig-side-stack { display: grid; gap: 13px; }
+.sig-instrument { display: grid; gap: 9px; }
+.sig-instrument .section-index { margin-bottom: 2px; }
+.sig-reading { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #253542; color: #b4c2ce; font-size: 11px; }
+.sig-reading b { color: #eef4f8; font: 600 13px 'DM Mono',monospace; text-align: right; }
+.sig-reading b small { color: #a7b7c5; font: 10px 'DM Sans',system-ui,sans-serif; }
+.sig-progress { height: 7px; overflow: hidden; border-radius: 9px; background: #263b48; }
+.sig-progress i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#5da8c2,#e8a4cb); transition: width .16s ease; }
+.model-caveat { color: #94a7b5; font-size: 9px; line-height: 1.5; }
+.sig-stepper { display: flex; justify-content: space-between; align-items: center; gap: 9px; padding: 9px 0; border-bottom: 1px solid #253542; }
+.sig-stepper > span { display: grid; gap: 2px; color: #dce7ee; font-size: 11px; font-weight: 600; }
+.sig-stepper > span small { color: #9cabb8; font-size: 9px; font-weight: 400; }
+.sig-stepper > div { display: flex; align-items: center; gap: 9px; }
+.sig-stepper button { width: 32px; height: 32px; border: 1px solid #3b5363; border-radius: 8px; background: #12212c; color: #e7f4f7; font-size: 18px; cursor: pointer; }
+.sig-stepper button:focus-visible,.sig-stepper button:hover { border-color: var(--lab-accent); outline: 2px solid color-mix(in srgb,var(--lab-accent) 35%,transparent); outline-offset: 1px; }
+.sig-observation-list { display: grid; gap: 5px; max-height: 170px; overflow: auto; margin: 0; padding: 0; list-style: none; }
+.sig-observation-list li { display: grid; grid-template-columns: 24px 1fr 1fr; align-items: center; gap: 7px; padding: 7px; border: 1px solid #293a46; border-radius: 8px; background: #0c151e; }
+.sig-observation-list span { color: #adc0cf; font: 9px 'DM Mono',monospace; }
+.sig-observation-list b,.sig-observation-list em { color: #e2edf2; font: 10px 'DM Mono',monospace; font-style: normal; }
+.sig-empty,.sig-copy { margin: 0; color: #aebdca; font-size: 11px; line-height: 1.6; }
+.sig-small-heading { margin: 1px 0; color: #edf3f7; font-size: 16px; }
+.formula-card { padding: 11px; border: 1px solid #2b4451; border-radius: 9px; background: #0d1922; color: #c8e6ea; font: 12px 'DM Mono',monospace; text-align: center; }
+.sig-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.sig-actions .button { min-height: 40px; padding: 8px 11px; font-size: 11px; }
+.touch-instruction { margin: 10px 0 0; color: #a2b3c1; font-size: 10px; line-height: 1.55; }
+
+/* Titration: apparatus and its live curve are side-by-side, never layered. */
+.titration-visual-row { display: grid; grid-template-columns: minmax(220px,.78fr) minmax(300px,1.22fr); align-items: stretch; gap: 10px; }
+.titration-canvas,.titration-graph { display: block; width: 100%; height: auto; min-width: 0; border: 1px solid #2b414c; border-radius: 12px; background: radial-gradient(ellipse at 50% 35%,#142630,#0b131b 78%); }
+.apparatus-glass { fill: url(#flask-glass); stroke: #85adbd; stroke-width: 2; }
+.flask-outline { fill: none; stroke: #a1c8d3; stroke-width: 2; }
+.burette-tube { fill: #0a141b; stroke: #b5ccd3; stroke-width: 1.5; }
+.burette-solution { fill: #66bfcb; opacity: .76; }
+.burette-tick { stroke: #d0e0e4; stroke-width: 1; }
+.stopcock { fill: none; stroke: #e0b977; stroke-width: 3; stroke-linecap: round; }
+.titrant-drop { fill: #67d2df; stroke: #d2f6f7; stroke-width: 1; transition: r .15s ease; }
+.indicator-fluid { transition: fill .2s ease; }
+.sig-svg-label { fill: #d7e4ea; font: 700 11px 'DM Mono',monospace; }
+.sig-svg-note { fill: #a8bac5; font: 10px 'DM Sans',system-ui,sans-serif; }
+.flask-label { fill: #f2f7f8; font: 700 10px 'DM Mono',monospace; letter-spacing: .08em; }
+.graph-panel { fill: #0d1821; stroke: #2d4653; stroke-width: 1; }
+.graph-axes { fill: none; stroke: #92a8b6; stroke-width: 1.3; }
+.graph-grid { stroke: #465b68; stroke-opacity: .45; stroke-width: 1; }
+.graph-axis-label { fill: #a8b8c5; font: 10px 'DM Sans',system-ui,sans-serif; }
+.ph-curve { fill: none; stroke: #65d5de; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.graph-cursor { stroke: #f0bf72; stroke-width: 1.5; stroke-dasharray: 4 4; }
+.graph-dot { fill: #f1bf70; stroke: #fff1d2; stroke-width: 2; }
+
+/* Coordinate plane: the plotted points themselves are touch targets. */
+.coordinate-layout { grid-template-columns: minmax(0,1.5fr) minmax(290px,.7fr); }
+.coordinate-canvas,.calculus-canvas { display: block; width: 100%; height: auto; margin-top: 12px; border: 1px solid #304350; border-radius: 12px; background: radial-gradient(ellipse at 50% 42%,#14242d,#0b131b 77%); touch-action: none; }
+.coordinate-plot,.calculus-plot-bg { fill: #0d1821; stroke: #2b414d; stroke-width: 1; }
+.coordinate-grid,.calculus-grid { stroke: #526570; stroke-opacity: .35; stroke-width: 1; }
+.coordinate-axis,.calculus-axis { stroke: #b2c1ca; stroke-opacity: .75; stroke-width: 1.4; }
+.coordinate-label,.calculus-tick { fill: #aabac6; font: 9px 'DM Mono',monospace; }
+.coordinate-line { stroke: #9b8cff; stroke-width: 3; }
+.coordinate-triangle { fill: none; stroke: #e2b66a; stroke-width: 1.6; stroke-dasharray: 5 4; }
+.midpoint-point { fill: #f1c879; stroke: #fff1cf; stroke-width: 1.5; }
+.coordinate-mark-label,.coordinate-point-label { fill: #e8f0f5; font: 600 10px 'DM Mono',monospace; paint-order: stroke; stroke: #0c151d; stroke-width: 3px; stroke-linejoin: round; }
+.coordinate-handle { cursor: grab; outline: none; }
+.coordinate-handle:active { cursor: grabbing; }
+.coordinate-handle:focus-visible .point-a,.coordinate-handle:focus-visible .point-b { stroke: #fff; stroke-width: 4; }
+.point-hit { fill: transparent; stroke: transparent; pointer-events: all; }
+.point-a { fill: #67cce1; stroke: #d7f6fa; stroke-width: 2; }
+.point-b { fill: #dd84b3; stroke: #ffe2f1; stroke-width: 2; }
+
+/* Binary register: each bit is a large, independently operable switch. */
+.binary-layout { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(290px,.7fr); align-items: start; gap: 16px; }
+.register-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 9px; margin: 13px 0 15px; }
+.width-switch,.signed-switch { display: flex; gap: 4px; padding: 4px; border: 1px solid #2d414e; border-radius: 9px; background: #0a141c; }
+.width-switch button,.signed-switch { min-height: 34px; padding: 6px 10px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #aebdc9; font: 600 10px 'DM Sans',system-ui,sans-serif; cursor: pointer; }
+.width-switch button.selected,.signed-switch.selected { border-color: #536d88; background: #182737; color: #f0f5f9; }
+.bit-register { display: grid; grid-template-columns: repeat(8,minmax(0,1fr)); gap: 7px; }
+.bit-register.width-4 { grid-template-columns: repeat(4,minmax(0,1fr)); max-width: 440px; margin: 20px auto; }
+.bit-register.width-12 { grid-template-columns: repeat(6,minmax(0,1fr)); }
+.bit-register.width-16 { grid-template-columns: repeat(8,minmax(0,1fr)); }
+.bit-cell { display: grid; justify-items: center; gap: 8px; min-width: 0; min-height: 112px; padding: 9px 3px; border: 1px solid #334754; border-radius: 10px; background: linear-gradient(#15232d,#0d171f); color: #adbdc8; cursor: pointer; touch-action: manipulation; transition: .15s ease; }
+.bit-cell:hover,.bit-cell:focus-visible { border-color: #76d6e2; outline: 2px solid #76d6e255; outline-offset: 1px; }
+.bit-cell.bit-on { border-color: #4ab8c7; background: linear-gradient(#163d46,#112b34); color: #e3fbff; box-shadow: inset 0 0 22px #5dd4e322; }
+.bit-power { color: #a9bdca; font: 10px 'DM Mono',monospace; }
+.bit-power sup { font-size: 8px; }
+.bit-cell b { color: #f0f6f8; font: 700 25px 'DM Mono',monospace; }
+.bit-cell small { color: #aac0cd; font: 9px 'DM Mono',monospace; }
+.binary-output-grid { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 7px; margin-top: 16px; }
+.binary-output-grid > div { display: grid; gap: 7px; min-width: 0; padding: 11px; border: 1px solid #2c414d; border-radius: 9px; background: #0c1720; }
+.binary-output-grid span { color: #9db1be; font: 9px 'DM Mono',monospace; letter-spacing: .06em; }
+.binary-output-grid strong { overflow-wrap: anywhere; color: #ebf4f7; font: 600 18px 'DM Mono',monospace; }
+.binary-output-grid strong.raw-bits { font-size: 15px; letter-spacing: .06em; }
+.binary-place-value { display: flex; flex-wrap: wrap; gap: 7px; min-height: 24px; margin-top: 11px; color: #a9bdc9; font: 10px 'DM Mono',monospace; }
+.binary-place-value .place-on { color: #8fe1eb; }
+
+/* Genetics: outcome cells can be sampled directly. */
+.inheritance-layout { grid-template-columns: minmax(0,1.3fr) minmax(280px,.7fr); }
+.parent-selectors { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 18px auto; }
+.genotype-picker { display: grid; gap: 8px; padding: 12px; border: 1px solid #2d414c; border-radius: 10px; background: #0d1720; }
+.genotype-picker > span { display: flex; justify-content: space-between; gap: 16px; color: #b1c0cb; font-size: 10px; }
+.genotype-picker > span b { color: #edf5f7; font: 700 14px 'DM Mono',monospace; }
+.genotype-picker > div { display: flex; gap: 5px; }
+.genotype-picker button { min-width: 40px; min-height: 34px; border: 1px solid #394d5b; border-radius: 7px; background: #14212b; color: #c8d4dc; font: 600 11px 'DM Mono',monospace; cursor: pointer; }
+.genotype-picker button.selected { border-color: #79d2dc; background: #17343a; color: #e7fcfd; }
+.cross-symbol { color: #e4bf76; font: 500 25px 'DM Mono',monospace; }
+.punnett-board { display: grid; grid-template-columns: 56px 1fr 1fr; gap: 6px; max-width: 560px; margin: 0 auto; }
+.punnett-corner,.gamete-heading { display: grid; place-items: center; min-height: 42px; border-radius: 8px; background: #14232e; color: #cae1e7; font: 700 15px 'DM Mono',monospace; }
+.punnett-corner { color: #9fb3bf; font: 9px 'DM Sans',system-ui,sans-serif; }
+.gamete-heading { border: 1px solid #344b57; }
+.punnett-outcome { display: grid; place-content: center; gap: 6px; min-height: 97px; border: 1px solid #36515d; border-radius: 10px; cursor: pointer; touch-action: manipulation; transition: .14s ease; }
+.punnett-outcome:hover,.punnett-outcome:focus-visible { transform: translateY(-2px); border-color: #a9deea; outline: 2px solid #92e3ed55; }
+.dominant-outcome { background: linear-gradient(145deg,#13323b,#10242d); color: #d3f2f5; }
+.recessive-outcome { background: linear-gradient(145deg,#2e2440,#1d1b2c); color: #e6d5ff; }
+.punnett-outcome b { font: 700 22px 'DM Mono',monospace; }
+.punnett-outcome small { color: #acbdc7; font: 9px 'DM Sans',system-ui,sans-serif; }
+.sample-genotypes { display: flex; flex-wrap: wrap; gap: 5px; max-height: 110px; overflow: auto; }
+.sample-genotypes span { display: grid; place-items: center; width: 32px; height: 28px; border: 1px solid #3b5360; border-radius: 6px; font: 600 10px 'DM Mono',monospace; }
+
+/* Water system: storage responds to each rainfall, recharge and abstraction action. */
+.water-layout { grid-template-columns: minmax(0,1.45fr) minmax(290px,.7fr); }
+.water-canvas { display: block; width: 100%; height: auto; margin-top: 12px; border: 1px solid #30454c; border-radius: 12px; background: linear-gradient(#10202a,#0b151b); }
+.watershed-land { fill: #526657; stroke: #9bb29b; stroke-width: 2; }
+.watershed-ground { fill: #594b3d; stroke: #92795d; stroke-width: 1.5; }
+.reservoir-fill { fill: #267f98; fill-opacity: .84; stroke: #6dd3df; stroke-width: 1.5; transition: transform .25s ease; }
+.reservoir-rim { fill: none; stroke: #b4c7bb; stroke-width: 2; }
+.dam-wall { fill: #647582; stroke: #bdc8cb; stroke-width: 2; }
+.abstraction-pipe,.recharge-arrow,.runoff-arrow { fill: none; stroke: #80deea; stroke-width: 3; stroke-linecap: round; }
+.rain-cloud { fill: #aabac1; stroke: #e0e8e9; stroke-width: 1.5; }
+.rain-drop { fill: none; stroke: #72d1ed; stroke-width: 2; stroke-linecap: round; animation: rain-fall .9s ease-in infinite; }
+.water-label { fill: #d9e7e4; font: 600 10px 'DM Mono',monospace; letter-spacing: .06em; }
+.water-storage-label { fill: #f0f7f5; font: 700 15px 'DM Mono',monospace; }
+.ground-line { stroke: #a38967; stroke-width: 2; }
+.storage-gauge { position: relative; width: 45px; height: 140px; overflow: hidden; justify-self: center; border: 2px solid #9ab0bb; border-radius: 7px 7px 10px 10px; background: repeating-linear-gradient(to bottom,transparent 0 27px,#506572 28px 29px); }
+.storage-gauge i { position: absolute; right: 0; bottom: 0; left: 0; background: linear-gradient(#42b8c4,#276d9b); transition: height .25s ease; }
+.water-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.water-actions .button { min-height: 42px; padding: 8px 11px; font-size: 11px; touch-action: manipulation; }
+
+/* Additional Mathematics: a draggable x-value controls a true tangent and integral. */
+.calculus-layout { grid-template-columns: minmax(0,1.45fr) minmax(300px,.7fr); }
+.calculus-function { fill: none; stroke: #6bd1e3; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.calculus-tangent { fill: none; stroke: #f1be70; stroke-width: 2; stroke-dasharray: 7 4; }
+.calculus-area { fill: #9b89e944; stroke: #b0a1ff; stroke-width: 1; }
+.calculus-hit { fill: transparent; stroke: transparent; cursor: ew-resize; pointer-events: all; }
+.calculus-dot { fill: #f1c370; stroke: #fff0cb; stroke-width: 2; pointer-events: none; }
+.calculus-label { fill: #f2e3c2; font: 600 10px 'DM Mono',monospace; paint-order: stroke; stroke: #10171e; stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+.calculus-tick { fill: #a4b4c0; font: 8px 'DM Mono',monospace; }
+.calculus-caption { fill: #c8b8fa; font: 10px 'DM Sans',system-ui,sans-serif; }
+
+@keyframes rain-fall { 0% { opacity: .3; transform: translateY(-3px); } 100% { opacity: 1; transform: translateY(5px); } }
+@media(max-width:1050px) { .signature-grid,.coordinate-layout,.binary-layout,.inheritance-layout,.water-layout,.calculus-layout { grid-template-columns: minmax(0,1fr); } .sig-side-stack { grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; } }
+@media(max-width:740px) {
+  .signature-page .lab-hero { padding-right: 14px; padding-left: 14px; }
+  .signature-page .lab-hero h1 { font-size: clamp(25px,6vw,34px); }
+  .signature-grid,.coordinate-layout,.binary-layout,.inheritance-layout,.water-layout,.calculus-layout { gap: 10px; }
+  .sig-play-panel,.sig-instrument,.inheritance-panel,.water-panel,.calculus-panel,.binary-register-panel { padding: 15px; }
+  .sig-side-stack { grid-template-columns: minmax(0,1fr); }
+  .titration-visual-row { grid-template-columns: minmax(0,1fr); }
+  .titration-canvas { max-height: 250px; }
+  .titration-graph { max-height: 290px; }
+  .sig-actions .button,.water-actions .button { flex: 1 1 145px; }
+  .binary-output-grid { grid-template-columns: 1fr 1fr; }
+  .binary-output-grid > div:nth-child(2) { grid-column: 1/-1; grid-row: 2; }
+  .bit-register { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .bit-register.width-12,.bit-register.width-16 { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .bit-cell { min-height: 92px; }
+  .parent-selectors { gap: 7px; }
+  .genotype-picker { padding: 8px; }
+  .genotype-picker button { min-width: 34px; }
+  .punnett-board { grid-template-columns: 42px 1fr 1fr; gap: 5px; }
+  .punnett-outcome { min-height: 82px; }
+  .coordinate-canvas { min-height: 300px; }
+}
+@media(prefers-reduced-motion:reduce) { .signature-page * { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }

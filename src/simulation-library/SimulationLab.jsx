@@ -3,6 +3,7 @@ import { LAB_BY_ID } from './catalog';
 import { createModelProfile, evaluateModel } from './models';
 import { VisualStage } from './VisualStage';
 import { MagnetCompassLab } from './MagnetCompassLab';
+import { BinaryWorkbenchLab, CalculusWorkbenchLab, ChemistryTitrationLab, CoordinatePlaneLab, InheritanceWorkbenchLab, WaterBalanceWorkbenchLab } from './SignatureLabs';
 import './lab-quality.css';
 import './lab-controls.css';
 import './lab-premium.css';
@@ -10,9 +11,21 @@ import './lab-visibility.css';
 
 export function SimulationLab({ simulationId }) {
   const spec = LAB_BY_ID[simulationId];
-  if (spec?.subjectId === 'physics' && spec.operation === 'magneticField') {
-    return <MagnetCompassLab spec={spec} />;
-  }
+  const specialLabs = {
+    'physics:magneticField': MagnetCompassLab,
+    'chemistry:neutralisation': ChemistryTitrationLab,
+    'biology:inheritance': InheritanceWorkbenchLab,
+    'environmental:waterBalance': WaterBalanceWorkbenchLab,
+    'mathematics:coordinate': CoordinatePlaneLab,
+    'computerscience:binary': BinaryWorkbenchLab,
+    'additionalmaths:amCalculus': CalculusWorkbenchLab,
+  };
+  const HandsOnLab = spec ? specialLabs[`${spec.subjectId}:${spec.operation}`] : null;
+  if (HandsOnLab) return <HandsOnLab spec={spec} />;
+  return <GenericSimulationLab simulationId={simulationId} spec={spec} />;
+}
+
+function GenericSimulationLab({ simulationId, spec }) {
   const profile = useMemo(() => createModelProfile(spec.operation, spec.variant), [spec.operation, spec.variant]);
   const [values, setValues] = useState(() => Object.fromEntries(profile.controls.map(x => [x.id,x.initial])));
   const [trials, setTrials] = useState([]);
