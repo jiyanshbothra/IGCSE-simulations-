@@ -1,0 +1,125 @@
+.magnet-lab-page { max-width: 1500px; }
+.magnet-lab-page .lab-hero { border-color: #285064; background: radial-gradient(ellipse at 88% 8%, #39b8d51c, transparent 38%), linear-gradient(120deg,#122331,#0b141d 70%); }
+.magnet-lab-page .lab-hero:before { background: linear-gradient(90deg,#53d4ef,#7698ed 76%,transparent); }
+.magnet-lab-page .lab-count { color: #9ae8f5; }
+.magnet-lab-page .lab-grid { grid-template-columns: 1fr; }
+.magnet-lab-grid { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(335px,.75fr); align-items: start; gap: 17px; }
+.magnet-lab-page .panel { border-color: #263c4d; background: linear-gradient(145deg,#111e29,#0c141d 78%); }
+.magnet-play-panel,.magnet-instrument-panel,.magnet-evidence-panel,.magnet-challenge-panel { padding: 22px; }
+.magnet-play-panel .lab-section-head { margin-bottom: 15px; }
+.magnet-play-panel .lab-section-head p { max-width: 780px; color: #b5c5d3; font-size: 12px; line-height: 1.65; }
+.magnet-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 10px; }
+.magnet-toolbar button { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 7px 11px; border: 1px solid #394e60; border-radius: 9px; background: #101b26; color: #d1deea; font: 600 11px 'DM Sans',system-ui,sans-serif; cursor: pointer; transition: .16s ease; }
+.magnet-toolbar button:hover,.magnet-toolbar button:focus-visible { border-color: #57bfd7; background: #142738; outline: 2px solid #57bfd755; outline-offset: 1px; }
+.magnet-toolbar button.is-on { border-color: #327288; background: #102a35; color: #cbf4fc; }
+.magnet-toolbar button span { color: #91d9e7; font: 10px 'DM Mono',monospace; }
+.probe-preset { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 5px 8px 5px 11px; border: 1px solid #394e60; border-radius: 9px; background: #101b26; color: #c5d4df; font: 600 10px 'DM Sans',system-ui,sans-serif; }
+.probe-preset select { min-height: 28px; max-width: 145px; border: 1px solid #334b5d; border-radius: 6px; background: #0b151e; color: #e0edf4; font: 10px 'DM Sans',system-ui,sans-serif; }
+.probe-preset select:focus-visible { outline: 2px solid #57bfd7; outline-offset: 2px; }
+.magnet-canvas-wrap { overflow: hidden; border: 1px solid #334858; border-radius: 14px; background: radial-gradient(ellipse at 50% 44%,#142636,#0a111a 72%); box-shadow: inset 0 1px #ffffff09, 0 14px 32px #02070b40; }
+.magnet-canvas { display: block; width: 100%; height: auto; min-height: 320px; max-height: min(62vw,620px); touch-action: none; user-select: none; }
+.field-lines path { fill: none; stroke: #58cde7; stroke-width: 1.35; stroke-opacity: .58; stroke-linecap: round; }
+.earth-vector path { fill: none; stroke: #eebc68; stroke-width: 3; stroke-linecap: round; }
+.earth-vector text { fill: #f1c97e; font: 600 10px 'DM Mono',monospace; letter-spacing: .11em; }
+.map-axis path { fill: none; stroke: #8ca1b5; stroke-opacity: .38; stroke-width: 1; }
+.map-axis text { fill: #a5b6c6; font: 10px 'DM Sans',system-ui,sans-serif; }
+.magnet-object { cursor: grab; outline: none; }
+.magnet-object:active,.compass-object:active { cursor: grabbing; }
+.magnet-hit-area { fill: transparent; stroke: transparent; pointer-events: all; }
+.magnet-object:focus-visible .magnet-shell { stroke: #fff; stroke-width: 3; }
+.magnet-shell { fill: #244363; stroke: #a9bac8; stroke-width: 2; }
+.magnet-pole { stroke: #e7edf2; stroke-opacity: .55; stroke-width: .8; }
+.magnet-object text { fill: white; text-anchor: middle; font: 700 15px 'DM Mono',monospace; pointer-events: none; }
+.magnet-object .magnet-drag-label { fill: #d3e2ed; font-size: 8px; letter-spacing: .12em; }
+.coil-turns path { fill: none; stroke: #c9adff; stroke-width: 2; opacity: .86; pointer-events: none; }
+.rotate-handle { fill: #f0c36d; stroke: #fff2d0; stroke-width: 2; cursor: alias; }
+.compass-object { cursor: grab; outline: none; }
+.compass-object:focus-visible .compass-bezel { stroke: #fff; stroke-width: 3; }
+.compass-hit-area { fill: transparent; stroke: transparent; pointer-events: all; }
+.compass-bezel { fill: #1d2a35; stroke: #c3d0db; stroke-width: 2; }
+.compass-face { fill: #e4e8e8; stroke: #607589; stroke-width: 1; }
+.compass-cardinal { fill: none; stroke: #657b8e; stroke-width: 1.3; }
+.compass-needle-north { fill: #e65365; stroke: #9f2d42; stroke-width: .7; }
+.compass-needle-south { fill: #526a8c; stroke: #334961; stroke-width: .7; }
+.compass-pivot { fill: #f2c466; stroke: #6c5530; stroke-width: 1; }
+.compass-north-mark { fill: #334957; font: 700 8px 'DM Mono',monospace; text-anchor: middle; }
+.compass-drag-label { fill: #cde4ed; font: 600 8px 'DM Mono',monospace; text-anchor: middle; letter-spacing: .08em; }
+.probe-readout rect { fill: #0d1d28; stroke: #426174; stroke-width: 1; }
+.probe-readout text { fill: #cfebf2; font: 10px 'DM Mono',monospace; }
+.field-sample circle { fill: #eabe6a; fill-opacity: .9; stroke: #fff0cb; stroke-width: 1.4; }
+.field-sample path { fill: #384e65; }
+.field-sample text { fill: #f7e9c8; font: 700 9px 'DM Mono',monospace; }
+.magnet-gesture-hint { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding: 11px 13px; border: 1px solid #294452; border-radius: 10px; background: #0e1b24; }
+.magnet-gesture-hint .gesture-icon { display: grid; flex: 0 0 30px; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #133440; color: #8de1ef; font-size: 20px; }
+.magnet-gesture-hint p { margin: 0; color: #aebfce; font-size: 11px; line-height: 1.5; }
+.magnet-gesture-hint b { color: #e6f0f6; }
+.magnet-side-column { display: grid; gap: 14px; }
+.magnet-side-column .lab-section-head { margin-bottom: 13px; }
+.magnet-side-column .lab-section-head h2,.magnet-challenge-panel h2 { font-size: 18px; }
+.magnet-side-column .lab-section-head p { color: #aebdcc; font-size: 11px; line-height: 1.55; }
+.field-meter { padding: 15px; border: 1px solid #2d5060; border-radius: 12px; background: linear-gradient(140deg,#10232d,#101923); }
+.meter-heading { display: flex; justify-content: space-between; color: #a4bcc9; font: 600 9px 'DM Mono',monospace; letter-spacing: .09em; }
+.meter-live { display: flex; align-items: center; gap: 6px; color: #a3ddbd; }
+.meter-live i { width: 6px; height: 6px; border-radius: 50%; background: #78d5a4; box-shadow: 0 0 9px #78d5a455; }
+.field-meter > strong { display: block; margin-top: 10px; color: #effbff; font: 500 32px 'DM Mono',monospace; letter-spacing: -.04em; }
+.field-meter > strong small { color: #a6c3d0; font-size: 13px; }
+.meter-direction { display: flex; justify-content: space-between; margin-top: 9px; color: #aebdcb; font-size: 11px; }
+.meter-direction b { color: #d3eff5; font: 600 12px 'DM Mono',monospace; }
+.meter-bar { height: 7px; overflow: hidden; margin-top: 10px; border-radius: 20px; background: #304453; }
+.meter-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#3895bc,#76e0e6); transition: width .12s ease; }
+.meter-note { display: block; margin-top: 7px; color: #91a6b5; font-size: 9px; }
+.source-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 12px; padding: 4px; border: 1px solid #293e4e; border-radius: 10px; background: #0a141c; }
+.source-switch button { min-height: 37px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #acbcc9; font: 600 10px 'DM Sans',system-ui,sans-serif; cursor: pointer; }
+.source-switch button.selected { border-color: #417285; background: #14303b; color: #e0f8fb; }
+.coil-controls { display: grid; gap: 8px; margin-top: 12px; }
+.number-stepper { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #253543; }
+.number-stepper > span { display: grid; gap: 3px; color: #dce7ef; font-size: 11px; font-weight: 600; }
+.number-stepper > span small { color: #97aaba; font-size: 9px; font-weight: 400; }
+.number-stepper > div { display: flex; align-items: center; gap: 10px; }
+.number-stepper button { width: 31px; height: 31px; border: 1px solid #3d5869; border-radius: 8px; background: #122330; color: #dff5fa; font-size: 18px; cursor: pointer; }
+.number-stepper button:hover,.number-stepper button:focus-visible { border-color: #61c9de; outline: 2px solid #61c9de55; outline-offset: 1px; }
+.number-stepper b { min-width: 30px; color: #edf5f9; font: 600 12px 'DM Mono',monospace; text-align: center; }
+.magnet-readout-list { display: grid; gap: 9px; margin-top: 15px; padding-top: 12px; border-top: 1px solid #2a3b49; }
+.magnet-readout-list > div { display: flex; justify-content: space-between; gap: 10px; color: #aabac8; font-size: 10px; }
+.magnet-readout-list b { color: #d9e5ed; font-size: 10px; font-weight: 600; text-align: right; }
+.model-limit-note { margin: 12px 0 0; color: #90a4b2; font-size: 9px; line-height: 1.55; }
+.sample-list { display: grid; gap: 5px; max-height: 205px; overflow: auto; margin: 0; padding: 0; list-style: none; }
+.sample-list li { display: grid; grid-template-columns: 25px 1fr 1.3fr auto; align-items: center; gap: 6px; padding: 7px 8px; border: 1px solid #283b49; border-radius: 8px; background: #0c1720; }
+.sample-list li > span { color: #dcbd70; font: 9px 'DM Mono',monospace; }
+.sample-list li b,.sample-list li em { color: #dceaf0; font: 600 10px 'DM Mono',monospace; font-style: normal; }
+.sample-list li small { color: #9fb1bf; font: 9px 'DM Sans',system-ui,sans-serif; }
+.empty-map { display: grid; justify-items: center; gap: 5px; padding: 16px 8px; border: 1px dashed #334653; border-radius: 10px; background: #0c1720; text-align: center; }
+.empty-map span { color: #84d5e5; font-size: 21px; }
+.empty-map b { color: #d6e3ea; font-size: 11px; }
+.empty-map small { max-width: 230px; color: #99aab8; font-size: 9px; line-height: 1.4; }
+.evidence-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px; }
+.evidence-actions .button { min-height: 37px; padding: 7px 9px; font-size: 10px; }
+.magnet-challenge-panel { border-left: 2px solid #55c8e5 !important; }
+.magnet-challenge-panel h2 { margin: 7px 0; color: #edf4f8; }
+.magnet-challenge-panel p { margin: 0; color: #bac8d4; font-size: 11px; line-height: 1.65; }
+.magnet-lab-page button:disabled { opacity: .45; cursor: not-allowed; }
+@media(max-width:1000px) { .magnet-lab-grid { grid-template-columns: minmax(0,1fr); } .magnet-side-column { grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; } .magnet-challenge-panel { grid-column: 1/-1; } }
+@media(max-width:650px) {
+  .magnet-lab-page .lab-hero { padding-left: 14px; padding-right: 14px; }
+  .magnet-lab-page .lab-hero-main { align-items: flex-start; gap: 9px; }
+  .magnet-lab-page .lab-count { font-size: 21px; }
+  .magnet-lab-page .lab-hero-stats { padding: 7px; }
+  .magnet-lab-page .lab-hero-stats small { font-size: 8px; }
+  .magnet-lab-grid { gap: 11px; }
+  .magnet-play-panel,.magnet-instrument-panel,.magnet-evidence-panel,.magnet-challenge-panel { padding: 15px; }
+  .magnet-lab-page .lab-section-head { gap: 8px; }
+  .magnet-lab-page .lab-section-head h2 { font-size: 17px; }
+  .magnet-lab-page .lab-section-head p { font-size: 10px; }
+  .magnet-toolbar { gap: 6px; }
+  .magnet-toolbar button { min-height: 36px; padding: 7px 8px; font-size: 10px; }
+  .magnet-canvas { min-height: 0; max-height: none; }
+  .map-axis text { font-size: 18px; }
+  .magnet-object .magnet-drag-label,.compass-object .compass-north-mark,.compass-object .compass-drag-label { font-size: 15px; }
+  .probe-readout text { font-size: 16px; }
+  .magnet-gesture-hint p { font-size: 10px; }
+  .magnet-side-column { grid-template-columns: minmax(0,1fr); }
+  .magnet-challenge-panel { grid-column: auto; }
+  .sample-list li { grid-template-columns: 22px .7fr 1.3fr; }
+  .sample-list li em { grid-column: 2/-1; }
+}
+@media(prefers-reduced-motion:reduce) { .magnet-lab-page * { scroll-behavior: auto !important; transition-duration: .01ms !important; } }

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { LAB_BY_ID } from './catalog';
 import { createModelProfile, evaluateModel } from './models';
 import { VisualStage } from './VisualStage';
+import { MagnetCompassLab } from './MagnetCompassLab';
 import './lab-quality.css';
 import './lab-controls.css';
 import './lab-premium.css';
@@ -9,6 +10,9 @@ import './lab-visibility.css';
 
 export function SimulationLab({ simulationId }) {
   const spec = LAB_BY_ID[simulationId];
+  if (spec?.subjectId === 'physics' && spec.operation === 'magneticField') {
+    return <MagnetCompassLab spec={spec} />;
+  }
   const profile = useMemo(() => createModelProfile(spec.operation, spec.variant), [spec.operation, spec.variant]);
   const [values, setValues] = useState(() => Object.fromEntries(profile.controls.map(x => [x.id,x.initial])));
   const [trials, setTrials] = useState([]);
