@@ -1,0 +1,11 @@
+.titration-canvas .stopcock { cursor: ns-resize; stroke-width: 4; touch-action: none; }
+.titration-canvas .stopcock-hit { fill: transparent; stroke: transparent; cursor: ns-resize; pointer-events: all; touch-action: none; }
+.titration-canvas:has(.stopcock-hit:hover) .stopcock { stroke: #fff1a8; }
+.water-canvas .reservoir-level-handle { fill: none; stroke: #b8fbff; stroke-width: 4; stroke-dasharray: 7 4; filter: drop-shadow(0 0 5px #50c9dd); pointer-events: none; }
+.water-canvas .reservoir-level-hit { fill: transparent; stroke: transparent; cursor: ns-resize; pointer-events: all; touch-action: none; }
+.water-canvas:has(.reservoir-level-hit:hover) .reservoir-level-handle { stroke-width: 7; }
+.draggable-allele { cursor: grab; user-select: none; }
+.draggable-allele:active { cursor: grabbing; }
+.draggable-allele small { display: block; margin-top: .12rem; color: #91a4b7; font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; }
+.punnett-outcome { cursor: copy; }
+.punnett-outcome:focus-visible { outline: 2px solid #75dce4; outline-offset: 2px; }

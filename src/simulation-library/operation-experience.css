@@ -5,108 +5,93 @@
   --rig-shadow: 0 18px 48px rgb(15 33 53 / 9%);
   color: var(--rig-ink);
 }
-
 .operation-page .lab-grid { align-items: start; }
 .operation-page .panel { border: 1px solid var(--rig-line); box-shadow: var(--rig-shadow); }
 .operation-page .model-panel { overflow: hidden; }
 .operation-page .model-panel > .panel-head { padding: 1.2rem 1.35rem; background: linear-gradient(120deg, color-mix(in srgb, var(--lab-accent) 13%, white), white 72%); border-bottom: 1px solid var(--rig-line); }
 .operation-page .model-panel > .panel-head p { max-width: 54rem; color: #526477; line-height: 1.55; }
-.operation-page .stage-toolbar { min-height: 2.6rem; }
-.operation-page .instrument-panel { background: linear-gradient(165deg, #fff, var(--rig-paper)); }
+.operation-page .instrument-panel { background: linear-gradient(155deg, #111a25, #0b111b 78%); }
 .operation-page .instrument-panel > .panel-head { margin-bottom: 0; padding-bottom: 1.1rem; border-bottom: 1px solid var(--rig-line); }
 .operation-page .section-index { letter-spacing: .11em; }
 
 .instrument-rack {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .85rem;
-  padding: 1.1rem;
-  background:
-    linear-gradient(90deg, transparent 49.8%, rgb(96 119 145 / 5%) 50%, transparent 50.2%),
-    linear-gradient(#f5f8fb, #edf2f7);
+  gap: .7rem;
+  padding: 1.05rem;
+  background: linear-gradient(145deg, #f4f7fa, #eaf0f4);
   border-bottom: 1px solid var(--rig-line);
 }
-
-.instrument-control {
-  position: relative;
+.parameter-control {
+  display: grid;
   min-width: 0;
-  margin: 0;
-  padding: .85rem .85rem .75rem;
+  gap: .6rem;
+  padding: .8rem .85rem;
   border: 1px solid #d4dde6;
-  border-radius: 12px;
-  background: linear-gradient(155deg, #fff 0%, #f8fafc 70%, #f1f5f8 100%);
+  border-radius: 10px;
+  background: linear-gradient(155deg, #fff, #f6f8fa);
   box-shadow: inset 0 1px #fff, 0 3px 8px rgb(34 54 76 / 5%);
 }
-
-.instrument-control::before {
-  position: absolute;
-  top: .72rem;
-  right: .78rem;
-  width: .43rem;
-  height: .43rem;
-  border-radius: 50%;
-  background: var(--lab-accent, #167f83);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lab-accent, #167f83) 12%, white);
-  content: "";
-}
-
-.instrument-control legend { display: block; width: 100%; padding: 0 1rem 0 0; color: #1b2e42; font-size: .92rem; font-weight: 750; }
-.instrument-control legend small { display: block; margin-top: .2rem; color: #718196; font-size: .7rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-.dial-unit { display: grid; justify-items: center; padding: .45rem .2rem .1rem; }
-.dial {
-  position: relative;
-  display: grid;
-  width: 5.1rem;
-  height: 5.1rem;
-  padding: .36rem;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: conic-gradient(from 225deg, var(--lab-accent, #167f83) var(--dial-progress), #dfe6ec var(--dial-progress) 75%, transparent 75% 100%);
-  cursor: ns-resize;
-  touch-action: none;
-  user-select: none;
-}
-.dial::after { position: absolute; inset: .25rem; border: 1px solid rgb(16 32 49 / 10%); border-radius: 50%; content: ""; }
-.dial-face { display: grid; width: 100%; height: 100%; place-items: center; border: 1px solid #aebac6; border-radius: 50%; background: radial-gradient(circle at 35% 28%, #fff 0, #e8edf2 54%, #cfd7df 100%); box-shadow: inset 0 2px 3px #fff, 0 2px 5px rgb(28 43 57 / 20%); }
-.dial-face i { width: .32rem; height: 1.22rem; transform: rotate(var(--dial-angle)); transform-origin: 50% 1.05rem; border-radius: 1rem; background: #263b4c; box-shadow: 0 1px 0 #fff; }
-.dial:focus-visible, .instrument-value button:focus-visible, .choice-bank button:focus-visible, .instrument-switch:focus-visible { outline: 3px solid color-mix(in srgb, var(--lab-accent, #167f83) 42%, white); outline-offset: 3px; }
-.dial-range { display: flex; width: 100%; justify-content: space-between; margin-top: .2rem; color: #8492a1; font-size: .67rem; font-variant-numeric: tabular-nums; }
-.instrument-value { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 2rem; align-items: center; gap: .4rem; margin-top: .6rem; }
-.instrument-value > button { display: grid; width: 2rem; height: 2rem; place-items: center; border: 1px solid #c8d2dd; border-radius: 7px; background: #fff; color: #263c50; font-size: 1.15rem; font-weight: 700; cursor: pointer; }
-.instrument-value > button:hover:not(:disabled) { border-color: var(--lab-accent, #167f83); color: var(--lab-accent, #167f83); }
-.instrument-value > button:disabled { opacity: .42; cursor: not-allowed; }
-.instrument-value label { display: flex; min-width: 0; align-items: baseline; justify-content: center; gap: .35rem; }
-.instrument-value input { width: 100%; min-width: 0; border: 0; border-bottom: 1px solid #bac7d3; border-radius: 0; background: transparent; color: #172638; font-size: 1.1rem; font-weight: 750; text-align: center; font-variant-numeric: tabular-nums; }
-.instrument-value input:focus { border-color: var(--lab-accent, #167f83); outline: 0; }
-.instrument-value label small { flex: 0 0 auto; max-width: 3.7rem; overflow: hidden; color: #748397; font-size: .67rem; text-overflow: ellipsis; white-space: nowrap; }
-.choice-bank { display: grid; grid-template-columns: repeat(auto-fit, minmax(3.1rem, 1fr)); gap: .35rem; margin: 1.15rem 0 .25rem; }
+.parameter-label { display: flex; min-width: 0; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem .6rem; }
+.parameter-label b { color: #1b2e42; font-size: .9rem; }
+.parameter-label small { color: #718196; font-size: .68rem; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
+.parameter-reading { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) 2.2rem; align-items: center; gap: .45rem; }
+.parameter-reading > button { width: 2.2rem; height: 2.2rem; border: 1px solid #c8d2dd; border-radius: 6px; background: #fff; color: #263c50; font-size: 1.05rem; font-weight: 750; cursor: pointer; }
+.parameter-reading > button:hover:not(:disabled) { border-color: var(--lab-accent, #167f83); color: var(--lab-accent, #167f83); }
+.parameter-reading > button:disabled { opacity: .4; cursor: not-allowed; }
+.parameter-reading label { display: flex; min-width: 0; align-items: baseline; justify-content: center; gap: .35rem; }
+.parameter-reading input { width: 100%; min-width: 0; border: 0; border-bottom: 1px solid #bac7d3; border-radius: 0; background: transparent; color: #172638; font-size: 1.1rem; font-weight: 750; text-align: center; font-variant-numeric: tabular-nums; }
+.parameter-reading input:focus { border-color: var(--lab-accent, #167f83); outline: 0; }
+.parameter-reading label small { flex: 0 0 auto; max-width: 4rem; overflow: hidden; color: #748397; font-size: .66rem; text-overflow: ellipsis; white-space: nowrap; }
+.choice-bank { display: grid; grid-template-columns: repeat(auto-fit, minmax(3.1rem, 1fr)); gap: .35rem; }
 .choice-bank button { min-height: 2.5rem; padding: .4rem .45rem; border: 1px solid #cad5df; border-radius: 7px; background: #fff; color: #516276; font-size: .73rem; font-weight: 700; cursor: pointer; }
 .choice-bank button[aria-pressed="true"] { border-color: var(--lab-accent, #167f83); background: color-mix(in srgb, var(--lab-accent, #167f83) 13%, white); color: #142f3b; box-shadow: inset 0 0 0 1px var(--lab-accent, #167f83); }
-.instrument-control.is-choice .instrument-value { margin-top: .8rem; }
-.instrument-switch { display: flex; width: 100%; min-height: 3.2rem; align-items: center; justify-content: space-between; margin: 1rem 0 .65rem; padding: .45rem .65rem; border: 1px solid #cbd5df; border-radius: 9px; background: #edf1f5; color: #68788a; cursor: pointer; }
+.instrument-switch { display: flex; width: 100%; min-height: 2.8rem; align-items: center; justify-content: space-between; padding: .45rem .65rem; border: 1px solid #cbd5df; border-radius: 8px; background: #edf1f5; color: #68788a; cursor: pointer; }
 .instrument-switch span { position: relative; width: 2.65rem; height: 1.45rem; border-radius: 1rem; background: #aeb9c4; transition: background .16s ease; }
 .instrument-switch span::after { position: absolute; top: .16rem; left: .16rem; width: 1.12rem; height: 1.12rem; border-radius: 50%; background: white; box-shadow: 0 1px 3px #52617066; content: ""; transition: transform .16s ease; }
 .instrument-switch.is-on { border-color: color-mix(in srgb, var(--lab-accent, #167f83) 35%, #cbd5df); background: color-mix(in srgb, var(--lab-accent, #167f83) 8%, white); color: #254651; }
 .instrument-switch.is-on span { background: var(--lab-accent, #167f83); }
 .instrument-switch.is-on span::after { transform: translateX(1.2rem); }
-.instrument-control.is-toggle .instrument-value { margin-top: 0; }
+.parameter-control :focus-visible, .choice-bank button:focus-visible, .instrument-switch:focus-visible { outline: 3px solid color-mix(in srgb, var(--lab-accent, #167f83) 42%, white); outline-offset: 3px; }
 
 .stage-viewport { position: relative; overflow: hidden; }
-.stage-touch-layer { position: absolute; z-index: 2; inset: 0; overflow: hidden; border-radius: inherit; cursor: crosshair; touch-action: none; user-select: none; }
-.stage-touch-layer:focus-visible { outline: 3px solid var(--stage-accent, #167f83); outline-offset: -4px; }
-.stage-touch-layer.is-dragging { cursor: grabbing; }
-.stage-touch-instruction { position: absolute; top: .75rem; left: .75rem; display: flex; max-width: min(21rem, calc(100% - 1.5rem)); align-items: center; gap: .6rem; padding: .48rem .65rem; border: 1px solid rgb(189 204 218 / 82%); border-radius: 8px; background: rgb(255 255 255 / 91%); box-shadow: 0 4px 14px rgb(17 35 52 / 12%); pointer-events: none; }
-.stage-touch-instruction > b { display: grid; min-width: 2rem; height: 2rem; place-items: center; border-radius: 6px; background: color-mix(in srgb, var(--stage-accent, #167f83) 13%, white); color: #193a48; font-size: .72rem; letter-spacing: .03em; }
-.stage-touch-instruction span { display: grid; min-width: 0; }
-.stage-touch-instruction strong { overflow: hidden; color: #203448; font-size: .75rem; text-overflow: ellipsis; white-space: nowrap; }
-.stage-touch-instruction small { color: #6b7b8d; font-size: .66rem; }
-.stage-touch-target { position: absolute; display: grid; min-width: 2.1rem; min-height: 2.1rem; transform: translate(-50%, -50%); place-items: center; border: 2px solid #fff; border-radius: 50%; background: var(--stage-accent, #167f83); color: white; box-shadow: 0 0 0 5px color-mix(in srgb, var(--stage-accent, #167f83) 23%, transparent), 0 3px 12px #17283855; pointer-events: none; transition: left .08s linear, top .08s linear; }
-.stage-touch-layer.is-dragging .stage-touch-target { transform: translate(-50%, -50%) scale(1.13); }
-.stage-touch-target i { font-size: .72rem; font-style: normal; font-weight: 800; }
-.stage-touch-target small { position: absolute; top: calc(100% + .35rem); left: 50%; width: max-content; max-width: 10rem; transform: translateX(-50%); padding: .18rem .4rem; border-radius: 4px; background: rgb(20 36 51 / 88%); color: #fff; font-size: .65rem; font-variant-numeric: tabular-nums; }
-.stage-caption-mark { display: flex; align-items: center; gap: .38rem; }
-.stage-caption-mark::after { color: #66788c; content: "Drag to explore"; font-size: .68rem; }
+.stage-direct-layer { position: absolute; z-index: 3; top: 50%; left: 50%; width: min(calc(100% - 20px), 760px); max-height: 340px; aspect-ratio: 760 / 340; overflow: visible; transform: translate(-50%, -50%); pointer-events: none; touch-action: none; }
+.stage-direct-target { cursor: grab; pointer-events: all; touch-action: none; user-select: none; }
+.stage-direct-target.is-dragging { cursor: grabbing; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--stage-accent, #38bdf8) 72%, transparent)); }
+.stage-direct-target:focus-visible { outline: none; }
+.stage-direct-target:focus-visible .direct-hit-area { stroke: #fff; stroke-width: 3; }
+.direct-hit-area { fill: transparent; stroke: transparent; stroke-width: 1; pointer-events: all; }
+.direct-part-label, .direct-part-value { fill: #f4f8fb; font: 700 9px 'DM Sans', system-ui, sans-serif; paint-order: stroke; stroke: #0a121d; stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
+.direct-part-value { fill: #9cecf0; font: 700 8px 'DM Mono', monospace; }
+.direct-vector-line { stroke: #facc15; stroke-width: 3; stroke-dasharray: 6 3; pointer-events: none; }
+.direct-vector-arrow { fill: #facc15; stroke: #fff; stroke-width: 1; pointer-events: none; }
+.object-cart rect, .object-block path, .object-instrument rect, .object-piston rect { fill: #1a405b; stroke: #e5f7fb; stroke-width: 2; }
+.object-cart circle { fill: #111c29; stroke: #dce7ee; stroke-width: 1.7; }
+.object-jaw path { fill: none; stroke: #e5f7fb; stroke-width: 4; stroke-linecap: square; }
+.object-block path { fill: #397b8f; }
+.object-arrow path, .object-arrow circle, .object-ray path { fill: none; stroke: #fff3b0; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.object-arrow circle, .object-ray circle { fill: #fb7185; stroke: #fff; stroke-width: 1.5; }
+.object-point circle, .object-point path { fill: #facc15; stroke: #fff; stroke-width: 2; }
+.object-point path { fill: none; }
+.object-particle circle, .object-orbit circle, .object-probe circle { fill: #e8f8fc; stroke: #128b9b; stroke-width: 2.5; }
+.object-particle .object-core, .object-orbit .object-core, .object-source .object-core, .object-bio .object-core { fill: #f97316; stroke: #fff; stroke-width: 1.4; }
+.object-probe path, .object-orbit path { fill: #ec4899; stroke: #fff; stroke-width: 1.5; }
+.object-source path { fill: #f59e0b; stroke: #fff0bd; stroke-width: 2; }
+.object-piston path, .object-liquid path, .object-magnet path { fill: none; stroke: #e5f7fb; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.object-liquid path:first-child { fill: #38bdf8; }
+.object-molecule circle { fill: #5ac6c6; stroke: #eaffff; stroke-width: 2; }
+.object-molecule path { fill: none; stroke: #fff; stroke-width: 2.5; }
+.object-bio path { fill: #37956d; stroke: #d6ffe6; stroke-width: 2; }
+.object-person circle { fill: #fb923c; stroke: #fff3df; stroke-width: 1.5; }
+.object-person path, .object-wave-source path, .object-spectrum path, .object-flask path, .object-slide path, .object-heart path, .object-diaphragm path { fill: none; stroke: #e5f7fb; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.object-wave-source path:first-child, .object-spectrum path:first-child, .object-flask path:first-child, .object-slide rect { fill: #155b73; stroke: #e5f7fb; stroke-width: 2; }
+.object-slide circle { fill: #f59e0b; stroke: #fff; stroke-width: 1.5; }
+.object-hazard path:first-child { fill: #9a3412; stroke: #fed7aa; stroke-width: 2; }
+.object-hazard path:last-child { fill: none; stroke: #fff7ed; stroke-width: 3; stroke-linecap: round; }
+.object-slope path:first-child { fill: #496a48; stroke: #e3f4d9; stroke-width: 2; }
+.object-slope path:last-child { fill: none; stroke: #fbbf24; stroke-width: 2; }
+.object-heart path:first-child { fill: #be3455; stroke: #ffe4eb; stroke-width: 2; }
+.object-heart path:last-child, .object-diaphragm path { fill: none; stroke: #fff; stroke-width: 2; }
 
 .rig-physics .instrument-rack { background: linear-gradient(145deg, #f1f6fa, #e9f0f5); }
 .rig-chemistry .instrument-rack { background: linear-gradient(145deg, #fbf6ef, #f5eee5); }
@@ -114,29 +99,18 @@
 .rig-environmental .instrument-rack { background: linear-gradient(145deg, #eef7f6, #e5f0ee); }
 .rig-mathematics .instrument-rack, .rig-additionalmaths .instrument-rack { background: linear-gradient(145deg, #f4f2f9, #eceaf3); }
 .rig-computerscience .instrument-rack { background: linear-gradient(145deg, #edf3f8, #e5edf4); }
-.rig-chemistry .instrument-control { border-radius: 4px 12px 12px 12px; }
-.rig-biology .instrument-control { border-radius: 16px; }
-.rig-computerscience .instrument-control { border-radius: 7px; }
-.rig-additionalmaths .dial { border-radius: 14px; background: conic-gradient(from 225deg, var(--lab-accent, #167f83) var(--dial-progress), #dfe6ec var(--dial-progress) 75%, transparent 75% 100%); }
+.rig-chemistry .parameter-control { border-radius: 4px 12px 12px 12px; }
+.rig-biology .parameter-control { border-radius: 16px; }
+.rig-computerscience .parameter-control { border-radius: 7px; }
 
 @media (min-width: 1100px) {
   .rig-mathematics .instrument-rack, .rig-additionalmaths .instrument-rack { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-
 @media (max-width: 680px) {
   .instrument-rack { gap: .55rem; padding: .7rem; }
-  .instrument-control { padding: .7rem .6rem .6rem; }
-  .dial { width: 4.55rem; height: 4.55rem; }
-  .stage-touch-instruction { top: .45rem; left: .45rem; padding: .35rem .45rem; }
-  .stage-touch-instruction > b { min-width: 1.7rem; height: 1.7rem; }
+  .parameter-control { padding: .7rem .6rem; }
+  .stage-direct-layer { max-height: 270px; }
 }
-
 @media (max-width: 420px) {
   .instrument-rack { grid-template-columns: minmax(0, 1fr); }
-  .instrument-control { display: grid; grid-template-columns: minmax(0, 1fr) minmax(6rem, .8fr); align-items: center; gap: .4rem .7rem; }
-  .instrument-control legend { grid-column: 1 / -1; }
-  .dial-unit { grid-row: span 2; }
-  .instrument-value { margin-top: .15rem; }
-  .instrument-control.is-choice, .instrument-control.is-toggle { grid-template-columns: minmax(0, 1fr); }
-  .instrument-control.is-choice .choice-bank, .instrument-control.is-toggle .instrument-switch { margin-top: .4rem; }
 }

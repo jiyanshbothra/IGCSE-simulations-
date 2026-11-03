@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { AdditionalMathStage } from './AdditionalMathStage';
+import { getDirectPart } from './direct-manipulation';
 import './visual-stage.css';
 import './visual-stage-details.css';
 
@@ -13,67 +14,137 @@ const marker = <defs><marker id="stageArrow" viewBox="0 0 10 10" refX="8" refY="
 
 export function VisualStage({ operation, family, values, results, accent, title, controls = [], onValuesChange, experience }) {
   const safeId = operation.replace(/[^a-z0-9]/gi, '-');
+  const directPart = controls.length ? getDirectPart(operation, controls) : null;
   return <figure className="simulation-stage" style={{ '--stage-accent': accent }} aria-label={`${title} interactive scientific model`}>
     <div className="stage-toolbar"><span className="stage-live"><i />LIVE MODEL</span><span className="stage-chapter">{operation.replace(/([A-Z])/g, ' $1').replace(/^./, letter => letter.toUpperCase())}</span><span className="stage-view-id">MODEL VIEW · {safeId}</span></div>
-    <div className="stage-viewport">{scene(operation, family, values, results)}{onValuesChange && controls.length > 0 && <StageTouchLayer controls={controls} values={values} onValuesChange={onValuesChange} experience={experience}/>}</div>
-    <figcaption className="stage-caption"><span className="stage-caption-mark"><span />Touch the play area or use the instrument controls</span><span className="stage-caption-result">{results[0]?.label}: <b>{typeof results[0]?.value === 'number' ? Number(results[0].value).toPrecision(4) : results[0]?.value}</b> {results[0]?.unit}</span></figcaption>
+    <div className="stage-viewport">{scene(operation, family, values, results)}{onValuesChange && controls.length > 0 && <StageDirectManipulation operation={operation} controls={controls} values={values} onValuesChange={onValuesChange}/>}</div>
+    <figcaption className="stage-caption"><span className="stage-caption-mark"><span />Grab and move the {directPart?.part ?? experience.instrument} in the diagram</span><span className="stage-caption-result">{results[0]?.label}: <b>{typeof results[0]?.value === 'number' ? Number(results[0].value).toPrecision(4) : results[0]?.value}</b> {results[0]?.unit}</span></figcaption>
   </figure>;
 }
 
-function StageTouchLayer({ controls, values, onValuesChange, experience }) {
+function StageDirectManipulation({ operation, controls, values, onValuesChange }) {
+  const part = getDirectPart(operation, controls);
+  return <svg className="stage-direct-layer" viewBox="0 0 760 340" aria-label={`Manipulable ${part.part}`}>
+    <DirectPartHandle part={part} values={values} onValuesChange={onValuesChange}/>
+  </svg>;
+}
+
+function DirectPartHandle({ part, values, onValuesChange }) {
   const [dragging, setDragging] = useState(false);
-  const activePointer = useRef(null);
-  const primary = controls[0];
-  const secondary = controls[1];
-  const fraction = (control) => control ? clamp((Number(values[control.id]) - control.min) / Math.max(1e-12, control.max - control.min), 0, 1) : .5;
-  const xPercent = fraction(primary) * 100;
-  const yPercent = secondary ? (1 - fraction(secondary)) * 100 : 50;
+  const pointerId = useRef(null);
+  const controls = part.controls;
+  const fraction = (control) => clamp((Number(values[control.id]) - control.min) / Math.max(1e-12, control.max - control.min), 0, 1);
   const quantize = (control, raw) => {
-    if (!control) return undefined;
     const step = Math.max(Number(control.step) || 1, 1e-12);
-    const stepped = control.min + Math.round((clamp(raw, control.min, control.max) - control.min) / step) * step;
-    return Number(clamp(stepped, control.min, control.max).toPrecision(10));
+    const limited = clamp(raw, control.min, control.max);
+    return Number((control.min + Math.round((limited - control.min) / step) * step).toPrecision(10));
+  };
+  const valueAt = (control, normalized) => quantize(control, control.min + clamp(normalized, 0, 1) * (control.max - control.min));
+  const position = (() => {
+    if (part.mode === 'x') return { x: part.track[0] + fraction(controls[0]) * (part.track[1] - part.track[0]), y: part.track[2] };
+    if (part.mode === 'y') return { x: part.track[0], y: part.track[2] - fraction(controls[0]) * (part.track[2] - part.track[1]) };
+    if (part.mode === 'angle') {
+      const radians = fraction(controls[0]) * Math.PI * 2 - Math.PI / 2;
+      return { x: part.center[0] + Math.cos(radians) * part.radius, y: part.center[1] + Math.sin(radians) * part.radius };
+    }
+    const xRange = controls[0].max - controls[0].min || 1;
+    const yRange = controls[1].max - controls[1].min || 1;
+    return {
+      x: part.center[0] + ((Number(values[controls[0].id]) - controls[0].min) / xRange * 2 - 1) * part.radius,
+      y: part.center[1] - ((Number(values[controls[1].id]) - controls[1].min) / yRange * 2 - 1) * part.radius,
+    };
+  })();
+  const pointInScene = (event) => {
+    const svg = event.currentTarget.ownerSVGElement;
+    const matrix = svg?.getScreenCTM?.();
+    if (!matrix) return null;
+    const point = svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    const local = point.matrixTransform(matrix.inverse());
+    return { x: local.x, y: local.y };
   };
   const updateFromPointer = (event) => {
-    const bounds = event.currentTarget.getBoundingClientRect();
-    if (!bounds.width || !bounds.height) return;
-    const x = clamp((event.clientX - bounds.left) / bounds.width, 0, 1);
-    const y = clamp((event.clientY - bounds.top) / bounds.height, 0, 1);
-    const changes = { [primary.id]: quantize(primary, primary.min + x * (primary.max - primary.min)) };
-    if (secondary) changes[secondary.id] = quantize(secondary, secondary.min + (1 - y) * (secondary.max - secondary.min));
-    onValuesChange(changes);
+    const local = pointInScene(event);
+    if (!local) return;
+    if (part.mode === 'x') {
+      onValuesChange({ [controls[0].id]: valueAt(controls[0], (local.x - part.track[0]) / (part.track[1] - part.track[0])) });
+    } else if (part.mode === 'y') {
+      onValuesChange({ [controls[0].id]: valueAt(controls[0], (part.track[2] - local.y) / (part.track[2] - part.track[1])) });
+    } else if (part.mode === 'angle') {
+      const radians = Math.atan2(local.y - part.center[1], local.x - part.center[0]);
+      const normalized = ((radians + Math.PI / 2 + Math.PI * 2) % (Math.PI * 2)) / (Math.PI * 2);
+      onValuesChange({ [controls[0].id]: valueAt(controls[0], normalized) });
+    } else {
+      onValuesChange({
+        [controls[0].id]: valueAt(controls[0], (local.x - (part.center[0] - part.radius)) / (part.radius * 2)),
+        [controls[1].id]: valueAt(controls[1], (part.center[1] + part.radius - local.y) / (part.radius * 2)),
+      });
+    }
   };
-  const begin = (event) => {
-    activePointer.current = event.pointerId;
+  const pointerDown = (event) => {
+    pointerId.current = event.pointerId;
     event.currentTarget.setPointerCapture?.(event.pointerId);
     setDragging(true);
     updateFromPointer(event);
     event.preventDefault();
   };
-  const move = (event) => {
-    if (activePointer.current === event.pointerId) updateFromPointer(event);
-  };
-  const end = (event) => {
-    if (activePointer.current !== event.pointerId) return;
-    activePointer.current = null;
+  const pointerMove = (event) => { if (pointerId.current === event.pointerId) updateFromPointer(event); };
+  const pointerUp = (event) => {
+    if (pointerId.current !== event.pointerId) return;
+    pointerId.current = null;
     setDragging(false);
     if (event.currentTarget.hasPointerCapture?.(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
   const keyboard = (event) => {
-    const changes = {};
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') changes[primary.id] = quantize(primary, Number(values[primary.id]) + (event.key === 'ArrowRight' ? primary.step : -primary.step));
-    if (secondary && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) changes[secondary.id] = quantize(secondary, Number(values[secondary.id]) + (event.key === 'ArrowUp' ? secondary.step : -secondary.step));
-    if (Object.keys(changes).length) { event.preventDefault(); onValuesChange(changes); }
+    const direction = ['ArrowRight', 'ArrowUp'].includes(event.key) ? 1 : ['ArrowLeft', 'ArrowDown'].includes(event.key) ? -1 : 0;
+    if (!direction) return;
+    event.preventDefault();
+    if (part.mode === 'vector') {
+      const key = event.key === 'ArrowRight' || event.key === 'ArrowLeft' ? controls[0].id : controls[1].id;
+      const control = controls.find((item) => item.id === key);
+      onValuesChange({ [key]: quantize(control, Number(values[key]) + direction * control.step) });
+    } else {
+      const control = controls[0];
+      onValuesChange({ [control.id]: quantize(control, Number(values[control.id]) + direction * control.step) });
+    }
   };
-  return <div className={`stage-touch-layer${dragging ? ' is-dragging' : ''}`} role="application" tabIndex="0" aria-label={`${experience.instrument}. Drag across the model to change ${primary.label}${secondary ? ` and ${secondary.label}` : ''}. Keyboard arrows also adjust the model.`} onPointerDown={begin} onPointerMove={move} onPointerUp={end} onPointerCancel={end} onKeyDown={keyboard}>
-    <div className="stage-touch-instruction"><b>{experience.glyph}</b><span><strong>{experience.instrument}</strong><small>{primary.label}{secondary ? ` · ${secondary.label}` : ''} | drag to manipulate</small></span></div>
-    <span className="stage-touch-target" style={{ left: `${xPercent}%`, top: `${yPercent}%` }} aria-hidden="true"><i>{experience.glyph}</i><small>{formatTouchValue(primary, values[primary.id])}{secondary ? ` / ${formatTouchValue(secondary, values[secondary.id])}` : ''}</small></span>
-  </div>;
+  return <g className={`stage-direct-target shape-${part.shape}${dragging ? ' is-dragging' : ''}`} transform={`translate(${position.x} ${position.y})`} role="slider" tabIndex="0" aria-label={`Drag the ${part.part} to change ${controls[0].label}`} aria-valuemin={controls[0].min} aria-valuemax={controls[0].max} aria-valuenow={values[controls[0].id]} aria-valuetext={`${controls[0].label}: ${values[controls[0].id]} ${controls[0].unit}`} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onKeyDown={keyboard}>
+    <circle className="direct-hit-area" r="28" />
+    {part.mode === 'vector' && <><line className="direct-vector-line" x1={part.center[0] - position.x} y1={part.center[1] - position.y} x2="0" y2="0"/><path className="direct-vector-arrow" d="M-8 -7 L0 0 L-10 4 Z"/></>}
+    <ManipulatorShape shape={part.shape}/>
+    <text className="direct-part-label" x="0" y="-25" textAnchor="middle">{part.part}</text>
+    <text className="direct-part-value" x="0" y="34" textAnchor="middle">{Number(values[controls[0].id]).toPrecision(3)} {controls[0].unit}</text>
+  </g>;
 }
 
-function formatTouchValue(control, value) {
-  if (typeof value !== 'number') return String(value);
-  return `${Number(value.toPrecision(3))} ${control.unit}`;
+function ManipulatorShape({ shape }) {
+  if (shape === 'cart') return <g className="object-cart"><rect x="-19" y="-10" width="38" height="19" rx="4"/><circle cx="-11" cy="11" r="4"/><circle cx="11" cy="11" r="4"/></g>;
+  if (shape === 'person') return <g className="object-person"><circle cx="0" cy="-13" r="5"/><path d="M0 -7 V7 M0 -2 L-10 3 M0 -2 L10 3 M0 7 L-9 18 M0 7 L9 18"/></g>;
+  if (shape === 'waveSource') return <g className="object-wave-source"><path d="M-18 -9 H-7 L5 -17 V17 L-7 9 H-18 Z"/><path d="M10 -9 Q20 0 10 9 M14 -16 Q30 0 14 16"/></g>;
+  if (shape === 'spectrum') return <g className="object-spectrum"><path d="M-16 -14 L17 0 L-16 14 Z"/><path d="M-7 -10 L7 -5 M-7 -5 L7 -2 M-7 0 L7 1 M-7 5 L7 4 M-7 10 L7 7"/></g>;
+  if (shape === 'flask') return <g className="object-flask"><path d="M-6 -18 H6 M-4 -18 V-5 L-16 12 Q-18 17 -12 18 H12 Q18 17 16 12 L4 -5 V-18 Z"/><path d="M-11 8 H11"/></g>;
+  if (shape === 'slide') return <g className="object-slide"><rect x="-20" y="-8" width="40" height="16" rx="2"/><circle cx="2" cy="0" r="5"/><path d="M-17 -3 H-9 M-17 3 H-9"/></g>;
+  if (shape === 'hazard') return <g className="object-hazard"><path d="M0 -18 L18 15 H-18 Z"/><path d="M0 -8 V4 M0 10 V11"/></g>;
+  if (shape === 'slope') return <g className="object-slope"><path d="M-19 15 H19 L-19 -12 Z"/><path d="M-13 8 A10 10 0 0 1 -5 0"/></g>;
+  if (shape === 'heart') return <g className="object-heart"><path d="M0 17 C-3 12 -18 2 -18 -7 C-18 -19 -3 -19 0 -9 C3 -19 18 -19 18 -7 C18 2 3 12 0 17Z"/><path d="M-13 0 H-5 L-2 -5 L2 6 L6 -1 H13"/></g>;
+  if (shape === 'diaphragm') return <g className="object-diaphragm"><path d="M-20 -8 Q0 17 20 -8 M-20 -8 V-15 M20 -8 V-15"/><path d="M-13 7 H13"/></g>;
+  if (shape === 'jaw') return <g className="object-jaw"><path d="M-15 -15 V14 H-7 V-5 H16 V-15 M-20 -15 H-9 M10 -15 H20"/></g>;
+  if (shape === 'block') return <g className="object-block"><path d="M-16 -10 L0 -18 L17 -10 L17 11 L0 18 L-16 10 Z M-16 -10 L0 -2 L17 -10 M0 -2 V18"/></g>;
+  if (shape === 'arrow' || shape === 'vectorTip') return <g className="object-arrow"><path d="M-18 7 L8 -10 M0 -15 L10 -11 L8 -2"/><circle cx="-18" cy="7" r="3"/></g>;
+  if (shape === 'point' || shape === 'root' || shape === 'curveHandle') return <g className="object-point"><circle r="10"/><path d="M-17 0 H17 M0 -17 V17"/></g>;
+  if (['particle', 'electron', 'bubble', 'token', 'bit'].includes(shape)) return <g className="object-particle"><circle r="11"/><circle className="object-core" r="4"/></g>;
+  if (shape === 'probe' || shape === 'microphone') return <g className="object-probe"><circle r="15"/><path d="M-10 9 L9 -10 M-2 -8 L9 -10 L7 1"/></g>;
+  if (['piston', 'collar', 'bracket'].includes(shape)) return <g className="object-piston"><rect x="-16" y="-10" width="32" height="20" rx="3"/><path d="M0 -18 V-10 M-12 15 H12"/></g>;
+  if (['flame', 'lamp', 'sun', 'spark'].includes(shape)) return <g className="object-source"><path d="M0 -18 C17 -5 13 12 0 15 C-14 11 -14 0 -6 -7 C-6 1 1 2 0 -18Z"/><circle className="object-core" cx="0" cy="5" r="4"/></g>;
+  if (shape === 'ray' || shape === 'angleArm') return <g className="object-ray"><circle r="6"/><path d="M0 0 L0 -22 M0 -22 L-5 -14 M0 -22 L5 -14"/></g>;
+  if (['compass', 'nucleus', 'planet', 'cell', 'specimen'].includes(shape)) return <g className="object-orbit"><circle r="15"/><path d="M0 -12 L5 5 L0 2 L-5 5Z"/><circle className="object-core" r="3"/></g>;
+  if (shape === 'magnet') return <g className="object-magnet"><path d="M-16 12 V-7 A16 16 0 0 1 16 -7 V12 H6 V-6 A6 6 0 0 0 -6 -6 V12Z"/><path d="M-16 5 H-6 M6 5 H16"/></g>;
+  if (['resistor', 'filter', 'resource', 'code', 'packet', 'counter', 'switch', 'plug', 'energyBlock'].includes(shape)) return <g className="object-instrument"><rect x="-17" y="-12" width="34" height="24" rx="4"/><path d="M-10 0 H10 M0 -8 V8"/></g>;
+  if (['drop', 'pipette', 'valve'].includes(shape)) return <g className="object-liquid"><path d="M0 -18 C6 -8 15 0 13 8 A13 13 0 1 1 -13 8 C-15 0 -6 -8 0 -18Z"/><path d="M-5 8 Q0 12 5 8"/></g>;
+  if (['molecule', 'gene', 'food', 'people'].includes(shape)) return <g className="object-molecule"><circle cx="-9" cy="0" r="7"/><circle cx="7" cy="-8" r="6"/><circle cx="9" cy="9" r="6"/><path d="M-3 -3 L2 -6 M-2 4 L4 7"/></g>;
+  if (shape === 'leaf') return <g className="object-bio"><path d="M-16 8 C-10 -15 9 -19 18 -12 C16 6 1 17 -16 8Z M-15 8 L11 -11"/><circle className="object-core" r="3"/></g>;
+  return <g className="object-generic"><circle r="13"/><path d="M-8 0 H8 M0 -8 V8"/></g>;
 }
 
 function scene(operation, family, values, results) {

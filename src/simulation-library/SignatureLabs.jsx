@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import './signature-labs.css';
+import './signature-lab-interactions.css';
 
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 const fmt = (n, digits = 2) => Number(n).toFixed(digits);
@@ -25,6 +26,8 @@ function LabShell({ spec, title, objective, badge, children }) {
 
 export function ChemistryTitrationLab({ spec }) {
   const initial = [0.1, 0.2, 0.5, 0.25][(spec.variant - 1) % 4];
+  const apparatusRef = useRef(null);
+  const buretteDrag = useRef(null);
   const [acidC, setAcidC] = useState(initial);
   const [baseC, setBaseC] = useState([0.1, 0.25, 0.2, 0.5][(spec.variant - 1) % 4]);
   const [added, setAdded] = useState(0);
@@ -45,18 +48,44 @@ export function ChemistryTitrationLab({ spec }) {
   const addToEndpoint = () => setAdded(Number(equivalence.toFixed(2)));
   const reset = () => { setAdded(0); setTrials([]); };
   const record = () => setTrials((previous) => [...previous, { volume: added, pH }]);
+  const localPoint = (event) => {
+    const matrix = apparatusRef.current?.getScreenCTM();
+    if (!matrix) return null;
+    const point = apparatusRef.current.createSVGPoint(); point.x = event.clientX; point.y = event.clientY;
+    return point.matrixTransform(matrix.inverse());
+  };
+  const beginBuretteDrag = (event) => {
+    if (!event.target.closest('[data-stopcock]')) return;
+    const point = localPoint(event);
+    if (!point) return;
+    buretteDrag.current = { pointerId: event.pointerId, y: point.y, added };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  };
+  const moveBuretteDrag = (event) => {
+    if (buretteDrag.current?.pointerId !== event.pointerId) return;
+    const point = localPoint(event);
+    if (!point) return;
+    const amount = buretteDrag.current.added + (point.y - buretteDrag.current.y) * buretteCapacity / 110;
+    setAdded(Number(clamp(amount, 0, buretteCapacity).toFixed(2)));
+  };
+  const endBuretteDrag = (event) => {
+    if (buretteDrag.current?.pointerId !== event.pointerId) return;
+    buretteDrag.current = null;
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  };
   return <LabShell spec={spec} title="Titration: add, observe, explain" badge={`${pH.toFixed(1)}`} objective="Operate the stopcock to add alkali to the acid. The indicator colour and pH curve respond to the actual volume delivered.">
     <div className="signature-grid">
       <section className="panel sig-play-panel">
         <div className="panel-head lab-section-head"><div><span className="section-index">PLAY AREA · RELEASE TITRANT</span><h2>Acid in flask · alkali in burette</h2><p>Each touch adds a measured volume. The steep section marks the equivalence region.</p></div><button className="text-button" onClick={reset}>Reset</button></div>
-        <div className="titration-visual-row"><svg className="titration-canvas" viewBox="0 0 660 360" role="img" aria-label={`Titration apparatus. ${fmt(added)} millilitres added, pH ${fmt(pH, 1)}.`}>
+        <div className="titration-visual-row"><svg ref={apparatusRef} className="titration-canvas" viewBox="0 0 660 360" role="img" aria-label={`Titration apparatus. Drag the burette stopcock to control the added volume. ${fmt(added)} millilitres added, pH ${fmt(pH, 1)}.`} onPointerDown={beginBuretteDrag} onPointerMove={moveBuretteDrag} onPointerUp={endBuretteDrag} onPointerCancel={endBuretteDrag}>
           <defs><linearGradient id="flask-glass" x2="0" y2="1"><stop stopColor="#d9f3f6" stopOpacity=".18"/><stop offset="1" stopColor="#6cb8c4" stopOpacity=".04"/></linearGradient><clipPath id="flask-clip"><path d="M335 120H385V205L433 286Q435 298 420 298H300Q285 298 287 286L335 205Z"/></clipPath></defs>
           <path className="apparatus-glass" d="M335 20H385V210L434 286Q438 301 417 301H303Q282 301 286 286L335 210Z"/>
           <path d="M289 264H431L420 293H300Z" fill={fillColor} opacity=".72" clipPath="url(#flask-clip)" className="indicator-fluid"/>
           <path className="flask-outline" d="M335 20H385V210L434 286Q438 301 417 301H303Q282 301 286 286L335 210Z"/>
           <path className="burette-tube" d="M354 23H366V146H354Z"/><path className="burette-solution" d={`M357 ${buretteLiquidTop}H363V138H357Z`}/>
           {Array.from({ length: 8 }, (_, i) => <path key={i} className="burette-tick" d={`M367 ${36 + i * 13}h${i % 2 ? 6 : 10}`} />)}
-          <path className="stopcock" d="M344 153H376M360 147V159M351 153l-8 9M369 153l8 9"/><circle className="titrant-drop" cx="360" cy="178" r={added ? 5 : 3} style={{ opacity: added ? .8 : .3 }} />
+          <path className="stopcock" data-stopcock="true" d="M344 153H376M360 147V159M351 153l-8 9M369 153l8 9"/><circle className="stopcock-hit" data-stopcock="true" cx="360" cy="153" r="17"/><circle className="titrant-drop" cx="360" cy="178" r={added ? 5 : 3} style={{ opacity: added ? .8 : .3 }} />
           <text x="402" y="69" className="sig-svg-label">BURETTE</text><text x="402" y="87" className="sig-svg-note">{fmt(added, 1)} cm³ added</text>
           <text x="360" y="280" textAnchor="middle" className="flask-label">{pH < 8.2 ? 'ACIDIC' : pH < 9.8 ? 'ENDPOINT RANGE' : 'ALKALINE'}</text>
           <text x="360" y="323" textAnchor="middle" className="sig-svg-note">Indicator colour changes across its transition range.</text>
@@ -71,7 +100,7 @@ export function ChemistryTitrationLab({ spec }) {
           <text x="90" y="82" className="graph-axis-label">pH</text>
         </svg></div>
         <div className="sig-actions"><button className="button primary" onClick={() => addVolume(0.05)}>Add one drop · 0.05 cm³</button><button className="button secondary" onClick={() => addVolume(1)}>Add 1 cm³</button><button className="button secondary" onClick={addToEndpoint}>Go to equivalence · {fmt(equivalence, 1)} cm³</button><button className="button secondary" onClick={record}>Record reading</button></div>
-        <p className="touch-instruction">On a touchscreen, tap the large volume buttons. On a keyboard, tab to a button and press Enter or Space.</p>
+        <p className="touch-instruction">Grab the burette stopcock and drag downward to release titrant; drag upward to reduce the setting. The flask colour, pH reading and curve update together.</p>
       </section>
       <aside className="sig-side-stack">
         <section className="panel sig-instrument"><span className="section-index">LIVE MEASUREMENTS</span><div className="sig-reading"><span>pH</span><b>{fmt(pH, 2)}</b></div><div className="sig-reading"><span>Volume delivered</span><b>{fmt(added, 1)} <small>cm³</small></b></div><div className="sig-reading"><span>Calculated equivalence</span><b>{fmt(equivalence, 2)} <small>cm³</small></b></div><div className="sig-progress"><i style={{ width: `${clamp(added / equivalence * 100, 0, 100)}%` }}/></div><small className="model-caveat">Strong acid–strong base, 1:1 stoichiometry; ideal solution model.</small></section>
@@ -185,11 +214,11 @@ export function InheritanceWorkbenchLab({ spec }) {
   };
   return <LabShell spec={spec} title="Inheritance: cross the alleles" badge={String(samples.length)} objective="Choose a genotype for each parent, then tap Punnett-square offspring to sample outcomes and compare the observed ratio with the prediction.">
     <div className="signature-grid inheritance-layout">
-      <section className="panel inheritance-panel"><div className="panel-head lab-section-head"><div><span className="section-index">ALLELE CROSS · TAP AN OFFSPRING CELL</span><h2>Build the Punnett square</h2><p>Each square is one equally likely allele combination.</p></div><button className="text-button" onClick={reset}>Clear sample</button></div>
+      <section className="panel inheritance-panel"><div className="panel-head lab-section-head"><div><span className="section-index">ALLELE CROSS · DRAG A GAMETE</span><h2>Build the Punnett square</h2><p>Drag a parent allele into an offspring cell. The dropped allele combines with the other parent allele and enters the sample.</p></div><button className="text-button" onClick={reset}>Clear sample</button></div>
         <div className="parent-selectors"><GenotypePicker label="Parent 1" value={mother} onChange={setMother}/><span className="cross-symbol">×</span><GenotypePicker label="Parent 2" value={father} onChange={setFather}/></div>
-        <div className="punnett-board"><div className="punnett-corner">Gametes</div>{maternal.map((allele, i) => <div key={`mh${i}`} className="gamete-heading allele-a">{allele}</div>)}{paternal.map((p, row) => <React.Fragment key={`row${row}`}><div className="gamete-heading allele-a">{p}</div>{maternal.map((m, col) => { const result = offspring[row * 2 + col]; return <button key={`${row}-${col}`} className={`punnett-outcome ${result.genotype.includes('A') ? 'dominant-outcome' : 'recessive-outcome'}`} onClick={() => setSamples((previous) => [...previous, result.genotype])} aria-label={`Sample offspring genotype ${result.genotype}, ${result.phenotype}`}><b>{result.genotype}</b><small>{result.phenotype === 'Dominant phenotype' ? 'dominant' : 'recessive'}</small></button>; })}</React.Fragment>)}</div>
+                <div className="punnett-board"><div className="punnett-corner">Gametes</div>{maternal.map((allele, i) => <div key={`mh${i}`} className="gamete-heading allele-a draggable-allele" draggable onDragStart={event => event.dataTransfer.setData('application/x-igcse-allele', JSON.stringify({ allele, parent: 'mother' }))} aria-label={`Drag maternal allele ${allele}`}>{allele}<small>drag</small></div>)}{paternal.map((p, row) => <React.Fragment key={`row${row}`}><div className="gamete-heading allele-a draggable-allele" draggable onDragStart={event => event.dataTransfer.setData('application/x-igcse-allele', JSON.stringify({ allele: p, parent: 'father' }))} aria-label={`Drag paternal allele ${p}`}>{p}<small>drag</small></div>{maternal.map((m, col) => { const result = offspring[row * 2 + col]; const addSample = genotype => setSamples(previous => [...previous, genotype]); const dropAllele = event => { event.preventDefault(); const payload = event.dataTransfer.getData('application/x-igcse-allele'); if (!payload) return; const source = JSON.parse(payload); const partner = source.parent === 'mother' ? p : m; addSample([source.allele, partner].sort().join('')); }; return <button key={`${row}-${col}`} className={`punnett-outcome ${result.genotype.includes('A') ? 'dominant-outcome' : 'recessive-outcome'}`} onClick={() => addSample(result.genotype)} onDragOver={event => event.preventDefault()} onDrop={dropAllele} aria-label={`Drop a parental allele or sample offspring genotype ${result.genotype}, ${result.phenotype}`}><b>{result.genotype}</b><small>{result.phenotype === 'Dominant phenotype' ? 'dominant' : 'recessive'}</small></button>; })}</React.Fragment>)}</div>
         <div className="sig-actions"><button className="button primary" onClick={simulateFour}>Generate 4 random offspring</button><button className="button secondary" onClick={reset}>Start a new sample</button></div>
-        <p className="touch-instruction">Tap a square to add one offspring to the sample. Parent genotype choices rebuild the square instantly.</p>
+        <p className="touch-instruction">Drag an allele from either parent into a square to form and sample the genotype. You can also click a square to sample the displayed cross.</p>
       </section>
       <aside className="sig-side-stack"><section className="panel sig-instrument"><span className="section-index">EXPECTED PROBABILITY</span>{offspring.map((item, i) => <div className="sig-reading" key={i}><span>Cell {i + 1} · {item.genotype}</span><b>25%</b></div>)}<div className="formula-card">Each cell has probability 1/4.</div></section><section className="panel sig-instrument"><span className="section-index">OBSERVED SAMPLE · {samples.length}</span><Metric label="Dominant phenotype" value={`${samples.filter((g) => g.includes('A')).length} / ${samples.length || '—'}`}/><Metric label="Recessive phenotype" value={`${samples.filter((g) => g === 'aa').length} / ${samples.length || '—'}`}/><div className="sample-genotypes">{samples.slice(-20).map((g, i) => <span key={`${i}-${g}`} className={g === 'aa' ? 'recessive-outcome' : 'dominant-outcome'}>{g}</span>)}</div></section></aside>
     </div>
@@ -200,6 +229,8 @@ function GenotypePicker({ label, value, onChange }) { return <div className="gen
 
 export function WaterBalanceWorkbenchLab({ spec }) {
   const initialStore = 46 + (spec.variant * 7) % 35;
+  const waterCanvas = useRef(null);
+  const waterDrag = useRef(null);
   const [storage, setStorage] = useState(initialStore);
   const [rain, setRain] = useState(0);
   const [abstraction, setAbstraction] = useState(0);
@@ -208,15 +239,47 @@ export function WaterBalanceWorkbenchLab({ spec }) {
   const pumpWater = (amount) => { setAbstraction((value) => value + amount); setStorage((value) => clamp(value - amount * 0.55, 0, 100)); };
   const rechargeStore = (amount) => { setRecharge((value) => value + amount); setStorage((value) => clamp(value + amount * 0.75, 0, 100)); };
   const reset = () => { setStorage(initialStore); setRain(0); setAbstraction(0); setRecharge(0); };
+  const pointOnWaterCanvas = (event) => {
+    const matrix = waterCanvas.current?.getScreenCTM();
+    if (!matrix) return null;
+    const point = waterCanvas.current.createSVGPoint(); point.x = event.clientX; point.y = event.clientY;
+    return point.matrixTransform(matrix.inverse());
+  };
+  const beginWaterDrag = (event) => {
+    if (!event.target.closest('[data-water-level]')) return;
+    waterDrag.current = { pointerId: event.pointerId, storage, recharge, abstraction };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  };
+  const moveWaterDrag = (event) => {
+    if (waterDrag.current?.pointerId !== event.pointerId) return;
+    const point = pointOnWaterCanvas(event);
+    if (!point) return;
+    const nextStorage = clamp((356 - point.y) / 0.95, 0, 100);
+    const change = nextStorage - waterDrag.current.storage;
+    setStorage(nextStorage);
+    if (change >= 0) {
+      setRecharge(waterDrag.current.recharge + change / 0.75);
+      setAbstraction(waterDrag.current.abstraction);
+    } else {
+      setRecharge(waterDrag.current.recharge);
+      setAbstraction(waterDrag.current.abstraction - change / 0.55);
+    }
+  };
+  const endWaterDrag = (event) => {
+    if (waterDrag.current?.pointerId !== event.pointerId) return;
+    waterDrag.current = null;
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  };
   const balance = storage - initialStore;
   return <LabShell spec={spec} title="Water resources: balance the basin" badge={`${Math.round(storage)}%`} objective="Add rainfall, recharge groundwater and abstract water from the basin. The reservoir level responds to each action so you can test sustainable use.">
     <div className="signature-grid water-layout">
       <section className="panel water-panel"><div className="panel-head lab-section-head"><div><span className="section-index">WATERSHED MODEL · USE THE WATER SYSTEM</span><h2>Catchment and reservoir</h2><p>Actions represent measured inputs and withdrawals over a model time step.</p></div><button className="text-button" onClick={reset}>Reset basin</button></div>
-        <svg className="water-canvas" viewBox="0 0 700 400" role="img" aria-label={`Reservoir storage ${Math.round(storage)} percent capacity.`}>
+        <svg ref={waterCanvas} className="water-canvas" viewBox="0 0 700 400" role="img" aria-label={`Reservoir storage ${Math.round(storage)} percent capacity. Drag the water surface up to add recharge or down to abstract water.`} onPointerDown={beginWaterDrag} onPointerMove={moveWaterDrag} onPointerUp={endWaterDrag} onPointerCancel={endWaterDrag}>
           <defs><clipPath id="reservoir-shape"><path d="M210 257Q275 219 337 263Q408 308 485 261V356H210Z"/></clipPath></defs>
           <path d="M0 272Q100 250 185 205Q258 173 330 225Q408 273 494 218Q596 165 700 214V400H0Z" className="watershed-land"/>
           <path d="M0 300Q80 270 176 226Q260 194 327 248Q408 296 492 242Q598 193 700 237V400H0Z" className="watershed-ground"/>
-          <rect x="210" y={356 - storage * .95} width="275" height={storage * .95} className="reservoir-fill" clipPath="url(#reservoir-shape)"/><path d="M210 257Q275 219 337 263Q408 308 485 261" className="reservoir-rim"/>
+          <rect x="210" y={356 - storage * .95} width="275" height={storage * .95} className="reservoir-fill" clipPath="url(#reservoir-shape)"/><path d="M210 257Q275 219 337 263Q408 308 485 261" className="reservoir-rim"/><path d={`M220 ${356 - storage * .95}H475`} className="reservoir-level-handle"/><rect x="210" y={356 - storage * .95 - 12} width="275" height="24" className="reservoir-level-hit" data-water-level="true" aria-label="Drag reservoir water level"/>
           <path d="M492 222V318H513V222M487 222H519" className="dam-wall"/><path d="M500 283V338" className="abstraction-pipe"/>
           <path d="M81 84Q80 64 102 66Q112 42 138 58Q159 54 163 78Q183 80 179 99H95Q81 98 81 84Z" className="rain-cloud"/>
           {Array.from({ length: Math.min(7, Math.ceil(rain / 10)) }, (_, i) => <path key={i} d={`M${103 + i * 11} ${110 + (i % 2) * 7}l-5 17`} className="rain-drop" style={{ animationDelay: `${i * .12}s` }}/>) }
@@ -227,7 +290,7 @@ export function WaterBalanceWorkbenchLab({ spec }) {
           <defs><marker id="water-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#78d9e6"/></marker></defs>
         </svg>
         <div className="water-actions"><button className="button primary" onClick={() => addRain(20)}>🌧 Add rainfall</button><button className="button secondary" onClick={() => rechargeStore(10)}>↗ Recharge aquifer</button><button className="button secondary" onClick={() => pumpWater(15)}>↓ Abstract water</button><button className="button secondary" onClick={() => pumpWater(5)}>Small withdrawal</button></div>
-        <p className="touch-instruction">Use a tap for each event. Repeat actions to model a season; the reservoir cannot exceed capacity or fall below empty.</p>
+        <p className="touch-instruction">Grab the bright waterline and drag it up or down to change storage directly. The model records the matching recharge or abstraction; the rainfall, recharge and pump actions remain available below.</p>
       </section>
       <aside className="sig-side-stack"><section className="panel sig-instrument"><span className="section-index">CATCHMENT LEDGER</span><Metric label="Storage change from actions" value={`${balance >= 0 ? '+' : ''}${fmt(balance, 1)} units`}/><Metric label="Rainfall captured" value={`${fmt(rain * .45, 1)} units`}/><Metric label="Groundwater recharge" value={`${fmt(recharge * .75, 1)} units`}/><Metric label="Water abstracted" value={`${fmt(abstraction * .55, 1)} units`}/><div className="storage-gauge"><i style={{ height: `${storage}%` }}/></div></section><section className="panel sig-instrument"><span className="section-index">DECISION CHALLENGE</span><h2 className="sig-small-heading">Keep supply sustainable</h2><p className="sig-copy">Can recharge and rainfall replace the withdrawals? Try a repeated pattern of events. A simplified model treats each action as an equal time step.</p><div className="formula-card">Δ storage = captured rain + recharge − abstraction</div></section></aside>
     </div>

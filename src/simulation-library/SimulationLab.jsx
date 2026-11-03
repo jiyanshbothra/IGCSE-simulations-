@@ -1,10 +1,11 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { LAB_BY_ID } from './catalog';
 import { createModelProfile, evaluateModel } from './models';
 import { VisualStage } from './VisualStage';
 import { MagnetCompassLab } from './MagnetCompassLab';
 import { BinaryWorkbenchLab, CalculusWorkbenchLab, ChemistryTitrationLab, CoordinatePlaneLab, InheritanceWorkbenchLab, WaterBalanceWorkbenchLab } from './SignatureLabs';
 import { getExperienceBlueprint } from './experience-blueprints';
+import { getDirectPart } from './direct-manipulation';
 import './lab-quality.css';
 import './lab-controls.css';
 import './lab-premium.css';
@@ -30,6 +31,7 @@ export function SimulationLab({ simulationId }) {
 function InteractiveOperationLab({ simulationId, spec }) {
   const profile = useMemo(() => createModelProfile(spec.operation, spec.variant), [spec.operation, spec.variant]);
   const experience = getExperienceBlueprint(spec.operation);
+  const directPart = getDirectPart(spec.operation, profile.controls);
   const [values, setValues] = useState(() => makeScenarioValues(profile, spec.variant));
   const [trials, setTrials] = useState([]);
   const [graphControlId, setGraphControlId] = useState(profile.controls[0]?.id ?? '');
@@ -80,14 +82,14 @@ function InteractiveOperationLab({ simulationId, spec }) {
 
     <div className="lab-grid">
       <section className="panel model-panel">
-        <div className="panel-head lab-section-head"><div><span className="section-index">01 / LIVE APPARATUS</span><h2>{experience.instrument}</h2><p>{experience.action}</p></div><span className="live-pill"><i /> LIVE</span></div>
+        <div className="panel-head lab-section-head"><div><span className="section-index">01 / LIVE APPARATUS</span><h2>{experience.instrument}</h2><p>Drag the {directPart.part} with your mouse or touch. It changes {directPart.controls[0].label.toLowerCase()} and updates the model as it moves.</p></div><span className="live-pill"><i /> LIVE</span></div>
         <VisualStage operation={spec.operation} family={profile.family} values={values} results={results} accent={spec.color} title={spec.title} controls={profile.controls} onValuesChange={updateValues} experience={experience}/>
         <div className="principle"><div className="principle-title"><span>Model notes</span><small>ASSUMPTIONS & RELATIONSHIPS</small></div><p>{spec.principle}</p><code>{profile.formula}</code><small className="principle-foot">Idealised teaching model | Use the stated units and conditions when interpreting the result.</small></div>
       </section>
 
       <section className="panel controls-panel instrument-panel">
-        <div className="panel-head lab-section-head"><div><span className="section-index">02 / {experience.rig.toUpperCase()} INSTRUMENTS</span><h2>Set the apparatus</h2><p>Turn, tap, or enter a reading. The model responds immediately.</p></div><button className="text-button" onClick={reset}>Reset</button></div>
-        <div className="instrument-rack" aria-label={`${experience.instrument} controls`}>{profile.controls.map(control => <InstrumentControl key={control.id} control={control} value={values[control.id]} onChange={value => updateValues({ [control.id]: value })} />)}</div>
+        <div className="panel-head lab-section-head"><div><span className="section-index">02 / MODEL SETTINGS</span><h2>Readings & adjustments</h2><p>Grab the named object in the play area for direct control. Enter exact values here when you need a precise setup.</p></div><button className="text-button" onClick={reset}>Reset</button></div>
+        <div className="instrument-rack" aria-label={`${experience.instrument} exact model settings`}>{profile.controls.map(control => <ParameterControl key={control.id} control={control} value={values[control.id]} onChange={value => updateValues({ [control.id]: value })} />)}</div>
         <div className="results"><div className="results-heading"><h3>Live measurements</h3><span>UPDATES IN REAL TIME</span></div><div className="result-grid">{results.map((result, index) => <div className="result" key={result.label}><span><i>{String(index + 1).padStart(2, '0')}</i>{result.label}</span><strong>{typeof result.value === 'number' ? result.value.toPrecision(4) : result.value}<small>{result.unit}</small></strong></div>)}</div></div>
         <div className="actions"><button className="button primary" onClick={record}>Record this trial</button><button className="button secondary" onClick={reset}>Reset experiment</button></div>
       </section>
@@ -158,45 +160,22 @@ const discreteChoices = {
   gate: ['AND', 'OR', 'XOR'],
 };
 
-function InstrumentControl({ control, value, onChange }) {
-  const pointer = useRef(null);
-  const startY = useRef(0);
-  const startValue = useRef(value);
+function ParameterControl({ control, value, onChange }) {
   const step = Math.max(Number(control.step) || 1, 1e-9);
-  const digits = Math.max(0, Math.min(8, (String(step).split('.')[1] || '').length));
-  const clampAndRound = raw => {
+  const quantize = raw => {
     const limited = Math.max(control.min, Math.min(control.max, Number(raw)));
-    return Number((control.min + Math.round((limited - control.min) / step) * step).toFixed(digits));
+    const result = control.min + Math.round((limited - control.min) / step) * step;
+    return Number(result.toPrecision(10));
   };
-  const changeBy = amount => onChange(clampAndRound(Number(value) + amount));
+  const changeBy = amount => onChange(quantize(Number(value) + amount));
   const choices = discreteChoices[control.id];
   const isToggle = control.unit === 'toggle' || control.unit === 'bit' || control.id === 'previousState';
-  const fraction = (Number(value) - control.min) / Math.max(control.max - control.min, step);
-  const angle = -135 + Math.max(0, Math.min(1, fraction)) * 270;
-  const dragStart = event => {
-    pointer.current = event.pointerId;
-    startY.current = event.clientY;
-    startValue.current = Number(value);
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-    event.preventDefault();
-  };
-  const dragMove = event => {
-    if (pointer.current !== event.pointerId) return;
-    const steps = Math.round((startY.current - event.clientY) / 8);
-    if (steps) onChange(clampAndRound(startValue.current + steps * step));
-  };
-  const dragEnd = event => {
-    if (pointer.current !== event.pointerId) return;
-    pointer.current = null;
-    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-  };
-  return <fieldset className={`instrument-control${choices ? ' is-choice' : ''}${isToggle ? ' is-toggle' : ''}`}>
-    <legend><span>{control.label}</span><small>{control.unit || 'model setting'}</small></legend>
+  return <div className={`parameter-control${choices ? ' is-choice' : ''}${isToggle ? ' is-toggle' : ''}`}>
+    <div className="parameter-label"><b>{control.label}</b><small>{control.unit || 'model setting'}</small></div>
     {choices ? <div className="choice-bank" role="group" aria-label={control.label}>{choices.map((choice, index) => <button type="button" key={choice} aria-pressed={Math.round(Number(value)) === index} onClick={() => onChange(index)}>{choice}</button>)}</div>
       : isToggle ? <button type="button" className={`instrument-switch${Number(value) ? ' is-on' : ''}`} aria-label={`${control.label}: ${Number(value) ? 'on' : 'off'}`} aria-pressed={Boolean(Number(value))} onClick={() => onChange(Number(value) ? control.min : control.max)}><span /><b>{Number(value) ? 'ON' : 'OFF'}</b></button>
-      : <div className="dial-unit"><button type="button" className="dial" style={{ '--dial-angle': `${angle}deg`, '--dial-progress': `${Math.round(Math.max(0, Math.min(1, fraction)) * 100)}%` }} aria-label={`${control.label}, ${value} ${control.unit}. Drag up or down to adjust. Use arrow keys.`} onPointerDown={dragStart} onPointerMove={dragMove} onPointerUp={dragEnd} onPointerCancel={dragEnd} onKeyDown={event => { if (event.key === 'ArrowUp' || event.key === 'ArrowRight') { event.preventDefault(); changeBy(step); } if (event.key === 'ArrowDown' || event.key === 'ArrowLeft') { event.preventDefault(); changeBy(-step); } }}><span className="dial-face"><i /></span></button><div className="dial-range"><span>{formatValue(control.min)}</span><span>{formatValue(control.max)}</span></div></div>}
-    <div className="instrument-value"><button type="button" aria-label={`Decrease ${control.label}`} disabled={Number(value) <= control.min} onClick={() => changeBy(-step)}>−</button><label><input aria-label={`Exact ${control.label}`} type="number" min={control.min} max={control.max} step={control.step} value={value} onChange={event => { const next = event.target.valueAsNumber; if (Number.isFinite(next)) onChange(clampAndRound(next)); }} /><small>{control.unit}</small></label><button type="button" aria-label={`Increase ${control.label}`} disabled={Number(value) >= control.max} onClick={() => changeBy(step)}>+</button></div>
-  </fieldset>;
+      : <div className="parameter-reading"><button type="button" aria-label={`Decrease ${control.label}`} disabled={Number(value) <= control.min} onClick={() => changeBy(-step)}>-</button><label><input aria-label={`Exact ${control.label}`} type="number" min={control.min} max={control.max} step={control.step} value={value} onChange={event => { const next = event.target.valueAsNumber; if (Number.isFinite(next)) onChange(quantize(next)); }} /><small>{control.unit}</small></label><button type="button" aria-label={`Increase ${control.label}`} disabled={Number(value) >= control.max} onClick={() => changeBy(step)}>+</button></div>}
+  </div>;
 }
 function TrialGraph({trials,controls,controlId,result}){
   const selected=controls.find(control=>control.id===controlId)??controls[0];
