@@ -74,7 +74,7 @@
 
 .signature-page .sig-side-stack {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   align-items: stretch;
   gap: 8px;
   min-height: 0;
@@ -87,11 +87,22 @@
   padding: 10px 13px;
 }
 .signature-page .sig-side-stack .sig-metric { padding: 4px 0; }
+.signature-page .sig-side-stack .sig-metric { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid #253542; color: #b4c2ce; }
+.signature-page .sig-side-stack .sig-metric b { color: #eef4f8; font: 600 10px 'DM Mono', monospace; text-align: right; }
 .signature-page .sig-side-stack .sig-reading { padding: 4px 0; }
 .signature-page .sig-side-stack .sig-metric span,
 .signature-page .sig-side-stack .sig-reading span { font-size: 9px; }
 .signature-page .sig-side-stack .sig-metric b,
 .signature-page .sig-side-stack .sig-reading b { font-size: 10px; }
+.signature-page .coordinate-layout .sig-side-stack > .panel:first-child,
+.signature-page .binary-layout .sig-side-stack > .panel:first-child,
+.signature-page .water-layout .sig-side-stack > .panel:first-child {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+}
+.signature-page .coordinate-layout .sig-side-stack > .panel:first-child > .section-index,
+.signature-page .binary-layout .sig-side-stack > .panel:first-child > .section-index,
+.signature-page .water-layout .sig-side-stack > .panel:first-child > .section-index { grid-column: 1 / -1; }
 .signature-page .sig-side-stack .storage-gauge { display: none; }
 .signature-page .coordinate-layout .sig-side-stack > .panel:nth-child(2),
 .signature-page .binary-layout .sig-side-stack > .panel:nth-child(2),
