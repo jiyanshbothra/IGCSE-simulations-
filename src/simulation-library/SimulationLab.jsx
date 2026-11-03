@@ -1,13 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { LAB_BY_ID } from './catalog';
 import { createModelProfile, evaluateModel } from './models';
 import { VisualStage } from './VisualStage';
 import { MagnetCompassLab } from './MagnetCompassLab';
 import { BinaryWorkbenchLab, CalculusWorkbenchLab, ChemistryTitrationLab, CoordinatePlaneLab, InheritanceWorkbenchLab, WaterBalanceWorkbenchLab } from './SignatureLabs';
+import { getExperienceBlueprint } from './experience-blueprints';
 import './lab-quality.css';
 import './lab-controls.css';
 import './lab-premium.css';
 import './lab-visibility.css';
+import './operation-experience.css';
 
 export function SimulationLab({ simulationId }) {
   const spec = LAB_BY_ID[simulationId];
@@ -22,18 +24,20 @@ export function SimulationLab({ simulationId }) {
   };
   const HandsOnLab = spec ? specialLabs[`${spec.subjectId}:${spec.operation}`] : null;
   if (HandsOnLab) return <HandsOnLab spec={spec} />;
-  return <GenericSimulationLab simulationId={simulationId} spec={spec} />;
+  return <InteractiveOperationLab simulationId={simulationId} spec={spec} />;
 }
 
-function GenericSimulationLab({ simulationId, spec }) {
+function InteractiveOperationLab({ simulationId, spec }) {
   const profile = useMemo(() => createModelProfile(spec.operation, spec.variant), [spec.operation, spec.variant]);
-  const [values, setValues] = useState(() => Object.fromEntries(profile.controls.map(x => [x.id,x.initial])));
+  const experience = getExperienceBlueprint(spec.operation);
+  const [values, setValues] = useState(() => makeScenarioValues(profile, spec.variant));
   const [trials, setTrials] = useState([]);
   const [graphControlId, setGraphControlId] = useState(profile.controls[0]?.id ?? '');
   const [prediction, setPrediction] = useState('');
   const [feedback, setFeedback] = useState('');
   const results = useMemo(() => evaluateModel(profile, values), [profile, values]);
-  const reset = () => { setValues(Object.fromEntries(profile.controls.map(x => [x.id,x.initial]))); setTrials([]); setPrediction(''); setFeedback(''); };
+  const reset = () => { setValues(makeScenarioValues(profile, spec.variant)); setTrials([]); setPrediction(''); setFeedback(''); };
+  const updateValues = (changes) => setValues((previous) => ({ ...previous, ...changes }));
   const record = () => setTrials(previous => [...previous,{values:{...values},results}]);
   const exportCsv = () => {
     const headers=['Subject','Chapter','Simulation','Trial',...profile.controls.map(x=>`${x.label} (${x.unit})`),...results.map(x=>`${x.label} (${x.unit})`)];
@@ -57,7 +61,7 @@ function GenericSimulationLab({ simulationId, spec }) {
   };
 
 
-  return <main className="lab-page">
+  return <main className={`lab-page operation-page rig-${experience.rig}`} style={{ '--lab-accent': spec.color }}>
     <header className="lab-hero" style={{ '--lab-accent': spec.color }}>
       <div className="lab-hero-top">
         <div className="lab-breadcrumb"><span>{spec.subjectName}</span><i />{spec.subjectCode}<i />{spec.period}<i />Chapter {spec.chapterCode}</div>
@@ -76,18 +80,14 @@ function GenericSimulationLab({ simulationId, spec }) {
 
     <div className="lab-grid">
       <section className="panel model-panel">
-        <div className="panel-head lab-section-head"><div><span className="section-index">01 / MODEL</span><h2>{spec.chapter}</h2><p>Adjust a parameter and follow how the model responds.</p></div><span className="live-pill"><i /> LIVE</span></div>
-        <VisualStage operation={spec.operation} family={profile.family} values={values} results={results} accent={spec.color} title={spec.title}/>
+        <div className="panel-head lab-section-head"><div><span className="section-index">01 / LIVE APPARATUS</span><h2>{experience.instrument}</h2><p>{experience.action}</p></div><span className="live-pill"><i /> LIVE</span></div>
+        <VisualStage operation={spec.operation} family={profile.family} values={values} results={results} accent={spec.color} title={spec.title} controls={profile.controls} onValuesChange={updateValues} experience={experience}/>
         <div className="principle"><div className="principle-title"><span>Model notes</span><small>ASSUMPTIONS & RELATIONSHIPS</small></div><p>{spec.principle}</p><code>{profile.formula}</code><small className="principle-foot">Idealised teaching model | Use the stated units and conditions when interpreting the result.</small></div>
       </section>
 
-      <section className="panel controls-panel">
-        <div className="panel-head lab-section-head"><div><span className="section-index">02 / PARAMETERS</span><h2>Tune the model</h2><p>Each control updates the diagram and measurements.</p></div><button className="text-button" onClick={reset}>Reset</button></div>
-        <div className="controls">{profile.controls.map(control => <label className="control" key={control.id}>
-          <span className="control-name"><b>{control.label}</b><small>{control.unit}</small></span>
-          <div className="control-readout"><input className="control-number" aria-label={'Exact value for ' + control.label} type="number" min={control.min} max={control.max} step={control.step} value={values[control.id]} onChange={event => { const next = event.target.valueAsNumber; if (Number.isFinite(next)) setValues(previous => ({ ...previous, [control.id]: Math.max(control.min, Math.min(control.max, next)) })); }}/></div>
-          <div className="control-range"><small>{control.min}</small><input aria-label={control.label + ' slider'} type="range" min={control.min} max={control.max} step={control.step} value={values[control.id]} onChange={event => setValues(previous => ({ ...previous, [control.id]: Number(event.target.value) }))}/><small>{control.max}</small></div>
-        </label>)}</div>
+      <section className="panel controls-panel instrument-panel">
+        <div className="panel-head lab-section-head"><div><span className="section-index">02 / {experience.rig.toUpperCase()} INSTRUMENTS</span><h2>Set the apparatus</h2><p>Turn, tap, or enter a reading. The model responds immediately.</p></div><button className="text-button" onClick={reset}>Reset</button></div>
+        <div className="instrument-rack" aria-label={`${experience.instrument} controls`}>{profile.controls.map(control => <InstrumentControl key={control.id} control={control} value={values[control.id]} onChange={value => updateValues({ [control.id]: value })} />)}</div>
         <div className="results"><div className="results-heading"><h3>Live measurements</h3><span>UPDATES IN REAL TIME</span></div><div className="result-grid">{results.map((result, index) => <div className="result" key={result.label}><span><i>{String(index + 1).padStart(2, '0')}</i>{result.label}</span><strong>{typeof result.value === 'number' ? result.value.toPrecision(4) : result.value}<small>{result.unit}</small></strong></div>)}</div></div>
         <div className="actions"><button className="button primary" onClick={record}>Record this trial</button><button className="button secondary" onClick={reset}>Reset experiment</button></div>
       </section>
@@ -136,6 +136,68 @@ function lensInstruction(lens){
   return instructions[lens] || 'Change one parameter at a time, record the result, and explain the pattern.';
 }
 
+function makeScenarioValues(profile, variant) {
+  const values = Object.fromEntries(profile.controls.map(control => [control.id, control.initial]));
+  if (profile.controls.length < 2) return values;
+  const index = (Math.max(1, Number(variant) || 1) - 1) % profile.controls.length;
+  const control = profile.controls[index];
+  const cycle = Math.floor((Math.max(1, Number(variant) || 1) - 1) / profile.controls.length);
+  const direction = (Number(variant) + index) % 2 === 0 ? 1 : -1;
+  const step = Math.max(Number(control.step) || 1, 1e-9);
+  const offset = (cycle + 1) * step * direction;
+  const moved = Math.max(control.min, Math.min(control.max, values[control.id] + offset));
+  values[control.id] = Number((control.min + Math.round((moved - control.min) / step) * step).toPrecision(10));
+  if (profile.controls.some(item => item.id === 'n') && profile.controls.some(item => item.id === 'r')) {
+    values.r = Math.min(values.r, values.n);
+  }
+  return values;
+}
+
+const discreteChoices = {
+  band: ['Radio', 'Microwave', 'Infrared', 'Visible', 'Ultraviolet', 'X-ray', 'Gamma'],
+  gate: ['AND', 'OR', 'XOR'],
+};
+
+function InstrumentControl({ control, value, onChange }) {
+  const pointer = useRef(null);
+  const startY = useRef(0);
+  const startValue = useRef(value);
+  const step = Math.max(Number(control.step) || 1, 1e-9);
+  const digits = Math.max(0, Math.min(8, (String(step).split('.')[1] || '').length));
+  const clampAndRound = raw => {
+    const limited = Math.max(control.min, Math.min(control.max, Number(raw)));
+    return Number((control.min + Math.round((limited - control.min) / step) * step).toFixed(digits));
+  };
+  const changeBy = amount => onChange(clampAndRound(Number(value) + amount));
+  const choices = discreteChoices[control.id];
+  const isToggle = control.unit === 'toggle' || control.unit === 'bit' || control.id === 'previousState';
+  const fraction = (Number(value) - control.min) / Math.max(control.max - control.min, step);
+  const angle = -135 + Math.max(0, Math.min(1, fraction)) * 270;
+  const dragStart = event => {
+    pointer.current = event.pointerId;
+    startY.current = event.clientY;
+    startValue.current = Number(value);
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    event.preventDefault();
+  };
+  const dragMove = event => {
+    if (pointer.current !== event.pointerId) return;
+    const steps = Math.round((startY.current - event.clientY) / 8);
+    if (steps) onChange(clampAndRound(startValue.current + steps * step));
+  };
+  const dragEnd = event => {
+    if (pointer.current !== event.pointerId) return;
+    pointer.current = null;
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+  return <fieldset className={`instrument-control${choices ? ' is-choice' : ''}${isToggle ? ' is-toggle' : ''}`}>
+    <legend><span>{control.label}</span><small>{control.unit || 'model setting'}</small></legend>
+    {choices ? <div className="choice-bank" role="group" aria-label={control.label}>{choices.map((choice, index) => <button type="button" key={choice} aria-pressed={Math.round(Number(value)) === index} onClick={() => onChange(index)}>{choice}</button>)}</div>
+      : isToggle ? <button type="button" className={`instrument-switch${Number(value) ? ' is-on' : ''}`} aria-label={`${control.label}: ${Number(value) ? 'on' : 'off'}`} aria-pressed={Boolean(Number(value))} onClick={() => onChange(Number(value) ? control.min : control.max)}><span /><b>{Number(value) ? 'ON' : 'OFF'}</b></button>
+      : <div className="dial-unit"><button type="button" className="dial" style={{ '--dial-angle': `${angle}deg`, '--dial-progress': `${Math.round(Math.max(0, Math.min(1, fraction)) * 100)}%` }} aria-label={`${control.label}, ${value} ${control.unit}. Drag up or down to adjust. Use arrow keys.`} onPointerDown={dragStart} onPointerMove={dragMove} onPointerUp={dragEnd} onPointerCancel={dragEnd} onKeyDown={event => { if (event.key === 'ArrowUp' || event.key === 'ArrowRight') { event.preventDefault(); changeBy(step); } if (event.key === 'ArrowDown' || event.key === 'ArrowLeft') { event.preventDefault(); changeBy(-step); } }}><span className="dial-face"><i /></span></button><div className="dial-range"><span>{formatValue(control.min)}</span><span>{formatValue(control.max)}</span></div></div>}
+    <div className="instrument-value"><button type="button" aria-label={`Decrease ${control.label}`} disabled={Number(value) <= control.min} onClick={() => changeBy(-step)}>−</button><label><input aria-label={`Exact ${control.label}`} type="number" min={control.min} max={control.max} step={control.step} value={value} onChange={event => { const next = event.target.valueAsNumber; if (Number.isFinite(next)) onChange(clampAndRound(next)); }} /><small>{control.unit}</small></label><button type="button" aria-label={`Increase ${control.label}`} disabled={Number(value) >= control.max} onClick={() => changeBy(step)}>+</button></div>
+  </fieldset>;
+}
 function TrialGraph({trials,controls,controlId,result}){
   const selected=controls.find(control=>control.id===controlId)??controls[0];
   if(trials.length<2 || typeof result?.value!=='number' || typeof trials[0]?.values?.[selected?.id]!=='number') return null;

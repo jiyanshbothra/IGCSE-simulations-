@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { AdditionalMathStage } from './AdditionalMathStage';
 import './visual-stage.css';
 import './visual-stage-details.css';
@@ -11,13 +11,69 @@ const output = (results, label, fallback = 0) => {
 };
 const marker = <defs><marker id="stageArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="currentColor" /></marker><marker id="stageArrowSoft" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#74d9e8" /></marker></defs>;
 
-export function VisualStage({ operation, family, values, results, accent, title }) {
+export function VisualStage({ operation, family, values, results, accent, title, controls = [], onValuesChange, experience }) {
   const safeId = operation.replace(/[^a-z0-9]/gi, '-');
   return <figure className="simulation-stage" style={{ '--stage-accent': accent }} aria-label={`${title} interactive scientific model`}>
     <div className="stage-toolbar"><span className="stage-live"><i />LIVE MODEL</span><span className="stage-chapter">{operation.replace(/([A-Z])/g, ' $1').replace(/^./, letter => letter.toUpperCase())}</span><span className="stage-view-id">MODEL VIEW · {safeId}</span></div>
-    <div className="stage-viewport">{scene(operation, family, values, results)}</div>
-    <figcaption className="stage-caption"><span className="stage-caption-mark"><span />Model state updates with the controls</span><span className="stage-caption-result">{results[0]?.label}: <b>{typeof results[0]?.value === 'number' ? Number(results[0].value).toPrecision(4) : results[0]?.value}</b> {results[0]?.unit}</span></figcaption>
+    <div className="stage-viewport">{scene(operation, family, values, results)}{onValuesChange && controls.length > 0 && <StageTouchLayer controls={controls} values={values} onValuesChange={onValuesChange} experience={experience}/>}</div>
+    <figcaption className="stage-caption"><span className="stage-caption-mark"><span />Touch the play area or use the instrument controls</span><span className="stage-caption-result">{results[0]?.label}: <b>{typeof results[0]?.value === 'number' ? Number(results[0].value).toPrecision(4) : results[0]?.value}</b> {results[0]?.unit}</span></figcaption>
   </figure>;
+}
+
+function StageTouchLayer({ controls, values, onValuesChange, experience }) {
+  const [dragging, setDragging] = useState(false);
+  const activePointer = useRef(null);
+  const primary = controls[0];
+  const secondary = controls[1];
+  const fraction = (control) => control ? clamp((Number(values[control.id]) - control.min) / Math.max(1e-12, control.max - control.min), 0, 1) : .5;
+  const xPercent = fraction(primary) * 100;
+  const yPercent = secondary ? (1 - fraction(secondary)) * 100 : 50;
+  const quantize = (control, raw) => {
+    if (!control) return undefined;
+    const step = Math.max(Number(control.step) || 1, 1e-12);
+    const stepped = control.min + Math.round((clamp(raw, control.min, control.max) - control.min) / step) * step;
+    return Number(clamp(stepped, control.min, control.max).toPrecision(10));
+  };
+  const updateFromPointer = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    const x = clamp((event.clientX - bounds.left) / bounds.width, 0, 1);
+    const y = clamp((event.clientY - bounds.top) / bounds.height, 0, 1);
+    const changes = { [primary.id]: quantize(primary, primary.min + x * (primary.max - primary.min)) };
+    if (secondary) changes[secondary.id] = quantize(secondary, secondary.min + (1 - y) * (secondary.max - secondary.min));
+    onValuesChange(changes);
+  };
+  const begin = (event) => {
+    activePointer.current = event.pointerId;
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    setDragging(true);
+    updateFromPointer(event);
+    event.preventDefault();
+  };
+  const move = (event) => {
+    if (activePointer.current === event.pointerId) updateFromPointer(event);
+  };
+  const end = (event) => {
+    if (activePointer.current !== event.pointerId) return;
+    activePointer.current = null;
+    setDragging(false);
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+  const keyboard = (event) => {
+    const changes = {};
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') changes[primary.id] = quantize(primary, Number(values[primary.id]) + (event.key === 'ArrowRight' ? primary.step : -primary.step));
+    if (secondary && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) changes[secondary.id] = quantize(secondary, Number(values[secondary.id]) + (event.key === 'ArrowUp' ? secondary.step : -secondary.step));
+    if (Object.keys(changes).length) { event.preventDefault(); onValuesChange(changes); }
+  };
+  return <div className={`stage-touch-layer${dragging ? ' is-dragging' : ''}`} role="application" tabIndex="0" aria-label={`${experience.instrument}. Drag across the model to change ${primary.label}${secondary ? ` and ${secondary.label}` : ''}. Keyboard arrows also adjust the model.`} onPointerDown={begin} onPointerMove={move} onPointerUp={end} onPointerCancel={end} onKeyDown={keyboard}>
+    <div className="stage-touch-instruction"><b>{experience.glyph}</b><span><strong>{experience.instrument}</strong><small>{primary.label}{secondary ? ` · ${secondary.label}` : ''} | drag to manipulate</small></span></div>
+    <span className="stage-touch-target" style={{ left: `${xPercent}%`, top: `${yPercent}%` }} aria-hidden="true"><i>{experience.glyph}</i><small>{formatTouchValue(primary, values[primary.id])}{secondary ? ` / ${formatTouchValue(secondary, values[secondary.id])}` : ''}</small></span>
+  </div>;
+}
+
+function formatTouchValue(control, value) {
+  if (typeof value !== 'number') return String(value);
+  return `${Number(value.toPrecision(3))} ${control.unit}`;
 }
 
 function scene(operation, family, values, results) {
