@@ -150,18 +150,18 @@ export function TrigonometryWorkbenchLab({ spec }) {
   const profile = useMemo(() => createModelProfile('trigonometry', spec.variant), [spec.variant]);
   const defaults = Object.fromEntries(profile.controls.map((control) => [control.id, control.initial]));
   const angle = clamp(20 + ((spec.variant * 11) % 52), 15, 75);
-  const hypotenuse = 52 + ((spec.variant * 7) % 29);
+  const hypotenuse = 78 + ((spec.variant * 7) % 23);
   const [values, setValues] = useState({ ...defaults, angle, hypotenuse });
   const svgRef = useRef(null);
   const dragRef = useRef(null);
   const origin = { x: 95, y: 460 };
   const radians = values.angle * Math.PI / 180;
   // Scale the drawing to fill the stage while keeping length changes visible.
-  const drawingScale = Math.min(730 / Math.cos(radians), 330 / Math.sin(radians));
+  const drawingScale = Math.min(730 / Math.cos(radians), 450 / Math.sin(radians));
   const radius = (values.hypotenuse / 100) * drawingScale;
   const foot = { x: origin.x + radius * Math.cos(radians), y: origin.y };
   const tip = { x: foot.x, y: origin.y - radius * Math.sin(radians) };
-  const oppositeLabelX = foot.x + (values.angle > 48 ? 112 : 30);
+  const oppositeLabelX = Math.min(foot.x + (values.angle > 48 ? 112 : 30), 810);
   const opposite = values.hypotenuse * Math.sin(radians);
   const adjacent = values.hypotenuse * Math.cos(radians);
   const results = evaluateModel(profile, values);
@@ -211,7 +211,7 @@ export function TrigonometryWorkbenchLab({ spec }) {
         <text x={(origin.x+foot.x)/2} y={origin.y+42} textAnchor="middle" className="trig-side-label adjacent-label">ADJACENT · {fmt(adjacent, 4)} cm</text>
         <text x={oppositeLabelX} y={(foot.y+tip.y)/2} textAnchor="start" className="trig-side-label opposite-label">OPPOSITE</text><text x={oppositeLabelX} y={(foot.y+tip.y)/2+25} textAnchor="start" className="trig-side-value">{fmt(opposite, 4)} cm</text>
         <text x={(origin.x+tip.x)/2-10*Math.sin(radians)} y={(origin.y+tip.y)/2-22*Math.cos(radians)} textAnchor="middle" className="trig-side-label hypotenuse-label">HYPOTENUSE · {fmt(values.hypotenuse, 4)} cm</text>
-        <g data-trig-handle="angle" tabIndex="0" role="slider" aria-label="Triangle angle. Drag around the angle arc or use arrow keys." aria-valuemin="1" aria-valuemax="89" aria-valuenow={values.angle} onKeyDown={(event) => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); update('angle', values.angle + (event.key === 'ArrowRight' ? 1 : -1)); } }}><circle cx={tip.x} cy={tip.y} r="27" className="trig-hit"/><circle cx={tip.x} cy={tip.y} r="11" className="trig-angle-handle"/><text x={tip.x+18} y={tip.y-18} className="trig-handle-tag">DRAG θ</text></g>
+        <g data-trig-handle="angle" tabIndex="0" role="slider" aria-label="Triangle angle. Drag around the angle arc or use arrow keys." aria-valuemin="1" aria-valuemax="89" aria-valuenow={values.angle} onKeyDown={(event) => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); update('angle', values.angle + (event.key === 'ArrowRight' ? 1 : -1)); } }}><circle cx={tip.x} cy={tip.y} r="27" className="trig-hit"/><circle cx={tip.x} cy={tip.y} r="11" className="trig-angle-handle"/><text x={tip.x+18} y={tip.y+24} className="trig-handle-tag">DRAG θ</text></g>
         <g data-trig-handle="length" tabIndex="0" role="slider" aria-label="Hypotenuse length. Drag along the hypotenuse or use arrow keys." aria-valuemin="0.1" aria-valuemax="100" aria-valuenow={values.hypotenuse} onKeyDown={(event) => { if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') update('hypotenuse', values.hypotenuse - .1); if (event.key === 'ArrowRight' || event.key === 'ArrowUp') update('hypotenuse', values.hypotenuse + .1); }}><circle cx={origin.x+radius*.72*Math.cos(radians)} cy={origin.y-radius*.72*Math.sin(radians)} r="24" className="trig-hit"/><circle cx={origin.x+radius*.72*Math.cos(radians)} cy={origin.y-radius*.72*Math.sin(radians)} r="9" className="trig-length-handle"/><text x={origin.x+radius*.72*Math.cos(radians)-20} y={origin.y-radius*.72*Math.sin(radians)-18} className="trig-handle-tag">DRAG LENGTH</text></g>
         <text x="70" y="70" className="trig-scene-kicker">MOVE THE POINTS · READ THE SIDES</text>
       </svg>
