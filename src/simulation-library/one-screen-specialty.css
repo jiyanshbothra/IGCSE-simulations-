@@ -318,3 +318,152 @@
 }
 .lab-page.signature-page .lab-hero-main,
 .lab-page.magnet-lab-page .lab-hero-main { padding: 3px 0; }
+
+/* Trigonometry uses one large instrument area. Each syllabus subtopic can be
+   opened directly, and the tabs keep the rest of the chapter within reach. */
+.lab-page.subject-workbench-page > .trig-frame {
+  grid-template-rows: 42px minmax(330px, 1fr) auto auto;
+}
+.trig-scene-head { min-width: 0; padding: 0 10px; overflow: hidden; }
+.trig-mode-tabs { display: flex; align-items: center; gap: 4px; min-width: 0; overflow-x: auto; scrollbar-width: thin; }
+.trig-mode-tabs button {
+  flex: 0 0 auto; min-height: 28px; padding: 4px 9px; border: 1px solid transparent;
+  border-radius: 6px; background: transparent; color: #9fb3c4; font: 600 10px 'DM Sans',system-ui,sans-serif;
+  white-space: nowrap; cursor: pointer;
+}
+.trig-mode-tabs button:hover { border-color: #355064; background: #122131; color: #e5f2f6; }
+.trig-mode-tabs button.is-active { border-color: #3f8694; background: #12303b; color: #d8f8fb; }
+.trig-canvas-shell { display: grid; place-items: center; min-width: 0; min-height: 0; overflow: hidden; background: #08111c; }
+.trig-canvas-shell .trig-scene { display: block; width: 100%; height: 100%; min-height: 0; max-height: none; touch-action: none; user-select: none; }
+.trig-live-strip { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.trig-result b { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
+.trig-graph-readouts .trig-result:last-child b { font-size: 11px; line-height: 1.4; }
+.trig-controls { grid-template-columns: repeat(3,minmax(150px,1fr)); }
+.trig-graph-controls { grid-template-columns: minmax(220px,1fr) minmax(220px,1fr) minmax(260px,1.1fr); }
+.trig-principle { min-width: 0; }
+.trig-range-control { display: grid; gap: 6px; min-width: 0; padding: 7px 10px; border: 1px solid #2a4053; border-radius: 7px; background: #111e2b; }
+.trig-range-control > span { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; color: #dbe6ed; font-size: 10px; }
+.trig-range-control output { color: #75d8e8; font: 700 13px 'DM Mono',monospace; }
+.trig-range-control input { width: 100%; height: 20px; accent-color: #57d5e8; cursor: ew-resize; }
+.trig-range-control small { color: #9aafbf; font-size: 9px; line-height: 1.35; }
+.trig-method-switch { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 0; }
+.trig-method-switch button,.trig-angle-presets button {
+  min-height: 29px; padding: 4px 8px; border: 1px solid #344b60; border-radius: 6px;
+  background: #0a141e; color: #b7c8d3; font: 600 9px 'DM Sans',system-ui,sans-serif; cursor: pointer;
+}
+.trig-method-switch button.is-selected,.trig-angle-presets button.is-selected { border-color: #5dc8d8; background: #12333e; color: #e2fbff; }
+.trig-angle-presets { display: flex; justify-content: center; gap: 6px; min-width: 0; }
+.trig-graph-kicker,.trig-axis-name { fill: #a7bac9; font: 700 12px 'DM Mono',monospace; letter-spacing: .08em; }
+.trig-axis-label { fill: #c0ced8; font: 600 13px 'DM Mono',monospace; }
+.trig-major-grid { stroke: #334b5f; stroke-width: 1.4; }
+.trig-minor-grid { stroke: #243849; stroke-width: 1; }
+.trig-axis-line { stroke: #93a8b6; stroke-width: 2; }
+.trig-curve { fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px #70d8e355); }
+.trig-asymptote { stroke: #fa7e88; stroke-width: 2; stroke-dasharray: 10 8; }
+.trig-asymptote-label { fill: #ffabb1; font: 600 11px 'DM Mono',monospace; }
+.trig-target-line { stroke: #f4bd65; stroke-width: 3; stroke-dasharray: 12 8; cursor: ns-resize; touch-action: none; }
+.trig-target-handle { fill: #f4bd65; stroke: #fff1d3; stroke-width: 2; cursor: ns-resize; }
+.trig-target-handle-text { fill: #14202b; font: 800 13px 'DM Mono',monospace; pointer-events: none; }
+.trig-solution-point { fill: #49d6a0; stroke: #e4fff1; stroke-width: 2.5; }
+.trig-cursor-line { stroke: #d3e3ed; stroke-width: 1.5; stroke-dasharray: 5 6; opacity: .78; }
+.trig-current-point { stroke: #f2fbff; stroke-width: 4; filter: drop-shadow(0 0 8px #92edff); }
+.trig-point-hit { fill: transparent; stroke: transparent; cursor: grab; touch-action: none; }
+.trig-point-label { fill: #f0f7fb; font: 700 13px 'DM Mono',monospace; paint-order: stroke; stroke: #08111c; stroke-width: 5px; stroke-linejoin: round; pointer-events: none; }
+.trig-key-points circle { fill: #d5e8f1; stroke: #0b1722; stroke-width: 2; }
+.trig-graph-legend { transform: translate(150px, 510px); }
+.trig-graph-legend line { stroke-width: 4; }
+.trig-graph-legend text { fill: #bdcbd5; font: 600 11px 'DM Mono',monospace; }
+.trig-graph-note { fill: #a7bdcc; font: 600 12px 'DM Mono',monospace; }
+.trig-triangle-method { fill: #a8bdcb; }
+.trig-ratio-panel,.trig-pythagoras-panel,.trig-nonright-panel,.trig-3d-panel { fill: #d8e5ec; }
+.trig-panel-kicker { fill: #92dce5; font: 700 13px 'DM Mono',monospace; letter-spacing: .12em; }
+.trig-ratio-line { fill: #e0eaf0; font: 600 16px 'DM Mono',monospace; }
+.trig-ratio-note { fill: #aebfca; font: 500 14px 'DM Sans',system-ui,sans-serif; }
+.trig-pythagoras-equation { fill: #f0f6f9; font: 700 25px 'DM Mono',monospace; }
+.trig-square-tiles rect { fill: #112131; stroke: #385064; stroke-width: 2; }
+.trig-square-tiles text { fill: #d9e7ee; font: 700 22px 'DM Mono',monospace; }
+.trig-square-tiles text:nth-of-type(even) { fill: #73d6e4; font-size: 18px; }
+.trig-square-plus { fill: #aebfca !important; font-size: 13px !important; }
+.trig-square-result { fill: #a5e8cb !important; font-size: 17px !important; }
+.trig-exact-heading { fill: #ebf4f8; font: 600 21px 'DM Sans',system-ui,sans-serif; }
+.trig-exact-table { fill: #0e1b29; stroke: #365064; stroke-width: 2; }
+.trig-table-line { stroke: #2a4052; stroke-width: 1.5; }
+.trig-table-head { fill: #9fb5c5; font: 700 14px 'DM Mono',monospace; letter-spacing: .08em; }
+.trig-table-ratio { fill: #74d4e1; font: 700 19px 'DM Mono',monospace; }
+.trig-table-value { fill: #e6eff4; font: 600 20px 'DM Mono',monospace; }
+.trig-table-value.is-selected { fill: #fff1c5; font-weight: 800; }
+.trig-table-highlight { fill: #f3bd4d0d; stroke: #e9b758; stroke-width: 2; pointer-events: none; }
+.trig-exact-note { fill: #a9bdcb; font: 600 13px 'DM Mono',monospace; }
+.trig-nonright-fill { fill: #28617533; stroke: none; }
+.trig-second-solution { fill: #b89bf922; stroke: none; }
+.trig-nonright-edge { fill: none; stroke: #68cce0; stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+.trig-alt-edge { stroke: #bd9dff; stroke-dasharray: 11 7; }
+.trig-solution-caption { fill: #92e5c4; font: 700 12px 'DM Mono',monospace; letter-spacing: .08em; }
+.trig-alt-caption { fill: #cfb8ff; }
+.trig-warning-box { fill: #351e2a; stroke: #ed7883; stroke-width: 2; }
+.trig-warning-title { fill: #ffe1e3; font: 700 20px 'DM Sans',system-ui,sans-serif; }
+.trig-box-wire { fill: #15314066; stroke: #72c9df; stroke-width: 5; stroke-linejoin: round; }
+.trig-face-diagonal { fill: none; stroke: #f1be63; stroke-width: 5; stroke-dasharray: 11 6; }
+.trig-space-diagonal { fill: none; stroke: #e9a4ff; stroke-width: 7; }
+.trig-height-projection { stroke: #7ed9a9; stroke-width: 4; stroke-dasharray: 9 7; }
+.trig-circle-axis { stroke: #899eae; stroke-width: 2; }
+.trig-circle-outline { fill: #102231; fill-opacity: .45; stroke: #a8c3d2; stroke-width: 3; }
+.trig-circle-radius { stroke: #d7e5eb; stroke-width: 4; }
+.trig-circle-sine { stroke: #f2b955; stroke-width: 5; }
+.trig-circle-cosine { stroke: #54d0a0; stroke-width: 5; }
+.trig-circle-coordinate { fill: #ecf5f8; font: 600 12px 'DM Mono',monospace; paint-order: stroke; stroke: #08111c; stroke-width: 4px; }
+.trig-unit-hit { fill: transparent; stroke: transparent; cursor: grab; touch-action: none; }
+.trig-compass-ring { fill: #0b1926; stroke: #8ba9bb; stroke-width: 3; }
+.trig-compass-inner-ring { fill: none; stroke: #294153; stroke-width: 1.5; stroke-dasharray: 4 7; }
+.trig-compass-axis { stroke: #365064; stroke-width: 1.5; }
+.trig-compass-tick { stroke: #7791a3; stroke-width: 1.5; }
+.trig-compass-major-tick { stroke: #b3c9d6; stroke-width: 2.5; }
+.trig-compass-cardinal { fill: #f1f7fa; font: 800 20px 'DM Mono',monospace; }
+.trig-north-reference { stroke: #8bd9e8; stroke-width: 4; marker-end: url(#trig-north-arrow); }
+.trig-bearing-route { stroke: #f4bd65; stroke-width: 6; stroke-linecap: round; }
+.trig-bearing-easting { stroke: #59d0a5; stroke-width: 4; stroke-dasharray: 9 7; }
+.trig-bearing-northing { stroke: #6fcbeb; stroke-width: 4; stroke-dasharray: 9 7; }
+.trig-bearing-arc { fill: none; stroke: #bd9dff; stroke-width: 5; }
+.trig-bearing-label { fill: #d6c7ff; font: 800 17px 'DM Mono',monospace; paint-order: stroke; stroke: #08111c; stroke-width: 5px; }
+.trig-compass-origin { fill: #e6f2f7; stroke: #08111c; stroke-width: 3; }
+.trig-destination-point { fill: #f4bd65; stroke: #fff0cf; stroke-width: 3; cursor: grab; }
+.trig-destination-label { fill: #fff0cf; font: 700 11px 'DM Mono',monospace; paint-order: stroke; stroke: #08111c; stroke-width: 4px; pointer-events: none; }
+.trig-bearing-panel { fill: #d8e5ec; }
+.trig-sight-panel { fill: #d8e5ec; }
+.trig-sight-ground { stroke: #8098a8; stroke-width: 3; }
+.trig-sight-support { stroke: #718b9c; stroke-width: 4; }
+.trig-sight-target-support { stroke: #587387; stroke-width: 3; }
+.trig-sight-horizontal { stroke: #7dc4db; stroke-width: 3; stroke-dasharray: 10 8; }
+.trig-sight-vertical { stroke: #58cfa5; stroke-width: 5; }
+.trig-sight-ray { stroke: #f4bd65; stroke-width: 7; stroke-linecap: round; }
+.trig-sight-angle-arc { fill: none; stroke: #bd9dff; stroke-width: 5; }
+.trig-sight-observer { fill: #74d5e8; stroke: #e8fbff; stroke-width: 3; }
+.trig-controls .workbench-number { min-height: 56px; }
+.trig-frame button:focus-visible,.trig-frame input:focus-visible,.trig-frame [role="slider"]:focus-visible { outline: 2px solid #8dddea; outline-offset: 2px; }
+
+@media (max-width: 1100px) {
+  .trig-mode-tabs button { padding: 4px 7px; font-size: 9px; }
+  .trig-graph-controls { grid-template-columns: repeat(2,minmax(180px,1fr)); }
+  .trig-graph-controls .trig-principle { grid-column: 1/-1; }
+}
+@media (max-width: 900px) {
+  .lab-page.subject-workbench-page > .trig-frame { grid-template-rows: 42px minmax(390px,1fr) auto auto; }
+  .trig-canvas-shell { min-height: 390px; }
+  .trig-live-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .trig-controls,.trig-graph-controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .trig-controls .trig-principle,.trig-graph-controls .trig-principle { grid-column: 1/-1; }
+}
+@media (max-width: 620px) {
+  .lab-page.subject-workbench-page > .trig-frame { grid-template-rows: 42px 398px auto auto; overflow: hidden; }
+  .trig-scene-head { padding: 0 6px; gap: 5px; }
+  .trig-mode-tabs { gap: 2px; }
+  .trig-mode-tabs button { min-height: 27px; padding: 3px 6px; font-size: 8px; }
+  .trig-canvas-shell { min-height: 0; height: 398px; overflow-x: auto; overflow-y: hidden; display: block; }
+  .trig-canvas-shell .trig-scene { width: 1280px; min-width: 1280px; height: 398px; }
+  .trig-canvas-shell .trig-plot-scene { width: 1850px; min-width: 1850px; height: 398px; }
+  .trig-live-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .trig-controls,.trig-graph-controls { grid-template-columns: minmax(0,1fr); }
+  .trig-controls .trig-principle,.trig-graph-controls .trig-principle { grid-column: auto; }
+  .trig-method-switch { justify-content: flex-start; }
+  .trig-graph-readouts .trig-result:last-child b { font-size: 9px; }
+}
