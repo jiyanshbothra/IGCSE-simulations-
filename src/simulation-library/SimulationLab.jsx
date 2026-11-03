@@ -14,6 +14,7 @@ import './lab-visibility.css';
 import './operation-experience.css';
 import './single-screen.css';
 import './one-screen-specialty.css';
+import '../studio-interface.css';
 
 export function SimulationLab({ simulationId }) {
   const spec = LAB_BY_ID[simulationId];
@@ -39,9 +40,14 @@ export function SimulationLab({ simulationId }) {
     'computerscience:binary': BinaryWorkbenchLab,
     'additionalmaths:amCalculus': CalculusWorkbenchLab,
   };
-  const HandsOnLab = spec ? specialLabs[`${spec.subjectId}:${spec.operation}`] : null;
-  if (HandsOnLab) return <HandsOnLab key={spec.id} spec={spec} />;
-  return <InteractiveOperationLab key={simulationId} simulationId={simulationId} spec={spec} />;
+  const labSpec = spec ? {
+    ...spec,
+    inquiry: challengeQuestion(spec.operation, spec.lens),
+    method: lensInstruction(spec.lens),
+  } : spec;
+  const HandsOnLab = labSpec ? specialLabs[`${labSpec.subjectId}:${labSpec.operation}`] : null;
+  if (HandsOnLab) return <HandsOnLab key={labSpec.id} spec={labSpec} />;
+  return <InteractiveOperationLab key={simulationId} simulationId={simulationId} spec={labSpec} />;
 }
 
 function InteractiveOperationLab({ simulationId, spec }) {
@@ -57,14 +63,15 @@ function InteractiveOperationLab({ simulationId, spec }) {
   return <main className={`lab-page operation-page single-lab-page rig-${experience.rig}`} style={{ '--lab-accent': spec.color }}>
     <header className="lab-hero single-lab-hero" style={{ '--lab-accent': spec.color }}>
       <div className="single-lab-top"><div className="lab-breadcrumb"><span>{spec.subjectName}</span><i />{spec.subjectCode}<i />Chapter {spec.chapterCode}</div><button className="lab-back" onClick={() => { window.location.hash = '#/subject/' + spec.subjectId }}>Back to subject</button></div>
-      <div className="single-hero-copy"><div><p className="lab-overline">{spec.chapter} <span>/</span> MODEL {String(simulationId.slice(-3))}</p><h1>{spec.title}</h1><p className="lab-objective">{spec.objective}</p></div><button className="single-reset" onClick={reset}>Reset model</button></div>
+      <div className="single-hero-copy"><div><p className="lab-overline">{spec.chapter} <span>/</span> INVESTIGATION {String(spec.variant).padStart(2, '0')}</p><h1>{spec.title}</h1><p className="lab-objective">{spec.objective}</p></div><button className="single-reset" onClick={reset}>Reset investigation</button></div>
     </header>
     <section className="single-lab-frame">
-      <VisualStage operation={spec.operation} family={profile.family} values={values} results={results} accent={spec.color} title={spec.title} controls={profile.controls} onValuesChange={updateValues} experience={experience}/>
+      <VisualStage operation={spec.operation} chapter={spec.chapter} family={profile.family} values={values} results={results} accent={spec.color} title={spec.title} controls={profile.controls} onValuesChange={updateValues} experience={experience}/>
       <div className="single-lab-dock">
-        <div className="single-control-row"><div className="single-dock-label"><b>Interact</b><span>Drag the {directPart.part} or enter a precise value.</span></div><div className="instrument-rack" aria-label={`${experience.instrument} model controls`}>{profile.controls.map(control => <ParameterControl key={control.id} control={control} value={values[control.id]} onChange={value => updateValues({ [control.id]: value })} />)}</div></div>
+        <div className="single-control-row"><div className="single-dock-label"><b>{experience.instrument}</b><span>Drag the {directPart.part} or enter a precise value.</span></div><div className="instrument-rack" aria-label={`${experience.instrument} controls`}>{profile.controls.map(control => <ParameterControl key={control.id} control={control} value={values[control.id]} onChange={value => updateValues({ [control.id]: value })} />)}</div></div>
         <div className="single-results-row"><div className="single-dock-label"><b>Live results</b><span>Changes update immediately.</span></div><div className="result-grid">{results.map(result => <div className="result" key={result.label}><span>{result.label}</span><strong>{typeof result.value === 'number' ? result.value.toPrecision(4) : result.value}<small>{result.unit}</small></strong></div>)}</div></div>
         <div className="single-principle"><b>{profile.formula}</b><span>{spec.principle}</span></div>
+        <div className="single-inquiry"><span>Investigation question</span><p>{spec.inquiry}</p></div>
       </div>
     </section>
   </main>;

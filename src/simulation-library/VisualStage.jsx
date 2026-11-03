@@ -12,11 +12,11 @@ const output = (results, label, fallback = 0) => {
 };
 const marker = <defs><marker id="stageArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="currentColor" /></marker><marker id="stageArrowSoft" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#74d9e8" /></marker></defs>;
 
-export function VisualStage({ operation, family, values, results, accent, title, controls = [], onValuesChange, experience }) {
+export function VisualStage({ operation, chapter, family, values, results, accent, title, controls = [], onValuesChange, experience }) {
   const safeId = operation.replace(/[^a-z0-9]/gi, '-');
   const directPart = controls.length ? getDirectPart(operation, controls) : null;
   return <figure className="simulation-stage" style={{ '--stage-accent': accent }} aria-label={`${title} interactive scientific model`}>
-    <div className="stage-toolbar"><span className="stage-live"><i />LIVE MODEL</span><span className="stage-chapter">{operation.replace(/([A-Z])/g, ' $1').replace(/^./, letter => letter.toUpperCase())}</span><span className="stage-view-id">MODEL VIEW · {safeId}</span></div>
+    <div className="stage-toolbar"><span className="stage-live"><i />LIVE MODEL</span><span className="stage-chapter">{chapter}</span><span className="stage-view-id">{experience.instrument}</span></div>
     <div className="stage-viewport">{scene(operation, family, values, results)}{onValuesChange && controls.length > 0 && <StageDirectManipulation operation={operation} controls={controls} values={values} onValuesChange={onValuesChange}/>}</div>
     <figcaption className="stage-caption"><span className="stage-caption-mark"><span />Grab and move the {directPart?.part ?? experience.instrument} in the diagram</span><span className="stage-caption-result">{results[0]?.label}: <b>{typeof results[0]?.value === 'number' ? Number(results[0].value).toPrecision(4) : results[0]?.value}</b> {results[0]?.unit}</span></figcaption>
   </figure>;

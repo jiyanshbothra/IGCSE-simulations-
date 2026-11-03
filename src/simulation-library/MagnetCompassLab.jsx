@@ -196,8 +196,8 @@ export function MagnetCompassLab({ spec }) {
       </div>
       <div className="lab-hero-main">
         <div>
-          <p className="lab-overline">CHAPTER {spec.chapterCode} <span>/</span> FIELD LAB {String(spec.variant).padStart(2, '0')}</p>
-          <h1>{scenario.title}</h1>
+          <p className="lab-overline">CHAPTER {spec.chapterCode} <span>/</span> INVESTIGATION {String(spec.variant).padStart(2, '0')}</p>
+          <h1>{spec.title || scenario.title}</h1>
           <p className="lab-objective">Move the magnet and compass directly in the model. See field direction and strength change at the position you choose.</p>
         </div>
         <div className="lab-hero-stats"><span className="lab-count">{samples.length.toString().padStart(2, '0')}</span><small>field readings<br />recorded</small></div>
@@ -276,7 +276,7 @@ export function MagnetCompassLab({ spec }) {
           {samples.length ? <ol className="sample-list">{samples.map((sample, index) => <li key={`reading-${index}`}><span>{String(index + 1).padStart(2, '0')}</span><b>{bearing(sample.angle).toFixed(0)}°</b><small>x {sample.x.toFixed(0)}, y {sample.y.toFixed(0)}</small><em>{sample.strength.toFixed(2)} rel.</em></li>)}</ol> : <div className="empty-map"><span>⌖</span><b>No readings recorded</b><small>Move the compass, then choose “Record direction”.</small></div>}
           <div className="evidence-actions"><button type="button" className="button primary" onClick={addSample}>Record this position</button><button type="button" className="button secondary" disabled={!samples.length} onClick={exportMap}>Export CSV</button><button type="button" className="button secondary" disabled={!samples.length} onClick={() => setSamples([])}>Clear map</button></div>
         </section>
-        <section className="panel magnet-challenge-panel"><span className="section-index">THINK LIKE A SCIENTIST</span><h2>{spec.lens}</h2><p>{scenarioIndex === 2 ? 'How does increasing current or turns change the field? Does switching off the current leave a field like the permanent magnet?' : scenarioIndex === 3 ? 'What reverses when the poles are flipped? Which features of the field pattern stay the same?' : 'What pattern do your compass directions make? Follow a field line: which pole does it leave and which pole does it enter?'}</p></section>
+        <section className="panel magnet-challenge-panel"><span className="section-index">INVESTIGATION FOCUS</span><h2>{spec.studyMode}</h2><p>{scenarioIndex === 2 ? 'How does increasing current or turns change the field? Does switching off the current leave a field like the permanent magnet?' : scenarioIndex === 3 ? 'What reverses when the poles are flipped? Which features of the field pattern stay the same?' : 'What pattern do your compass directions make? Follow a field line: which pole does it leave and which pole does it enter?'}</p></section>
       </aside>
     </div>
   </main>;

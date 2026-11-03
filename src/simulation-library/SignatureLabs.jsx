@@ -17,7 +17,7 @@ function LabShell({ spec, title, objective, badge, children }) {
   return <main className="lab-page signature-page" style={{ '--lab-accent': spec.color }}>
     <header className="lab-hero">
       <div className="lab-hero-top"><div className="lab-breadcrumb"><span>{spec.subjectName}</span><i />{spec.subjectCode}<i />{spec.period}<i />Chapter {spec.chapterCode}</div><button className="lab-back" onClick={() => { window.location.hash = '#/subject/' + spec.subjectId }}>Back <span>Subject library</span></button></div>
-      <div className="lab-hero-main"><div><p className="lab-overline">CHAPTER {spec.chapterCode} <span>/</span> HANDS-ON LAB {String(spec.variant).padStart(2, '0')}</p><h1>{title}</h1><p className="lab-objective">{objective}</p></div><div className="lab-hero-stats"><span className="lab-count">{badge}</span><small>live model<br />state</small></div></div>
+      <div className="lab-hero-main"><div><p className="lab-overline">CHAPTER {spec.chapterCode} <span>/</span> INVESTIGATION {String(spec.variant).padStart(2, '0')}</p><h1>{spec.title || title}</h1><p className="lab-objective">{objective}</p>{spec.inquiry && <p className="lab-inquiry"><b>Question</b>{spec.inquiry}</p>}</div><div className="lab-hero-stats"><span className="lab-count">{badge}</span><small>live model<br />state</small></div></div>
       <div className="lab-hero-foot"><span className="lab-subject-mark">{spec.subjectName}</span><span>{spec.chapter}</span><span className="lab-live-status"><i /> Interactive experiment</span></div>
     </header>
     {children}

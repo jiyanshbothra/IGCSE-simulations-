@@ -8,7 +8,7 @@ const fmt = (value, digits = 3) => Number(value).toPrecision(digits).replace(/(?
 function SubjectLabHeader({ spec, title, objective }) {
   return <header className="lab-hero subject-lab-hero" style={{ '--lab-accent': spec.color }}>
     <div className="single-lab-top"><div className="lab-breadcrumb"><span>{spec.subjectName}</span><i />{spec.subjectCode}<i />Chapter {spec.chapterCode}</div><button className="lab-back" onClick={() => { window.location.hash = `#/subject/${spec.subjectId}` }}>Back to subject</button></div>
-    <div className="subject-lab-title"><div><p className="lab-overline">{spec.chapter}</p><h1>{title}</h1><p className="lab-objective">{objective}</p></div><span className="subject-live-tag"><i /> LIVE MODEL</span></div>
+    <div className="subject-lab-title"><div><p className="lab-overline">{spec.chapter} · INVESTIGATION {String(spec.variant).padStart(2, '0')}</p><h1>{spec.title || title}</h1><p className="lab-objective">{objective}</p>{spec.inquiry && <p className="lab-inquiry"><b>Question</b>{spec.inquiry}</p>}</div><span className="subject-live-tag"><i /> LIVE MODEL</span></div>
   </header>;
 }
 
