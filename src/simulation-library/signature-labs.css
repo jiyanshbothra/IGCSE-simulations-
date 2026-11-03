@@ -1,6 +1,6 @@
-.signature-page { max-width: 1480px; }
+.signature-page { width:100%; max-width:none; margin:0; padding:24px clamp(12px,1.4vw,26px) 28px; }
 .signature-page .lab-hero { border-color: color-mix(in srgb,var(--lab-accent) 34%,#27394a); }
-.signature-grid { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(310px,.75fr); align-items: start; gap: 16px; }
+.signature-grid { display: grid; grid-template-columns: minmax(0,2.1fr) minmax(290px,.7fr); align-items: start; gap: 14px; }
 .sig-play-panel,.sig-instrument,.inheritance-panel,.water-panel,.calculus-panel,.binary-register-panel { padding: 22px; }
 .sig-play-panel .lab-section-head p,.inheritance-panel .lab-section-head p,.water-panel .lab-section-head p,.calculus-panel .lab-section-head p,.binary-register-panel .lab-section-head p { color: #b6c5d2; font-size: 11px; line-height: 1.6; }
 .sig-side-stack { display: grid; gap: 13px; }
@@ -52,7 +52,7 @@
 .graph-dot { fill: #f1bf70; stroke: #fff1d2; stroke-width: 2; }
 
 /* Coordinate plane: the plotted points themselves are touch targets. */
-.coordinate-layout { grid-template-columns: minmax(0,1.5fr) minmax(290px,.7fr); }
+.coordinate-layout { grid-template-columns: minmax(0,2.1fr) minmax(280px,.7fr); }
 .coordinate-canvas,.calculus-canvas { display: block; width: 100%; height: auto; margin-top: 12px; border: 1px solid #304350; border-radius: 12px; background: radial-gradient(ellipse at 50% 42%,#14242d,#0b131b 77%); touch-action: none; }
 .coordinate-plot,.calculus-plot-bg { fill: #0d1821; stroke: #2b414d; stroke-width: 1; }
 .coordinate-grid,.calculus-grid { stroke: #526570; stroke-opacity: .35; stroke-width: 1; }
@@ -70,7 +70,7 @@
 .point-b { fill: #dd84b3; stroke: #ffe2f1; stroke-width: 2; }
 
 /* Binary register: each bit is a large, independently operable switch. */
-.binary-layout { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(290px,.7fr); align-items: start; gap: 16px; }
+.binary-layout { display: grid; grid-template-columns: minmax(0,2.1fr) minmax(280px,.7fr); align-items: start; gap: 14px; }
 .register-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 9px; margin: 13px 0 15px; }
 .width-switch,.signed-switch { display: flex; gap: 4px; padding: 4px; border: 1px solid #2d414e; border-radius: 9px; background: #0a141c; }
 .width-switch button,.signed-switch { min-height: 34px; padding: 6px 10px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #aebdc9; font: 600 10px 'DM Sans',system-ui,sans-serif; cursor: pointer; }
@@ -95,7 +95,7 @@
 .binary-place-value .place-on { color: #8fe1eb; }
 
 /* Genetics: outcome cells can be sampled directly. */
-.inheritance-layout { grid-template-columns: minmax(0,1.3fr) minmax(280px,.7fr); }
+.inheritance-layout { grid-template-columns: minmax(0,1.9fr) minmax(280px,.7fr); }
 .parent-selectors { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 18px auto; }
 .genotype-picker { display: grid; gap: 8px; padding: 12px; border: 1px solid #2d414c; border-radius: 10px; background: #0d1720; }
 .genotype-picker > span { display: flex; justify-content: space-between; gap: 16px; color: #b1c0cb; font-size: 10px; }
@@ -118,7 +118,7 @@
 .sample-genotypes span { display: grid; place-items: center; width: 32px; height: 28px; border: 1px solid #3b5360; border-radius: 6px; font: 600 10px 'DM Mono',monospace; }
 
 /* Water system: storage responds to each rainfall, recharge and abstraction action. */
-.water-layout { grid-template-columns: minmax(0,1.45fr) minmax(290px,.7fr); }
+.water-layout { grid-template-columns: minmax(0,2.1fr) minmax(280px,.7fr); }
 .water-canvas { display: block; width: 100%; height: auto; margin-top: 12px; border: 1px solid #30454c; border-radius: 12px; background: linear-gradient(#10202a,#0b151b); }
 .watershed-land { fill: #526657; stroke: #9bb29b; stroke-width: 2; }
 .watershed-ground { fill: #594b3d; stroke: #92795d; stroke-width: 1.5; }
@@ -137,7 +137,7 @@
 .water-actions .button { min-height: 42px; padding: 8px 11px; font-size: 11px; touch-action: manipulation; }
 
 /* Additional Mathematics: a draggable x-value controls a true tangent and integral. */
-.calculus-layout { grid-template-columns: minmax(0,1.45fr) minmax(300px,.7fr); }
+.calculus-layout { grid-template-columns: minmax(0,2.1fr) minmax(290px,.7fr); }
 .calculus-function { fill: none; stroke: #6bd1e3; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
 .calculus-tangent { fill: none; stroke: #f1be70; stroke-width: 2; stroke-dasharray: 7 4; }
 .calculus-area { fill: #9b89e944; stroke: #b0a1ff; stroke-width: 1; }

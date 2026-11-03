@@ -1,14 +1,14 @@
 .subject-workbench-page {
-  width:min(100%,1720px);
+  width:100%;
   max-width:none;
-  height:calc(100dvh - 126px);
-  min-height:610px;
-  margin:0 auto;
-  padding:12px 20px 16px;
+  height:auto;
+  min-height:calc(100dvh - 70px);
+  margin:0;
+  padding:10px clamp(12px,1.4vw,26px) 22px;
   display:flex;
   flex-direction:column;
   gap:10px;
-  overflow:hidden;
+  overflow:visible;
 }
 .subject-lab-hero { flex:0 0 auto; margin:0; padding:10px 17px 12px; border-color:#2b4054; border-radius:13px; background:linear-gradient(115deg,#111c29,#0b121c 74%); box-shadow:0 8px 24px #02060b4d; }
 .subject-lab-hero:before { background:linear-gradient(90deg,var(--lab-accent,#57d4e5),#7385fa 75%,transparent); }
@@ -19,7 +19,7 @@
 .subject-live-tag { display:flex; align-items:center; gap:7px; flex:none; color:#a6e3ce; font:700 9px 'DM Mono',monospace; letter-spacing:.1em; }
 .subject-live-tag i { width:7px; height:7px; border-radius:50%; background:#4cda9c; box-shadow:0 0 11px #4cda9c88; }
 .subject-workbench-page .lab-back { min-height:30px; padding:5px 9px; border-color:#344a5f; background:#101a26; color:#d5e0ea; font-size:10px; }
-.subject-workbench-frame { flex:1 1 auto; min-height:0; display:grid; grid-template-rows:31px minmax(250px,1fr) auto auto; overflow:hidden; border:1px solid #293e53; border-radius:14px; background:#08111b; box-shadow:0 12px 30px #02060b55; }
+.subject-workbench-frame { flex:0 0 auto; min-height:0; display:grid; grid-template-rows:31px clamp(500px,68vh,760px) auto auto; overflow:hidden; border:1px solid #293e53; border-radius:14px; background:#08111b; box-shadow:0 12px 30px #02060b55; }
 .subject-scene-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 14px; border-bottom:1px solid #203449; background:#0d1824; color:#9fb3c4; font:700 9px 'DM Mono',monospace; letter-spacing:.1em; }
 .subject-scene-head button { padding:4px 8px; border:1px solid #344b60; border-radius:6px; background:#111e2a; color:#d5e3eb; font:600 9px 'DM Sans',system-ui,sans-serif; letter-spacing:0; cursor:pointer; }
 .electricity-scene,.trig-scene { display:block; width:100%; height:100%; min-height:0; background:#08111b; touch-action:none; user-select:none; }
@@ -82,7 +82,7 @@
 .electricity-footer { grid-column:1/-1; display:flex; align-items:baseline; gap:10px; color:#96aabd; font-size:8px; }
 .electricity-footer b { color:#a9dce1; font:600 9px 'DM Mono',monospace; }
 
-.trig-frame { grid-template-rows:31px minmax(250px,1fr) auto auto; }
+.trig-frame { grid-template-rows:31px clamp(500px,68vh,760px) auto auto; }
 .trig-scene-kicker { fill:#93a9bd; }
 .trig-fill { fill:#12445355; stroke:none; }
 .trig-adjacent,.trig-opposite,.trig-hypotenuse { fill:none; stroke-width:7; stroke-linecap:round; }
@@ -106,11 +106,12 @@
 
 @media(max-width:980px) {
   .subject-workbench-page { height:auto; min-height:calc(100dvh - 112px); overflow:visible; padding:10px 12px 18px; }
-  .subject-workbench-frame { flex:none; min-height:720px; overflow:visible; }
-  .electricity-scene { min-height:400px; }
+  .subject-workbench-frame { flex:none; min-height:0; grid-template-rows:31px clamp(420px,60vh,640px) auto auto; overflow:hidden; }
+  .trig-frame { grid-template-rows:31px clamp(420px,60vh,640px) auto auto; }
+  .electricity-scene { min-height:0; }
   .electricity-control-dock { grid-template-columns:1fr; }
   .electricity-footer { grid-column:auto; }
-  .trig-scene { min-height:400px; }
+  .trig-scene { min-height:0; }
 }
 @media(max-width:620px) {
   .subject-workbench-page { min-height:calc(100dvh - 100px); padding:8px; }
@@ -119,8 +120,9 @@
   .subject-lab-title h1 { font-size:19px; }
   .subject-lab-title .lab-objective { font-size:10px; }
   .subject-live-tag { display:none; }
-  .subject-workbench-frame { min-height:0; }
-  .electricity-scene,.trig-scene { min-height:280px; }
+  .subject-workbench-frame { min-height:0; grid-template-rows:31px clamp(320px,55vh,500px) auto auto; }
+  .trig-frame { grid-template-rows:31px clamp(320px,55vh,500px) auto auto; }
+  .electricity-scene,.trig-scene { min-height:0; }
   .electricity-instrument-strip { grid-template-columns:repeat(2,minmax(0,1fr)); padding:6px; }
   .electric-readout b,.trig-result b { font-size:11px; }
   .electricity-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }

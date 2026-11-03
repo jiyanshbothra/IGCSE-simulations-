@@ -1,9 +1,9 @@
-.magnet-lab-page { max-width: 1500px; }
+.magnet-lab-page { width:100%; max-width:none; margin:0; padding:28px clamp(12px,1.4vw,26px) 32px; }
 .magnet-lab-page .lab-hero { border-color: #285064; background: radial-gradient(ellipse at 88% 8%, #39b8d51c, transparent 38%), linear-gradient(120deg,#122331,#0b141d 70%); }
 .magnet-lab-page .lab-hero:before { background: linear-gradient(90deg,#53d4ef,#7698ed 76%,transparent); }
 .magnet-lab-page .lab-count { color: #9ae8f5; }
 .magnet-lab-page .lab-grid { grid-template-columns: 1fr; }
-.magnet-lab-grid { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(335px,.75fr); align-items: start; gap: 17px; }
+.magnet-lab-grid { display: grid; grid-template-columns: minmax(0,2.1fr) minmax(300px,.7fr); align-items: start; gap: 14px; }
 .magnet-lab-page .panel { border-color: #263c4d; background: linear-gradient(145deg,#111e29,#0c141d 78%); }
 .magnet-play-panel,.magnet-instrument-panel,.magnet-evidence-panel,.magnet-challenge-panel { padding: 22px; }
 .magnet-play-panel .lab-section-head { margin-bottom: 15px; }
@@ -17,7 +17,7 @@
 .probe-preset select { min-height: 28px; max-width: 145px; border: 1px solid #334b5d; border-radius: 6px; background: #0b151e; color: #e0edf4; font: 10px 'DM Sans',system-ui,sans-serif; }
 .probe-preset select:focus-visible { outline: 2px solid #57bfd7; outline-offset: 2px; }
 .magnet-canvas-wrap { overflow: hidden; border: 1px solid #334858; border-radius: 14px; background: radial-gradient(ellipse at 50% 44%,#142636,#0a111a 72%); box-shadow: inset 0 1px #ffffff09, 0 14px 32px #02070b40; }
-.magnet-canvas { display: block; width: 100%; height: auto; min-height: 320px; max-height: min(62vw,620px); touch-action: none; user-select: none; }
+.magnet-canvas { display: block; width: 100%; height: auto; min-height: 320px; max-height: min(78vh,900px); touch-action: none; user-select: none; }
 .field-lines path { fill: none; stroke: #58cde7; stroke-width: 1.35; stroke-opacity: .58; stroke-linecap: round; }
 .earth-vector path { fill: none; stroke: #eebc68; stroke-width: 3; stroke-linecap: round; }
 .earth-vector text { fill: #f1c97e; font: 600 10px 'DM Mono',monospace; letter-spacing: .11em; }

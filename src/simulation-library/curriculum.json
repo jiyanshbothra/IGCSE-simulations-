@@ -3,13 +3,14 @@
     {
       "id": "physics", "name": "Physics Pure", "code": "0625", "period": "2026-2028", "color": "#38bdf8", "icon": "⚛",
       "topics": [
-        ["1.1", "Physical quantities and measurement", "Measure length, time, and volume; evaluate resolution, precision, and uncertainty.", "measurement", "measurement", "resolution and uncertainty"],
+        ["1.1", "Physical quantities and measurement techniques", "Measure length, time, and volume with suitable instruments; compare resolution, precision, and uncertainty.", "measurement", "measurement", "resolution and uncertainty"],
         ["1.2", "Motion", "Investigate distance, displacement, speed, velocity, acceleration, and motion graphs.", "motion", "kinematics", "v = u + at; s = ut + 1/2 at^2"],
-        ["1.3", "Mass, weight and density", "Distinguish mass from weight and determine density from mass and volume.", "density", "density", "density = mass / volume"],
-        ["1.4", "Forces", "Explore resultant forces, Newton's laws, friction, drag, and terminal velocity.", "forces", "force", "F = ma"],
-        ["1.5", "Momentum", "Relate momentum, force, and change in momentum during interactions.", "momentum", "momentum", "p = mv; F = change in p / change in t"],
-        ["1.6", "Energy stores and transfers", "Track energy transfers and conservation in mechanical systems.", "energy", "energy", "GPE = mgh; KE = 1/2 mv^2"],
-        ["1.7", "Work and power", "Measure work done and compare power for different transfers.", "workPower", "workPower", "W = Fd; P = W / t"],
+        ["1.3", "Mass and weight", "Compare mass with weight and test how gravitational field strength determines an object's weight.", "massWeight", "force", "W = mg"],
+        ["1.4", "Density", "Measure mass and volume, then compare the density of solids and liquids to predict floating.", "density", "density", "density = mass / volume"],
+        ["1.5", "Forces", "Investigate resultant force, acceleration, friction, drag, terminal velocity, moments, and stability.", "forces", "force", "F = ma; moment = force x perpendicular distance"],
+        ["1.6", "Momentum", "Relate momentum and impulse to changes in motion and investigate conservation in one-dimensional interactions.", "momentum", "momentum", "p = mv; impulse = change in momentum"],
+        ["1.7", "Energy stores and transfers", "Track energy stores, transfer pathways, and conservation through a mechanical system.", "energy", "energy", "GPE = mgh; KE = 1/2 mv^2"],
+        ["1.7", "Work and power", "Measure work as energy transferred and compare power for different transfer times.", "workPower", "workPower", "W = Fd; P = W / t"],
         ["1.8", "Pressure", "Relate pressure to force and area and model pressure in liquids.", "pressure", "pressure", "p = F / A; p = rho g h"],
         ["2.1", "The kinetic particle model", "Explain changes of state, gas pressure, and temperature using particle motion.", "particles", "particleEnergy", "mean kinetic energy is proportional to absolute temperature"],
         ["2.2", "Thermal properties and temperature", "Investigate specific heat capacity, latent heat, and thermal expansion.", "thermal", "specificHeat", "E = mc DeltaT"],
@@ -32,18 +33,20 @@
     {
       "id": "chemistry", "name": "Chemistry Pure", "code": "0620", "period": "2026-2028", "color": "#34d399", "icon": "⚗",
       "topics": [
-        ["1", "States of matter", "Use particle theory to interpret solids, liquids, gases, diffusion, and changes of state.", "states", "particleState", "mean kinetic energy changes with temperature"],
-        ["2", "Atoms, elements and compounds", "Model atomic structure, isotopes, ions, bonding, and formulae.", "atomicStructure", "atomicStructure", "relative atomic mass is the abundance-weighted mean"],
-        ["3", "Stoichiometry", "Use balanced equations, formulae, moles, reacting masses, and concentration.", "stoichiometry", "moles", "n = m / Mr; c = n / V"],
-        ["4", "Electrochemistry", "Trace ions during electrolysis and predict products at each electrode.", "electrolysis", "electrolysis", "charge = current x time"],
-        ["5", "Chemical energetics", "Compare exothermic and endothermic reactions and energy profiles.", "energetics", "enthalpy", "bond energy change = bonds broken - bonds formed"],
-        ["6", "Chemical reactions", "Investigate rates, collision theory, catalysts, and reversible reactions.", "reactionRate", "reactionRate", "rate = change in quantity / time"],
-        ["7", "Acids, bases and salts", "Model neutralisation, pH, salt preparation, and titration.", "acidBase", "neutralisation", "acid + base -> salt + water"],
-        ["8", "The Periodic Table", "Compare groups, periods, electron arrangements, and periodic trends.", "periodicTable", "periodicity", "properties repeat with outer electron configuration"],
-        ["9", "Metals", "Compare reactivity, displacement, extraction, alloys, and corrosion.", "metals", "reactivity", "a more reactive metal displaces a less reactive metal"],
-        ["10", "Chemistry of the environment", "Model air and water composition, pollutants, and treatment choices.", "environmentChem", "pollution", "concentration = amount / volume"],
-        ["11", "Organic chemistry", "Explore hydrocarbons, functional groups, reactions, and polymers.", "organic", "organic", "alkane formula CnH2n+2"],
-        ["12", "Experimental techniques and chemical analysis", "Practise separation, chromatography, and qualitative ion and gas tests.", "analysis", "chromatography", "Rf = distance moved by spot / distance moved by solvent"]
+        ["1", "The particulate nature of matter", "Use particle motion and spacing to explain states of matter, diffusion, and changes of state.", "states", "particleState", "mean kinetic energy changes with temperature"],
+        ["2", "Experimental techniques", "Separate mixtures and interpret chromatograms; connect measured distances to an Rf value.", "analysis", "chromatography", "Rf = distance moved by spot / distance moved by solvent"],
+        ["3", "Atoms, elements and compounds", "Model atomic structure, isotopes, ions, bonding, and formulae.", "atomicStructure", "atomicStructure", "relative atomic mass is the abundance-weighted mean"],
+        ["4", "Stoichiometry", "Use balanced equations, formulae, moles, reacting masses, and concentration.", "stoichiometry", "moles", "n = m / Mr; c = n / V"],
+        ["5", "Electricity and chemistry", "Trace ions during electrolysis and predict products at each electrode.", "electrolysis", "electrolysis", "charge = current x time"],
+        ["6", "Chemical energetics", "Compare exothermic and endothermic reactions and energy profiles.", "energetics", "enthalpy", "bond energy change = bonds broken - bonds formed"],
+        ["7", "Chemical reactions", "Investigate reaction rate, collision theory, catalysts, and reversible reactions.", "reactionRate", "reactionRate", "rate = change in quantity / time"],
+        ["8", "Acids, bases and salts", "Model neutralisation, pH, salt preparation, and titration.", "acidBase", "neutralisation", "acid + base -> salt + water"],
+        ["9", "The Periodic Table", "Compare groups, periods, electron arrangements, and periodic trends.", "periodicTable", "periodicity", "properties repeat with outer electron configuration"],
+        ["10", "Metals", "Compare reactivity, displacement, extraction, alloys, and corrosion.", "metals", "reactivity", "a more reactive metal displaces a less reactive metal"],
+        ["11", "Air and water", "Compare atmospheric and water composition, pollutants, and treatment choices.", "environmentChem", "pollution", "concentration = amount / volume"],
+        ["12", "Sulfur", "Trace sulfur compounds through combustion and atmospheric pollution; compare ways to reduce sulfur dioxide emissions.", "sulfur", "pollution", "sulfur dioxide concentration depends on emissions and removal"],
+        ["13", "Carbonates", "Investigate how carbonate particle size and acid concentration affect reaction rate and gas production.", "carbonates", "reactionRate", "reaction rate depends on collision frequency and exposed surface area"],
+        ["14", "Organic chemistry", "Explore hydrocarbons, functional groups, reactions, and polymers.", "organic", "organic", "alkane formula CnH2n+2"]
       ]
     },
     {
@@ -76,10 +79,15 @@
       "id": "environmental", "name": "Environmental Management", "code": "0680", "period": "2027-2029", "color": "#2dd4bf", "icon": "🌍",
       "topics": [
         ["1", "Natural resources", "Compare renewable and non-renewable resources, demand, supply, and management.", "resources", "resourceBalance", "resource balance = sustainable supply - demand"],
+        ["1.3", "Sustainable management of rocks, ores and minerals", "Compare extraction demand with reuse, recycling, efficiency, and alternative materials to evaluate resource sustainability.", "resourceManagement", "resourceBalance", "finite resources need reduced demand and recovery"],
+        ["1.6", "Fracking", "Compare shale gas supply benefits with the environmental costs and limits of hydraulic fracturing.", "fracking", "resourceBalance", "energy supply must be weighed against environmental cost"],
         ["2", "Land", "Investigate soil, agriculture, land use, degradation, and management.", "land", "erosion", "soil loss responds to slope, cover, and runoff"],
         ["3", "Water", "Model water cycle stores, availability, pollution, and sustainable supply.", "water", "waterBalance", "change in storage = inputs - outputs"],
+        ["3.6", "Plastic pollution", "Track plastic waste and treatment; examine microplastics and the effects of plastic on marine food webs.", "plasticPollution", "pollution", "pollutant concentration = remaining mass / water volume"],
         ["4", "The atmosphere and human activities", "Analyse climate, air pollution, greenhouse gases, and mitigation.", "atmosphere", "climateBalance", "net radiative balance = incoming - outgoing energy"],
+        ["4.2", "Climate change", "Relate greenhouse-gas emissions to warming, impacts, mitigation, and adaptation choices.", "climateChange", "climateBalance", "enhanced greenhouse effect changes Earth's energy balance"],
         ["5", "Ecosystems, biodiversity and fieldwork", "Plan sampling and interpret biodiversity and ecosystem evidence.", "fieldwork", "biodiversity", "Simpson diversity responds to richness and evenness"],
+        ["5.4", "Fieldwork investigations", "Plan repeatable random or systematic sampling, process quadrat or transect results, and judge how well the sample represents a population.", "fieldworkMethods", "biodiversity", "repeat sampling improves estimates of richness and evenness"],
         ["6", "Natural hazards", "Assess hazard risk using probability, exposure, vulnerability, and preparedness.", "hazards", "hazardRisk", "risk = probability x exposure x vulnerability"],
         ["7", "Human population", "Interpret population structures, growth, migration, and demographic change.", "population", "populationGrowth", "population change = births - deaths + net migration"]
       ]
@@ -126,7 +134,7 @@
       "id": "additionalmaths",
       "name": "Additional Mathematics",
       "code": "0606",
-      "period": "2025-2027",
+      "period": "2028-2030",
       "color": "#b69cff",
       "icon": "A+",
       "topics": [
