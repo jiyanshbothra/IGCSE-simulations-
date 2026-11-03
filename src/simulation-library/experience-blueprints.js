@@ -114,7 +114,15 @@ export const EXPERIENCE_BLUEPRINTS = Object.freeze({
   amCalculus: bp('Calculus tangent plane', 'Drag the point along the curve. The tangent gradient and signed area update.', 'ƒ', 'additionalmaths'),
 });
 
-const curriculumOperations = new Set(LABS.map((lab) => lab.operation));
+// These trigonometry labs render their own topic-specific workbenches in
+// SubjectLabs. They intentionally do not use the generic experience blueprint.
+const specializedLabOperations = new Set([
+  'trigPythagoras', 'trigExact', 'trigSineGraph', 'trigCosineGraph',
+  'trigTangentGraph', 'trigNonRight', 'trigThreeD', 'trigBearings', 'trigElevation',
+]);
+const curriculumOperations = new Set(
+  LABS.map((lab) => lab.operation).filter((operation) => !specializedLabOperations.has(operation)),
+);
 const missingExperiences = [...curriculumOperations].filter((operation) => !EXPERIENCE_BLUEPRINTS[operation]);
 if (missingExperiences.length) {
   throw new Error(`Missing hands-on interaction blueprint: ${missingExperiences.join(', ')}`);

@@ -10,6 +10,46 @@ const simulationComponents = Object.fromEntries(Object.entries(modules).map(([pa
 }));
 const SubjectIcon = { physics: Atom, chemistry: FlaskConical, biology: Dna, environmental: Globe2, mathematics: Sigma, computerscience: Cpu, additionalmaths: Sigma };
 
+export class SimulationErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidMount() {
+    window.addEventListener('hashchange', this.handleRouteChange);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('hashchange', this.handleRouteChange);
+  }
+
+  handleRouteChange = () => {
+    if (this.state.error) this.setState({ error: null });
+  };
+
+  componentDidCatch(error) {
+    console.error('Simulation failed to load or render:', error);
+  }
+
+  render() {
+    if (this.state.error) {
+      return <main className="mx-auto my-12 w-[min(100%-2rem,760px)] rounded-2xl border border-rose-400/30 bg-[#111722] p-6 text-slate-100 shadow-2xl" role="alert">
+        <p className="font-mono text-xs font-bold uppercase tracking-widest text-rose-300">Simulation error</p>
+        <h1 className="mt-2 text-xl font-bold text-white">This simulation could not be opened.</h1>
+        <p className="mt-2 text-sm leading-relaxed text-slate-300">The rest of the library is still available. Reload this simulation or return to the subject list.</p>
+        <pre className="mt-4 max-h-40 overflow-auto rounded-lg border border-slate-800 bg-black/30 p-3 text-xs text-rose-200">{String(this.state.error?.message ?? this.state.error)}</pre>
+        <div className="mt-4 flex flex-wrap gap-2"><button type="button" onClick={() => window.location.reload()} className="rounded-lg bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-600">Reload simulation</button><a href="#/" className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-slate-800">Back to library</a></div>
+      </main>;
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   const [view, setView] = useState('home');
   const [subjectId, setSubjectId] = useState('physics');

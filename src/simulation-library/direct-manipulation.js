@@ -113,7 +113,14 @@ const definitions = {
   amCalculus: xTrack('tangent point on curve', 'point', 3, 132, 634, 190),
 };
 
-const operations = new Set(LABS.map((lab) => lab.operation));
+// These topic-specific labs own their own pointer controls and do not use the
+// shared model-profile overlay. Keep them out of the generic overlay registry
+// check so one specialized topic cannot prevent the entire library loading.
+const specializedLabOperations = new Set([
+  'trigPythagoras', 'trigExact', 'trigSineGraph', 'trigCosineGraph',
+  'trigTangentGraph', 'trigNonRight', 'trigThreeD', 'trigBearings', 'trigElevation',
+]);
+const operations = new Set(LABS.map((lab) => lab.operation).filter((operation) => !specializedLabOperations.has(operation)));
 const missing = [...operations].filter((operation) => !definitions[operation]);
 if (missing.length) throw new Error(`Missing direct-manipulation object: ${missing.join(', ')}`);
 const invalidControls = [...operations].filter((operation) => {
