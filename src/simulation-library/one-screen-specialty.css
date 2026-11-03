@@ -1,0 +1,226 @@
+/* Specialty labs share one full-screen workspace: the instrument comes first,
+   with live controls and readings docked directly below it. */
+.signature-page,
+.magnet-lab-page {
+  width: min(100%, 1720px);
+  max-width: none;
+  height: calc(100dvh - 126px);
+  min-height: 590px;
+  margin: 0 auto;
+  padding: 12px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.signature-page > .lab-hero,
+.magnet-lab-page > .lab-hero {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 13px;
+  background: linear-gradient(115deg, #111c29, #0b121c 74%);
+}
+
+.signature-page .lab-hero-main,
+.magnet-lab-page .lab-hero-main { align-items: center; }
+.signature-page .lab-hero-main h1,
+.magnet-lab-page .lab-hero-main h1 {
+  margin: 0;
+  color: #f2f6fa;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.15;
+}
+.signature-page .lab-objective,
+.magnet-lab-page .lab-objective {
+  max-width: 1050px;
+  margin: 5px 0 0;
+  color: #aebdce;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.signature-page .lab-hero-stats,
+.signature-page .lab-hero-foot,
+.magnet-lab-page .lab-hero-stats,
+.magnet-lab-page .lab-hero-foot,
+.magnet-challenge-panel { display: none !important; }
+
+.signature-grid,
+.coordinate-layout,
+.binary-layout,
+.inheritance-layout,
+.water-layout,
+.calculus-layout {
+  flex: 1 1 auto;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 8px;
+  overflow: hidden;
+}
+.signature-grid > .panel,
+.binary-layout > .panel {
+  min-height: 0;
+  overflow: hidden;
+  padding: 13px 16px;
+}
+.signature-grid > .panel > .lab-section-head,
+.binary-layout > .panel > .lab-section-head { margin-bottom: 7px; }
+.signature-grid .lab-section-head h2,
+.binary-layout .lab-section-head h2 { margin: 2px 0; font-size: 16px; }
+.signature-grid .lab-section-head p,
+.binary-layout .lab-section-head p { margin: 3px 0 0; font-size: 10px; line-height: 1.35; }
+
+.signature-page .sig-side-stack {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 8px;
+  min-height: 0;
+}
+.signature-page .sig-side-stack > .panel {
+  min-width: 0;
+  min-height: 0;
+  max-height: 160px;
+  overflow: auto;
+  padding: 10px 13px;
+}
+.signature-page .sig-side-stack .sig-metric { padding: 4px 0; }
+.signature-page .sig-side-stack .sig-reading { padding: 4px 0; }
+.signature-page .sig-side-stack .sig-metric span,
+.signature-page .sig-side-stack .sig-reading span { font-size: 9px; }
+.signature-page .sig-side-stack .sig-metric b,
+.signature-page .sig-side-stack .sig-reading b { font-size: 10px; }
+.signature-page .sig-side-stack .storage-gauge { display: none; }
+.signature-page .coordinate-layout .sig-side-stack > .panel:nth-child(2),
+.signature-page .binary-layout .sig-side-stack > .panel:nth-child(2),
+.signature-page .water-layout .sig-side-stack > .panel:nth-child(2),
+.signature-page .sig-side-stack > .panel:has(.sig-observation-list),
+.signature-page .sig-side-stack > .panel:has(.sig-empty) { display: none; }
+
+.titration-visual-row {
+  flex: 1 1 auto;
+  min-height: 0;
+  grid-template-columns: minmax(230px, .72fr) minmax(0, 1.28fr);
+}
+.titration-canvas,
+.titration-graph { height: 100%; max-height: 100%; object-fit: contain; }
+.sig-play-panel { display: flex; flex-direction: column; }
+.sig-play-panel .sig-actions { flex: 0 0 auto; margin-top: 7px; }
+.sig-play-panel > .touch-instruction { display: none; }
+
+.coordinate-canvas,
+.calculus-canvas { flex: 1 1 auto; min-height: 0; height: 100%; max-height: none; margin-top: 5px; }
+.coordinate-layout .sig-play-panel,
+.calculus-layout .calculus-panel,
+.water-layout .water-panel,
+.binary-layout .binary-register-panel,
+.inheritance-layout .inheritance-panel { display: flex; flex-direction: column; }
+.coordinate-layout .sig-actions { flex: 0 0 auto; margin-top: 5px; }
+.coordinate-layout .touch-instruction,
+.calculus-layout .touch-instruction,
+.water-layout .touch-instruction,
+.binary-layout .touch-instruction,
+.inheritance-layout .touch-instruction { display: none; }
+.parent-selectors { flex: 0 0 auto; margin: 7px auto; }
+.punnett-board { flex: 1 1 auto; min-height: 0; }
+.punnett-outcome { min-height: 62px; }
+.water-canvas { flex: 1 1 auto; min-height: 0; height: 100%; max-height: none; margin-top: 5px; }
+.water-actions { flex: 0 0 auto; margin-top: 7px; }
+.binary-layout .bit-cell { min-height: 70px; gap: 4px; }
+.binary-layout .binary-output-grid { margin-top: 8px; }
+.binary-layout .binary-place-value { margin-top: 5px; }
+.calculus-layout .calculus-panel .panel-head p { display: none; }
+
+.magnet-lab-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 8px;
+  overflow: hidden;
+}
+.magnet-play-panel {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 15px;
+}
+.magnet-play-panel .lab-section-head { margin-bottom: 5px; }
+.magnet-play-panel .lab-section-head h2 { margin: 2px 0; font-size: 16px; }
+.magnet-play-panel .lab-section-head p { margin: 3px 0 0; font-size: 10px; line-height: 1.35; }
+.magnet-toolbar { flex: 0 0 auto; margin: 6px 0; }
+.magnet-toolbar button,
+.probe-preset { min-height: 32px; padding-top: 4px; padding-bottom: 4px; }
+.magnet-canvas-wrap { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; }
+.magnet-canvas { width: 100%; height: 100%; min-height: 0; max-height: none; }
+.magnet-gesture-hint { display: none; }
+.magnet-side-column {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+  min-height: 0;
+}
+.magnet-side-column > .panel { min-width: 0; max-height: 150px; overflow: auto; padding: 9px 13px; }
+.magnet-side-column .lab-section-head { margin-bottom: 5px; }
+.magnet-side-column .lab-section-head h2 { margin: 2px 0; font-size: 14px; }
+.magnet-side-column .lab-section-head p,
+.magnet-side-column .model-limit-note,
+.magnet-side-column .empty-map { display: none; }
+.magnet-instrument-panel .field-meter { display: grid; grid-template-columns: auto auto minmax(100px, 1fr); align-items: center; gap: 7px 12px; margin: 0; }
+.magnet-instrument-panel .field-meter > strong { margin: 0; font-size: 20px; }
+.magnet-instrument-panel .meter-heading { font-size: 9px; }
+.magnet-instrument-panel .meter-direction { margin: 0; }
+.magnet-instrument-panel .meter-bar,
+.magnet-instrument-panel .meter-note { display: none; }
+.magnet-readout-list { display: none; }
+.magnet-evidence-panel .sample-list { max-height: 56px; overflow: auto; }
+.magnet-evidence-panel .evidence-actions { margin-top: 5px; }
+.magnet-evidence-panel .evidence-actions .button { min-height: 30px; padding: 5px 8px; }
+
+@media (max-width: 900px) {
+  .signature-page,
+  .magnet-lab-page { height: auto; min-height: calc(100dvh - 112px); overflow: visible; padding: 10px 12px 18px; }
+  .signature-grid,
+  .coordinate-layout,
+  .binary-layout,
+  .inheritance-layout,
+  .water-layout,
+  .calculus-layout,
+  .magnet-lab-grid { flex: none; grid-template-rows: auto auto; overflow: visible; }
+  .signature-grid > .panel,
+  .binary-layout > .panel,
+  .magnet-play-panel { min-height: 420px; overflow: visible; }
+  .signature-page .sig-side-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .signature-page .sig-side-stack > .panel { max-height: none; }
+  .magnet-canvas-wrap { flex: none; min-height: 0; }
+  .magnet-canvas { height: auto; min-height: 0; max-height: none; }
+  .magnet-side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .magnet-side-column > .panel { max-height: none; }
+}
+
+@media (max-width: 620px) {
+  .signature-page,
+  .magnet-lab-page { min-height: calc(100dvh - 100px); padding: 8px; }
+  .signature-page > .lab-hero,
+  .magnet-lab-page > .lab-hero { padding: 9px 11px; }
+  .signature-page .lab-hero-main h1,
+  .magnet-lab-page .lab-hero-main h1 { font-size: 20px; }
+  .signature-grid > .panel,
+  .binary-layout > .panel,
+  .magnet-play-panel { min-height: 430px; padding: 11px; }
+  .signature-page .sig-side-stack,
+  .magnet-side-column { grid-template-columns: minmax(0, 1fr); }
+  .titration-visual-row { grid-template-columns: minmax(0, 1fr); }
+  .titration-canvas { height: 230px; }
+  .titration-graph { height: 240px; }
+  .coordinate-canvas,
+  .calculus-canvas,
+  .water-canvas { flex: none; height: 330px; }
+  .magnet-toolbar { gap: 5px; }
+  .magnet-toolbar button,.probe-preset { font-size: 9px; }
+  .magnet-canvas-wrap { min-height: 270px; }
+}

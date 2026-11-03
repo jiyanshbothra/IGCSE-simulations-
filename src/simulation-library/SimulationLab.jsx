@@ -4,6 +4,7 @@ import { createModelProfile, evaluateModel } from './models';
 import { VisualStage } from './VisualStage';
 import { MagnetCompassLab } from './MagnetCompassLab';
 import { BinaryWorkbenchLab, CalculusWorkbenchLab, ChemistryTitrationLab, CoordinatePlaneLab, InheritanceWorkbenchLab, WaterBalanceWorkbenchLab } from './SignatureLabs';
+import { ElectricityWorkbenchLab, TrigonometryWorkbenchLab } from './SubjectLabs';
 import { getExperienceBlueprint } from './experience-blueprints';
 import { getDirectPart } from './direct-manipulation';
 import './lab-quality.css';
@@ -11,21 +12,27 @@ import './lab-controls.css';
 import './lab-premium.css';
 import './lab-visibility.css';
 import './operation-experience.css';
+import './single-screen.css';
+import './one-screen-specialty.css';
 
 export function SimulationLab({ simulationId }) {
   const spec = LAB_BY_ID[simulationId];
   const specialLabs = {
     'physics:magneticField': MagnetCompassLab,
+    'physics:charge': ElectricityWorkbenchLab,
+    'physics:circuit': ElectricityWorkbenchLab,
+    'physics:electricalPower': ElectricityWorkbenchLab,
     'chemistry:neutralisation': ChemistryTitrationLab,
     'biology:inheritance': InheritanceWorkbenchLab,
     'environmental:waterBalance': WaterBalanceWorkbenchLab,
     'mathematics:coordinate': CoordinatePlaneLab,
+    'mathematics:trigonometry': TrigonometryWorkbenchLab,
     'computerscience:binary': BinaryWorkbenchLab,
     'additionalmaths:amCalculus': CalculusWorkbenchLab,
   };
   const HandsOnLab = spec ? specialLabs[`${spec.subjectId}:${spec.operation}`] : null;
-  if (HandsOnLab) return <HandsOnLab spec={spec} />;
-  return <InteractiveOperationLab simulationId={simulationId} spec={spec} />;
+  if (HandsOnLab) return <HandsOnLab key={spec.id} spec={spec} />;
+  return <InteractiveOperationLab key={simulationId} simulationId={simulationId} spec={spec} />;
 }
 
 function InteractiveOperationLab({ simulationId, spec }) {
@@ -33,82 +40,24 @@ function InteractiveOperationLab({ simulationId, spec }) {
   const experience = getExperienceBlueprint(spec.operation);
   const directPart = getDirectPart(spec.operation, profile.controls);
   const [values, setValues] = useState(() => makeScenarioValues(profile, spec.variant));
-  const [trials, setTrials] = useState([]);
-  const [graphControlId, setGraphControlId] = useState(profile.controls[0]?.id ?? '');
-  const [prediction, setPrediction] = useState('');
-  const [feedback, setFeedback] = useState('');
   const results = useMemo(() => evaluateModel(profile, values), [profile, values]);
-  const reset = () => { setValues(makeScenarioValues(profile, spec.variant)); setTrials([]); setPrediction(''); setFeedback(''); };
+  const reset = () => setValues(makeScenarioValues(profile, spec.variant));
   const updateValues = (changes) => setValues((previous) => ({ ...previous, ...changes }));
-  const record = () => setTrials(previous => [...previous,{values:{...values},results}]);
-  const exportCsv = () => {
-    const headers=['Subject','Chapter','Simulation','Trial',...profile.controls.map(x=>`${x.label} (${x.unit})`),...results.map(x=>`${x.label} (${x.unit})`)];
-    const rows=trials.map((t,i)=>[spec.subjectName,spec.chapter,spec.title,i+1,...profile.controls.map(x=>t.values[x.id]),...t.results.map(x=>x.value)]);
-    const csv=[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\r\n');
-    const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));link.download=`${simulationId}-results.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);
-  };
-  const checkPrediction = () => {
-    const output=results[0];
-    if (!prediction.trim()) { setFeedback('Enter your prediction first, then compare it with the live model result.'); return; }
-    if (typeof output?.value !== 'number') {
-      const matches=prediction.trim().toLowerCase()===String(output?.value).toLowerCase();
-      setFeedback(`${matches?'Your prediction matches the model.':'Compare your prediction with the model result.'} Model result: ${output?.value ?? 'No result'}.`);
-      return;
-    }
-    const guess=Number(prediction);const actual=output.value;
-    if (!Number.isFinite(guess)) { setFeedback('Enter a valid number to compare with the live model result.'); return; }
-    const error=Math.abs(actual-guess);const relative=actual===0?null:error/Math.abs(actual)*100;
-    const closeness=relative===null?(error===0?'exactly matches':'differs from'):(relative<5?'is very close to':relative<20?'is reasonably close to':'differs from');
-    setFeedback(`Your prediction ${closeness} the model. Predicted ${guess.toPrecision(4)} ${output.unit}; model ${actual.toPrecision(4)} ${output.unit}; absolute difference ${error.toPrecision(3)}${relative===null?'':` (${relative.toPrecision(3)}% relative error)`}. Explain the difference using the model principle.`);
-  };
 
 
-  return <main className={`lab-page operation-page rig-${experience.rig}`} style={{ '--lab-accent': spec.color }}>
-    <header className="lab-hero" style={{ '--lab-accent': spec.color }}>
-      <div className="lab-hero-top">
-        <div className="lab-breadcrumb"><span>{spec.subjectName}</span><i />{spec.subjectCode}<i />{spec.period}<i />Chapter {spec.chapterCode}</div>
-        <button className="lab-back" onClick={() => { window.location.hash = '#/subject/' + spec.subjectId }}>Back <span>Subject library</span></button>
-      </div>
-      <div className="lab-hero-main">
-        <div>
-          <p className="lab-overline">CHAPTER {spec.chapterCode} <span>/</span> MODEL {String(simulationId.slice(-3))}</p>
-          <h1>{spec.title}</h1>
-          <p className="lab-objective">{spec.objective}</p>
-        </div>
-        <div className="lab-hero-stats"><span className="lab-count">100</span><small>models in<br />this subject</small></div>
-      </div>
-      <div className="lab-hero-foot"><span className="lab-subject-mark">{spec.subjectName}</span><span>{spec.chapter}</span><span className="lab-live-status"><i /> Interactive model</span></div>
+  return <main className={`lab-page operation-page single-lab-page rig-${experience.rig}`} style={{ '--lab-accent': spec.color }}>
+    <header className="lab-hero single-lab-hero" style={{ '--lab-accent': spec.color }}>
+      <div className="single-lab-top"><div className="lab-breadcrumb"><span>{spec.subjectName}</span><i />{spec.subjectCode}<i />Chapter {spec.chapterCode}</div><button className="lab-back" onClick={() => { window.location.hash = '#/subject/' + spec.subjectId }}>Back to subject</button></div>
+      <div className="single-hero-copy"><div><p className="lab-overline">{spec.chapter} <span>/</span> MODEL {String(simulationId.slice(-3))}</p><h1>{spec.title}</h1><p className="lab-objective">{spec.objective}</p></div><button className="single-reset" onClick={reset}>Reset model</button></div>
     </header>
-
-    <div className="lab-grid">
-      <section className="panel model-panel">
-        <div className="panel-head lab-section-head"><div><span className="section-index">01 / LIVE APPARATUS</span><h2>{experience.instrument}</h2><p>Drag the {directPart.part} with your mouse or touch. It changes {directPart.controls[0].label.toLowerCase()} and updates the model as it moves.</p></div><span className="live-pill"><i /> LIVE</span></div>
-        <VisualStage operation={spec.operation} family={profile.family} values={values} results={results} accent={spec.color} title={spec.title} controls={profile.controls} onValuesChange={updateValues} experience={experience}/>
-        <div className="principle"><div className="principle-title"><span>Model notes</span><small>ASSUMPTIONS & RELATIONSHIPS</small></div><p>{spec.principle}</p><code>{profile.formula}</code><small className="principle-foot">Idealised teaching model | Use the stated units and conditions when interpreting the result.</small></div>
-      </section>
-
-      <section className="panel controls-panel instrument-panel">
-        <div className="panel-head lab-section-head"><div><span className="section-index">02 / MODEL SETTINGS</span><h2>Readings & adjustments</h2><p>Grab the named object in the play area for direct control. Enter exact values here when you need a precise setup.</p></div><button className="text-button" onClick={reset}>Reset</button></div>
-        <div className="instrument-rack" aria-label={`${experience.instrument} exact model settings`}>{profile.controls.map(control => <ParameterControl key={control.id} control={control} value={values[control.id]} onChange={value => updateValues({ [control.id]: value })} />)}</div>
-        <div className="results"><div className="results-heading"><h3>Live measurements</h3><span>UPDATES IN REAL TIME</span></div><div className="result-grid">{results.map((result, index) => <div className="result" key={result.label}><span><i>{String(index + 1).padStart(2, '0')}</i>{result.label}</span><strong>{typeof result.value === 'number' ? result.value.toPrecision(4) : result.value}<small>{result.unit}</small></strong></div>)}</div></div>
-        <div className="actions"><button className="button primary" onClick={record}>Record this trial</button><button className="button secondary" onClick={reset}>Reset experiment</button></div>
-      </section>
-
-      <section className="panel investigation">
-        <div className="panel-head lab-section-head"><div><span className="section-index">03 / YOUR CHALLENGE / {String(spec.variant).padStart(2, '0')}</span><h2>{spec.lens}</h2></div></div>
-        <p className="investigation-question">{challengeQuestion(spec.operation, spec.lens)}</p>
-        <p className="challenge-instructions">{lensInstruction(spec.lens)} Record at least five trials and use the pattern in your data to support an explanation.</p>
-        <div className="lesson-steps"><span><b>1</b><em>Predict</em><small>Commit to an outcome</small></span><span><b>2</b><em>Change</em><small>Test a parameter</small></span><span><b>3</b><em>Explain</em><small>Use your evidence</small></span></div>
-        <div className="predict"><label htmlFor="prediction">Predict: {results[0]?.label?.toLowerCase()}</label><div><input id="prediction" inputMode={typeof results[0]?.value === 'number' ? 'decimal' : 'text'} value={prediction} onChange={event => setPrediction(event.target.value)} placeholder={typeof results[0]?.value === 'number' ? 'Value in ' + (results[0]?.unit || 'displayed units') : 'Enter your predicted result'}/><button className="button secondary" onClick={checkPrediction}>Check prediction</button></div>{feedback && <p role="status" aria-live="polite">{feedback}</p>}</div>
-      </section>
-
-      <section className="panel data-panel">
-        <div className="panel-head lab-section-head"><div><span className="section-index">04 / EVIDENCE</span><h2>Your trial record</h2><p>Compare readings to reveal a pattern.</p></div><div className="actions compact"><button className="button secondary" disabled={!trials.length} onClick={exportCsv}>Export CSV</button><button className="button secondary" disabled={!trials.length} onClick={() => setTrials([])}>Clear data</button></div></div>
-        <div className="graph-controls"><label htmlFor="graph-variable">Graph horizontal axis</label><select id="graph-variable" value={graphControlId} onChange={event => setGraphControlId(event.target.value)}>{profile.controls.map(control => <option value={control.id} key={control.id}>{control.label} ({control.unit})</option>)}</select></div>
-        <TrialGraph trials={trials} controls={profile.controls} controlId={graphControlId} result={results[0]}/>
-        {trials.length === 0 ? <div className="empty-record"><span>?</span><p>Your data will appear here.</p><small>Change a parameter and record a trial to start building evidence.</small></div> : <div className="table-scroll"><table><thead><tr><th>Trial</th>{profile.controls.map(control => <th key={control.id}>{control.label} ({control.unit})</th>)}{results.map(result => <th key={result.label}>{result.label} ({result.unit})</th>)}</tr></thead><tbody>{trials.map((trial, index) => <tr key={index}><td>{String(index + 1).padStart(2, '0')}</td>{profile.controls.map(control => <td key={control.id}>{trial.values[control.id]}</td>)}{trial.results.map(result => <td key={result.label}>{typeof result.value === 'number' ? result.value.toPrecision(4) : result.value}</td>)}</tr>)}</tbody></table></div>}
-      </section>
-    </div>
+    <section className="single-lab-frame">
+      <VisualStage operation={spec.operation} family={profile.family} values={values} results={results} accent={spec.color} title={spec.title} controls={profile.controls} onValuesChange={updateValues} experience={experience}/>
+      <div className="single-lab-dock">
+        <div className="single-control-row"><div className="single-dock-label"><b>Interact</b><span>Drag the {directPart.part} or enter a precise value.</span></div><div className="instrument-rack" aria-label={`${experience.instrument} model controls`}>{profile.controls.map(control => <ParameterControl key={control.id} control={control} value={values[control.id]} onChange={value => updateValues({ [control.id]: value })} />)}</div></div>
+        <div className="single-results-row"><div className="single-dock-label"><b>Live results</b><span>Changes update immediately.</span></div><div className="result-grid">{results.map(result => <div className="result" key={result.label}><span>{result.label}</span><strong>{typeof result.value === 'number' ? result.value.toPrecision(4) : result.value}<small>{result.unit}</small></strong></div>)}</div></div>
+        <div className="single-principle"><b>{profile.formula}</b><span>{spec.principle}</span></div>
+      </div>
+    </section>
   </main>;
 }
 
