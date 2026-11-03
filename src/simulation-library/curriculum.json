@@ -93,7 +93,7 @@
       ]
     },
     {
-      "id": "mathematics", "name": "Mathematics", "code": "0580", "period": "2025-2027", "color": "#818cf8", "icon": "∑",
+      "id": "mathematics", "name": "Mathematics", "code": "0580", "period": "2028-2030", "color": "#818cf8", "icon": "∑",
       "topics": [
         ["1", "Number", "Explore number operations, fractions, percentages, bounds, and standard form.", "number", "number", "percentage change = (new - original) / original x 100"],
         ["2", "Algebra and graphs", "Manipulate expressions, solve equations, and investigate functions and sequences.", "algebra", "algebra", "substitute x into the defined expression to obtain y"],
